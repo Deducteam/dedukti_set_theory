@@ -169,7 +169,6 @@ apply H P' H';
 end;
 
 symbol eta : Graph → Node → Node → Prop;
-
 symbol root : Graph → Node;
 
 symbol cr : Graph → Node → Graph;
@@ -252,5 +251,5 @@ rule eta omega $x $x' ↪ (∃ n (λ y, ∃ n (λ y', (($x = i y) ∧ ($x' = i y
 rule root omega ↪ o;
 
 symbol Cl : Graph → Graph;
-rule eta (Cl $a) $x $x' ↪ (∃ n (λ y, ∃ n (λ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')))) ∨ (∃ n (λ y, (($x = i y) ∧ ($x' = o) ∧ (∀ class (λ c, (∀ n (λ z, (eta $a z (root $a)) ⇒ (c z))) ∧ (∀ n (λ z, ∀ n (λ z', (((eta $a z z') ∧ (c z') ⇒ (c z)) ⇒ c y)))))))));
+rule eta (Cl $a) $x $x' ↪ (∃ n (λ y, ∃ n (λ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')))) ∨ (∃ n (λ y, (($x = i y) ∧ ($x' = o) ∧ (∀ class (λ c, ((∀ n (λ z, (eta $a z (root $a)) ⇒ (c z))) ∧ (∀ n (λ z, ∀ n (λ z', (((eta $a z z') ∧ (c z')) ⇒ (c z)))))) ⇒ c y)))));
 rule root (Cl $a) ↪ o;

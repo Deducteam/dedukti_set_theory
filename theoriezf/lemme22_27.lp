@@ -185,7 +185,7 @@ apply lemme1 (i y');
 apply and_ed _ _ Hy;
 end;
 
-opaque symbol lemme27 : π(∀ g (λ a, ∀ n (λ x, (eta (Cl a) x o) ⇔ (∃ n (λ y, ((x = i y) ∧ (∀ class (λ c, (∀ n (λ z, (eta a z (root a)) ⇒ (c z))) ∧ (∀ n (λ z, ∀ n (λ z', (((eta a z z') ∧ (c z') ⇒ (c z)) ⇒ c y))))))))))))
+opaque symbol lemme27 : π(∀ g (λ a, ∀ n (λ x, (eta (Cl a) x o) ⇔ (∃ n (λ y, ((x = i y) ∧ (∀ class (λ c, ((∀ n (λ z, (eta a z (root a)) ⇒ (c z))) ∧ (∀ n (λ z, ∀ n (λ z', (((eta a z z') ∧ (c z')) ⇒ (c z)))))) ⇒ c y))))))))
 ≔ begin
 assume a x;
 apply and_i;
