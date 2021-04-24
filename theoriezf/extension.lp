@@ -14,7 +14,11 @@ constant symbol eqF : El Nat → El Nat → El formula;
 constant symbol inF : El Nat → El Nat → El formula;
 constant symbol andF : El formula → El formula → El formula;
 constant symbol orF : El formula → El formula → El formula;
-constant symbol qF : El Nat → El formula → El formula;
+constant symbol allF : El Nat → El formula → El formula;
+constant symbol exF : El Nat → El formula → El formula;
+constant symbol impF : El formula → El formula → El formula;
+constant symbol fF : El formula;
+constant symbol tF : El formula;
 
 symbol if : El Nat → Graph → Graph → Graph;
 rule if zero $g1 $g2 ↪ $g2;
@@ -25,19 +29,26 @@ constant symbol recF : Π (P : El formula → Prop),
 → π(∀ Nat (λ x, ∀ Nat (λ y, P (inF x y))))
 → π(∀ formula (λ f, ∀ formula (λ g, (P f ∧ P g) ⇒ (P (andF f g)))))
 → π(∀ formula (λ f, ∀ formula (λ g, (P f ∧ P g) ⇒ (P (orF f g)))))
-→ π(∀ formula (λ f, (P f) ⇒ (∀ Nat (λ x, P (qF x f)))))
+→ π(∀ formula (λ f, ∀ formula (λ g, (P f ∧ P g) ⇒ (P (impF f g)))))
+→ π(∀ formula (λ f, (P f) ⇒ (∀ Nat (λ x, P (allF x f)))))
+→ π(∀ formula (λ f, (P f) ⇒ (∀ Nat (λ x, P (exF x f)))))
+→ π(⊥ ⇒ (∀ formula (λ f, (P f))))
+→ π(⊤ ⇒ (∀ formula (λ f, (P f) ⇒ (P f))))
 → π(∀ formula (λ f, P f));
+
+symbol update : (El Nat → Graph) → El Nat → Graph → (El Nat → Graph);
+rule update $σ $x $a $y ↪ if (eqN $x $y) $a ($σ $y);
 
 symbol interpretation : (El Nat → Graph) → El formula → Prop;
 rule interpretation $σ (eqF $x $y) ↪ ($σ $x) simeq ($σ $y);
 rule interpretation $σ (inF $x $y) ↪ ($σ $x) ∈ ($σ $y);
 rule interpretation $σ (andF $f $g) ↪ (interpretation $σ $f) ∧ (interpretation $σ $g);
 rule interpretation $σ (orF $f $g) ↪ (interpretation $σ $f) ∨ (interpretation $σ $g);
-
-symbol update : (El Nat → Graph) → El Nat → Graph → (El Nat → Graph);
-rule update $σ $x $a $y ↪ if (eqN $x $y) $a ($σ $y);
-
-rule interpretation $σ (qF $x $f) ↪ ∀ g (λ a, interpretation (update $σ $x a) $f);
+rule interpretation $σ (impF $f $g) ↪ (interpretation $σ $f) ⇒ (interpretation $σ $g);
+rule interpretation $σ (allF $x $f) ↪ ∀ g (λ a, interpretation (update $σ $x a) $f);
+rule interpretation $σ (exF $x $f) ↪ ∃ g (λ a, interpretation (update $σ $x a) $f);
+rule interpretation $σ fF ↪ ⊥;
+rule interpretation $σ tF ↪ ⊤;
 
 opaque symbol lemmeSymNP : Π (x y : El Nat), π((eqNP x y) ⇒ (eqNP y x)) 
 ≔ begin
@@ -111,6 +122,32 @@ end;
 symbol valuation : Set;
 rule El valuation ↪ El Nat → El g;
 
+opaque symbol lemmeVal : Π (σ σ' : El Nat → Graph), Π (x : El Nat), Π (c : Graph), π ((∀ Nat (λ y, σ y simeq σ' y)) ⇒ (∀ Nat (λ z, (update σ x c z) simeq (update σ' x c z))))
+≔ begin
+assume σ σ' x c H z;
+apply or_e _ _ _ (axiom2 x z);
+assume H1;
+simpl update;
+apply imp_i (eqNP (eqN x z) (s zero)) _ _ _;
+assume H;
+apply imp_i (eqNP (s zero) (eqN x z)) _ _ _;
+assume H';
+apply H' (λ w, (if w c (σ z)) simeq (if w c (σ' z))) _;
+apply lemme3 c;
+apply lemmeSymNP (eqN x z) (s zero) H1;
+apply H1;
+assume H0;
+simpl update;
+apply imp_i (eqNP (eqN x z) zero) _ _ _;
+assume H;
+apply imp_i (eqNP zero (eqN x z)) _ _ _;
+assume H';
+apply H' (λ w, (if w c (σ z)) simeq (if w c (σ' z))) _;
+apply H z;
+apply lemmeSymNP (eqN x z) zero H0;
+apply H0;
+end;
+
 opaque symbol lemmeInt : Π (f : El formula), π(∀ valuation (λ σ, ∀ valuation (λ σ', ((interpretation σ f) ∧ (∀ Nat (λ x, (σ x) simeq (σ' x)))) ⇒ (interpretation σ' f))))
 ≔ begin
 apply recF (λ f, ∀ valuation (λ σ, ∀ valuation (λ σ', ((interpretation σ f) ∧ (∀ Nat (λ x, (σ x) simeq (σ' x)))) ⇒ (interpretation σ' f))));
@@ -134,62 +171,124 @@ apply (and_eg _ _ Hfg σ σ') (and_i _ _ Hf (and_ed _ _ Hor));
 assume Hg;
 apply or_id;
 apply (and_ed _ _ Hfg σ σ') (and_i _ _ Hg (and_ed _ _ Hor));
-assume f Hf x σ σ' Hq c;
-apply Hf (update σ x c) (update σ' x c) (and_i _ _ (and_eg _ _ Hq c) _);
-assume z;
-apply or_e _ _ _ (axiom2 x z);
-assume H1;
-simpl update;
-apply imp_i (eqNP (eqN x z) (s zero)) _ _ _;
-assume H;
-apply imp_i (eqNP (s zero) (eqN x z)) _ _ _;
-assume H';
-apply H' (λ w, (if w c (σ z)) simeq (if w c (σ' z))) _;
-apply lemme3 c;
-apply lemmeSymNP (eqN x z) (s zero) H1;
-apply H1;
-assume H0;
-simpl update;
-apply imp_i (eqNP (eqN x z) zero) _ _ _;
-assume H;
-apply imp_i (eqNP zero (eqN x z)) _ _ _;
-assume H';
-apply H' (λ w, (if w c (σ z)) simeq (if w c (σ' z))) _;
-apply and_ed _ _ Hq z;
-apply lemmeSymNP (eqN x z) zero H0;
-apply H0;
+assume f g Hfg σ σ' Himp Hf;
+apply (and_ed _ _ Hfg σ σ') (and_i _ _ _ (and_ed _ _ Himp));
+apply and_eg _ _ Himp _;
+apply (and_eg _ _ Hfg σ' σ) (and_i _ _ Hf _);
+assume x;
+apply lemme4 (σ x) (σ' x) (and_ed _ _ Himp x);
+assume f Hf x σ σ' Hall c;
+apply Hf (update σ x c) (update σ' x c) (and_i _ _ (and_eg _ _ Hall c) _);
+apply lemmeVal σ σ' x c (and_ed _ _ Hall);
+assume f Hf x σ σ' Hex;
+apply ExElim g _ (and_eg _ _ Hex) _;
+assume c Hc;
+apply ExIntro g c _ _;
+apply Hf (update σ x c) (update σ' x c) (and_i _ _ Hc _);
+apply lemmeVal σ σ' x c (and_ed _ _ Hex);
+assume Pf f σ σ' H;
+apply f_e (interpretation σ' f) Pf;
+assume Pt f H σ σ';
+apply H σ σ';
 end;
 
-opaque symbol lemme32 : Π (a b : Graph), Π (z : El Nat), Π (f : El formula), π(∀ valuation (λ σ, ((interpretation (update σ z a) f) ∧ (a simeq b)) ⇒ (interpretation (update σ z b) f)))
+opaque symbol lemme32 : Π (z : El Nat), Π (f : El formula), π(∀ g (λ a, ∀ g (λ b, (∀ valuation (λ σ, ((interpretation (update σ z a) f) ∧ (a simeq b)) ⇒ (interpretation (update σ z b) f))))))
 ≔ begin
-assume a b z;
-apply recF (λ f, ∀ valuation (λ σ, (interpretation (update σ z a) f ∧ (a simeq b)) ⇒ interpretation (update σ z b) f));
-assume x y σ Heq;
+assume z;
+apply recF (λ f, ∀ g (λ a, ∀ g (λ b, ∀ valuation (λ σ, (interpretation (update σ z a) f ∧ (a simeq b)) ⇒ interpretation (update σ z b) f))));
+assume x y a b σ Heq;
 apply lemme5 (update σ z b x) (update σ z a x) (update σ z b y) (and_i _ _ _ _);
 apply lemme4 (update σ z a x) (update σ z b x) (lemmeUp σ z a b (and_ed _ _ Heq) x);
 apply lemme5 (update σ z a x) (update σ z a y) (update σ z b y) (and_i _ _ _ _);
 apply and_eg _ _ Heq;
 apply lemmeUp σ z a b (and_ed _ _ Heq) y;
-assume x y σ Hin;
+assume x y a b σ Hin;
 apply lemme31 (update σ z b x) (update σ z a y) (update σ z b y) (and_i _ _ _ _);
 apply lemme30 (update σ z a x) (update σ z a y) (update σ z b x) (and_i _ _ _ _);
 apply and_eg _ _ Hin;
 apply lemmeUp σ z a b (and_ed _ _ Hin) x;
 apply lemmeUp σ z a b (and_ed _ _ Hin) y;
-assume f g Hfg σ Hand;
+assume f g Hfg a b σ Hand;
 apply and_i;
-apply ((and_eg _ _ Hfg) σ) (and_i _ _ (and_eg _ _ (and_eg _ _ Hand)) (and_ed _ _ Hand));
-apply ((and_ed _ _ Hfg) σ) (and_i _ _ (and_ed _ _ (and_eg _ _ Hand)) (and_ed _ _ Hand));
-assume f g Hfg σ Hor;
+apply ((and_eg _ _ Hfg) a b σ) (and_i _ _ (and_eg _ _ (and_eg _ _ Hand)) (and_ed _ _ Hand));
+apply ((and_ed _ _ Hfg) a b σ) (and_i _ _ (and_ed _ _ (and_eg _ _ Hand)) (and_ed _ _ Hand));
+assume f g Hfg a b σ Hor;
 apply or_e _ _ _ (and_eg _ _ Hor);
 assume Hf;
 apply or_ig;
-apply ((and_eg _ _ Hfg) σ) (and_i _ _ Hf (and_ed _ _ Hor));
+apply ((and_eg _ _ Hfg) a b σ) (and_i _ _ Hf (and_ed _ _ Hor));
 assume Hg;
 apply or_id;
-apply ((and_ed _ _ Hfg) σ) (and_i _ _ Hg (and_ed _ _ Hor));
-assume f Hf x σ Heq c;
+apply ((and_ed _ _ Hfg) a b σ) (and_i _ _ Hg (and_ed _ _ Hor));
+assume f g Hfg a b σ Himp Hf;
+apply (and_ed _ _ Hfg a b σ) (and_i _ _ _ (and_ed _ _ Himp));
+apply and_eg _ _ Himp _;
+apply (and_eg _ _ Hfg b a σ) (and_i _ _ Hf _);
+apply lemme4 a b (and_ed _ _ Himp);
+assume f Hf x a b σ Hall c;
 apply lemmeInt f (update (update σ z a) x c) (update (update σ z b) x c) (and_i _ _ _ _);
-apply (and_eg _ _ Heq) c;
-apply (lemmeUp2 σ z x a b c) (and_ed _ _ Heq);
+apply (and_eg _ _ Hall) c;
+apply (lemmeUp2 σ z x a b c) (and_ed _ _ Hall);
+assume f Hf x a b σ Hex;
+apply ExElim g _ (and_eg _ _ Hex) _;
+assume c Hc;
+apply ExIntro g c _ _;
+apply lemmeInt f (update (update σ z a) x c) (update (update σ z b) x c) (and_i _ _ _ _);
+apply Hc;
+apply (lemmeUp2 σ z x a b c) (and_ed _ _ Hex);
+assume Pf f a b σ H;
+apply f_e (interpretation (update σ z b) f) Pf;
+assume Pt f H a b σ;
+apply H a b σ;
+end;
+
+opaque symbol lemme41 : Π (x y : El Nat), Π (f : El formula), Π (c d : Graph), π(∀ valuation (λ σ, ((interpretation (update (update σ x c) y d) f) 
+∧ (∀ g (λ a, ∀ g (λ a', ∀ g (λ b, ((a' ∈ a) ∧ (interpretation (update (update σ x a) y b) f)) ⇒ (∃ g (λ b', ((b' ∈ b) ∧ (interpretation (update (update σ x a') y b') f))))))))
+∧ (∀ g (λ b, ∀ g (λ b', ∀ g (λ a, ((b' ∈ b) ∧ (interpretation (update (update σ x a) y b) f)) ⇒ (∃ g (λ a', ((a' ∈ a) ∧ (interpretation (update (update σ x a') y b') f))))))))) ⇒ (c simeq d)))
+≔ begin
+assume x y f c d σ H;
+apply ExIntro relat (λ u, λ v, interpretation (update (update σ x (cr c u)) y (cr d v)) f) _ _;
+apply and_i;
+apply and_i;
+apply lemmeInt f (update (update σ x c) y (cr d (root d))) (update (update σ x (cr c (root c))) y (cr d (root d))) (and_i _ _ _ _);
+apply lemme32 y f d (cr d (root d)) (update σ x c) (and_i _ _ _ _);
+apply (and_eg _ _ (and_eg _ _ H));
+apply lemme6 d;
+apply lemmeUp2 σ x y c (cr c (root c)) (cr d (root d)) _;
+apply lemme6 c;
+assume u u' v Hu;
+apply ExElim g _ ((and_ed _ _ (and_eg _ _ H)) (cr c u) (cr c u') (cr d v) (and_i _ _ _ _)) _;
+apply lemme28 (cr c u) u' (and_eg _ _ Hu);
+apply and_ed _ _ Hu;
+assume b Hb;
+apply ExElim n _ (and_eg _ _ Hb) _;
+assume v' Hv';
+apply ExIntro n v' _ _;
+apply and_i;
+apply and_eg _ _ Hv';
+apply lemme32 y f b (cr d v') (update σ x (cr c u')) (and_i _ _ _ _);
+apply and_ed _ _ Hb;
+apply and_ed _ _ Hv';
+assume v v' u Hv;
+apply ExElim g _ ((and_ed _ _ H) (cr d v) (cr d v') (cr c u) (and_i _ _ _ _)) _;
+apply lemme28 (cr d v) v' (and_eg _ _ Hv);
+apply and_ed _ _ Hv;
+assume b Hb;
+apply ExElim n _ (and_eg _ _ Hb) _;
+assume u' Hu';
+apply ExIntro n u' _ _;
+apply and_i;
+apply and_eg _ _ Hu';
+apply lemmeInt f (update (update σ x b) y (cr d v')) (update (update σ x (cr c u')) y (cr d v')) (and_i _ _ _ _);
+apply and_ed _ _ Hb;
+apply lemmeUp2 σ x y b (cr c u') (cr d v') _;
+apply and_ed _ _ Hu';
+end;
+
+opaque symbol lemmeExt : 
+Π (x y z : El Nat), Π (a b : Graph), π((∀ valuation (λ σ, interpretation (update (update σ x a) y b) (allF z (andF (impF (inF z x) (inF z y)) (impF (inF z y) (inF z x)))))) ⇒ (a simeq b))
+≔ begin
+assume x y z a b H;
+apply lemme41 x y (λ u, λ v, (orF (andF (eqF u x) (eqF v y)) (eqF u v))) a b _ (and_i _ _ (and_i _ _));
+
 end;
