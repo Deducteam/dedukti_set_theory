@@ -1,0 +1,5 @@
+Les définitions et règles de réécritures relatifs aux connecteurs logiques et à la structure des graphes pointés sont écrits dans le fichier logique.lp.
+
+Les fichiers nommés lemmeA_B.lp contiennent les preuves des lemmes A à B.
+
+Le fichier extension.lp permet de réaliser des preuves par induction, en utlisant la définition des entiers du fichier nat.lp.
