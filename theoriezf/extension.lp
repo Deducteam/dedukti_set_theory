@@ -32,8 +32,8 @@ constant symbol recF : Π (P : El formula → Prop),
 → π(∀ formula (λ f, ∀ formula (λ g, (P f ∧ P g) ⇒ (P (impF f g)))))
 → π(∀ formula (λ f, (P f) ⇒ (∀ Nat (λ x, P (allF x f)))))
 → π(∀ formula (λ f, (P f) ⇒ (∀ Nat (λ x, P (exF x f)))))
-→ π(⊥ ⇒ (∀ formula (λ f, (P f))))
-→ π(⊤ ⇒ (∀ formula (λ f, (P f) ⇒ (P f))))
+→ π(P tF)
+→ π(P fF)
 → π(∀ formula (λ f, P f));
 
 symbol update : (El Nat → Graph) → El Nat → Graph → (El Nat → Graph);
@@ -186,10 +186,10 @@ assume c Hc;
 apply ExIntro g c _ _;
 apply Hf (update σ x c) (update σ' x c) (and_i _ _ Hc _);
 apply lemmeVal σ σ' x c (and_ed _ _ Hex);
-assume Pf f σ σ' H;
-apply f_e (interpretation σ' f) Pf;
-assume Pt f H σ σ';
-apply H σ σ';
+assume σ σ' H;
+apply Vrai;
+assume σ σ' H;
+apply and_eg _ _ H;
 end;
 
 opaque symbol lemme32 : Π (z : El Nat), Π (f : El formula), π(∀ g (λ a, ∀ g (λ b, (∀ valuation (λ σ, ((interpretation (update σ z a) f) ∧ (a simeq b)) ⇒ (interpretation (update σ z b) f))))))
@@ -236,10 +236,10 @@ apply ExIntro g c _ _;
 apply lemmeInt f (update (update σ z a) x c) (update (update σ z b) x c) (and_i _ _ _ _);
 apply Hc;
 apply (lemmeUp2 σ z x a b c) (and_ed _ _ Hex);
-assume Pf f a b σ H;
-apply f_e (interpretation (update σ z b) f) Pf;
-assume Pt f H a b σ;
-apply H a b σ;
+assume a b σ H;
+apply and_eg _ _ H;
+assume a b σ H;
+apply and_eg _ _ H;
 end;
 
 opaque symbol lemme41 : Π (x y : El Nat), Π (f : El formula), Π (c d : Graph), π(∀ valuation (λ σ, ((interpretation (update (update σ x c) y d) f) 
@@ -283,6 +283,29 @@ apply lemmeInt f (update (update σ x b) y (cr d v')) (update (update σ x (cr c
 apply and_ed _ _ Hb;
 apply lemmeUp2 σ x y b (cr c u') (cr d v') _;
 apply and_ed _ _ Hu';
+end;
+
+opaque symbol lemme : Π (c d : Graph), π((∀ g (λ z, (z ∈ c) ⇔ (z ∈ d))) ⇒ ((((c simeq c) ∧ (d simeq d)) ∨ (c simeq d))
+∧ (∀ g (λ a, ∀ g (λ a', ∀ g (λ b, ((a' ∈ a) ∧ (((a simeq c) ∧ (b simeq d)) ∨ (a simeq d))) ⇒ (∃ g (λ b', ((b' ∈ b) ∧ (((a' simeq c) ∧ (b' simeq d)) ∨ (a' simeq b')))))))))
+∧ (∀ g (λ b, ∀ g (λ b', ∀ g (λ a, ((b' ∈ b) ∧ (((a simeq c) ∧ (b simeq d)) ∨ (a simeq d))) ⇒ (∃ g (λ a', ((b' ∈ b) ∧ (((a' simeq c) ∧ (b' simeq d)) ∨ (a' simeq b')))))))))))
+≔ begin
+assume c d Hext;
+apply and_i;
+apply and_i;
+apply or_ig;
+apply (and_i _ _ (lemme3 c) (lemme3 d));
+assume a a' b H;
+apply or_e _ _ _ (and_ed _ _ H);
+assume H1;
+apply ExIntro g a' _ _;
+apply and_i;
+apply lemme31 a' d b (and_i _ _ _ _);
+apply (and_eg _ _ (Hext a')) (lemme31 a' a c (and_i _ _ (and_eg _ _ H) (and_eg _ _ H1)));
+apply lemme4 b d (and_ed _ _ H1);
+apply or_id;
+apply lemme3 a';
+assume H2;
+
 end;
 
 opaque symbol lemmeExt : 
