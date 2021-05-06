@@ -7,6 +7,7 @@ require open zf.theoriezf.lemme22_27;
 require open zf.theoriezf.lemme28_34;
 require open zf.theoriezf.lemme35_41;
 require open zf.theoriezf.extension;
+require open zf.theoriezf.lemme_extension;
 
 opaque symbol lemme42 : π(∀ g (λ a, ∀ g (λ c, (c ∈ (join a)) ⇔ (∃ g (λ b, (c ∈ b) ∧ (b ∈ a))))))
 ≔ begin
@@ -159,4 +160,27 @@ apply H2 (λ w, (cr (comp b σ f) w) simeq (cr b y));
 apply lemme39 σ f b y;
 apply lemmeSymEg x (i y) H1;
 apply and_eg _ _ (and_eg _ _ Hy);
-abort;
+apply lemme32 zero f (cr b y) a σ (and_i _ _ (and_ed _ _ Hy) _);
+apply lemme4 a (cr b y) (lemme5 a (cr (comp b σ f) x) (cr b y) (and_i _ _ (and_ed _ _ Hx) _));
+apply imp_i (x = i y) _ _ _;
+assume H1;
+apply imp_i (i y = x) _ _ _;
+assume H2;
+apply H2 (λ w, (cr (comp b σ f) w) simeq (cr b y));
+apply lemme39 σ f b y;
+apply lemmeSymEg x (i y) H1;
+apply and_eg _ _ (and_eg _ _ Hy);
+assume H;
+apply ExElim n _ (and_eg _ _ H) _;
+assume y Hy;
+apply ExIntro n (i y) _ _;
+apply and_i;
+apply (and_ed _ _ (lemme23 σ f b (i y))) _;
+apply ExIntro n y _ _;
+apply and_i;
+apply and_i;
+apply lemme1 (i y);
+apply and_eg _ _ Hy;
+apply lemme32 zero f a (cr b y) σ (and_i _ _ (and_ed _ _ H) (and_ed _ _ Hy));
+apply lemme5 a (cr b y) (cr (comp b σ f) (i y)) (and_i _ _ (and_ed _ _ Hy) (lemme4 (cr (comp b σ f) (i y)) (cr b y) (lemme39 σ f b y)));
+end;
