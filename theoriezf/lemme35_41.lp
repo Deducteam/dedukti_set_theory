@@ -5,6 +5,7 @@ require open zf.theoriezf.lemme14_18;
 require open zf.theoriezf.lemme19_21;
 require open zf.theoriezf.lemme22_27;
 require open zf.theoriezf.lemme28_34;
+require open zf.theoriezf.extension;
 
 opaque symbol lemme35 : π(∀ g (λ a, ∀ n (λ y, (cr (join a) (i y)) simeq (cr a y))))
 ≔ begin
@@ -46,14 +47,14 @@ assume x y';
 apply lemme19 a y' x;
 end;
 
-opaque symbol lemme39 : Π P: Graph → Prop, π(∀ g (λ a, ∀ n (λ y, (cr (comp a P) (i y)) simeq (cr a y))))
+opaque symbol lemme39 : Π (σ : El valuation), Π (f : El formula), π(∀ g (λ a, ∀ n (λ y, (cr (comp a σ f) (i y)) simeq (cr a y))))
 ≔ begin
-assume P a y;
-apply lemme4 (cr a y) (cr (comp a P) (i y)) (lemme33 (cr a y) (cr (comp a P) (i y)) _);
+assume σ f a y;
+apply lemme4 (cr a y) (cr (comp a σ f) (i y)) (lemme33 (cr a y) (cr (comp a σ f) (i y)) _);
 apply and_i;
 apply lemme1 (i y);
 assume x y';
-apply lemme22 P a y' x;
+apply lemme22 σ f a y' x;
 end;
 
 opaque symbol lemme40 : π(∀ g (λ a, ∀ n (λ y, (cr (Cl a) (i y)) simeq (cr a y))))

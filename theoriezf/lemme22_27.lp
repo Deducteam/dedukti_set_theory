@@ -3,10 +3,11 @@ require open zf.theoriezf.lemme1_6;
 require open zf.theoriezf.lemme7_13;
 require open zf.theoriezf.lemme14_18;
 require open zf.theoriezf.lemme19_21;
+require open zf.theoriezf.extension;
 
-opaque symbol lemme22 : Π (P : Graph → Prop), π(∀ g (λ a, ∀ n (λ x, ∀ n (λ y', (eta (comp a P) x (i y') ⇔ (∃ n (λ y, (x = i y) ∧ (eta a y y'))))))))
+opaque symbol lemme22 : Π (σ : El valuation), Π (f : El formula), π(∀ g (λ a, ∀ n (λ x, ∀ n (λ y', (eta (comp a σ f) x (i y') ⇔ (∃ n (λ y, (x = i y) ∧ (eta a y y'))))))))
 ≔ begin
-assume P;
+assume σ f;
 assume a x y;
 apply and_i;
 assume H;
@@ -40,9 +41,9 @@ apply ExIntro n y _ _;
 apply and_i _ _ (and_i _ _ (and_eg _ _ Hz) (lemme1 (i y))) (and_ed _ _ Hz);
 end;
 
-opaque symbol lemme23 : Π (P : Graph → Prop), π(∀ g (λ a, ∀ n (λ x, (eta (comp a P) x o ⇔ (∃ n (λ y, (x = i y) ∧ (eta a y (root a)) ∧ (P (cr a y))))))))
+opaque symbol lemme23 : Π (σ : El valuation), Π (f : El formula), π(∀ g (λ a, ∀ n (λ x, (eta (comp a σ f) x o ⇔ (∃ n (λ y, (x = i y) ∧ (eta a y (root a)) ∧ (interpretation (update σ zero (cr a y)) f)))))))
 ≔ begin
-assume P;
+assume σ f;
 assume a x;
 apply and_i;
 assume H;

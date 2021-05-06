@@ -242,10 +242,6 @@ symbol powerset : Graph → Graph;
 rule eta (powerset $a) $x $x' ↪ (∃ n (λ y, ∃ n (λ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')))) ∨ (∃ n (λ y, ∃ g (λ c, (($x = i y) ∧ ($x' = j (ρ c)) ∧ (eta $a y (root $a)) ∧ ((cr $a y) ∈ c))))) ∨ (∃ g (λ c, (($x = j (ρ c)) ∧ ($x' = o))));
 rule root (powerset $a) ↪ o;
 
-symbol comp : Graph → (Graph → Prop) → Graph;
-rule eta (comp $a $P) $x $x' ↪ (∃ n (λ y, ∃ n (λ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')))) ∨ (∃ n (λ y, ($x = i y) ∧ ($x' = o) ∧ (eta $a y (root $a)) ∧ ($P (cr $a y))));
-rule root (comp $a $P) ↪ o;
-
 symbol omega : Graph;
 rule eta omega $x $x' ↪ (∃ n (λ y, ∃ n (λ y', (($x = i y) ∧ ($x' = i y') ∧ (y < y'))))) ∨ (∃ n (λ y, (($x = i y) ∧ ($x' = o) ∧ Nat y)));
 rule root omega ↪ o;

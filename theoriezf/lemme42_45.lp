@@ -6,8 +6,8 @@ require open zf.theoriezf.lemme19_21;
 require open zf.theoriezf.lemme22_27;
 require open zf.theoriezf.lemme28_34;
 require open zf.theoriezf.lemme35_41;
+require open zf.theoriezf.extension;
 
-/*
 opaque symbol lemme42 : π(∀ g (λ a, ∀ g (λ c, (c ∈ (join a)) ⇔ (∃ g (λ b, (c ∈ b) ∧ (b ∈ a))))))
 ≔ begin
 assume a c;
@@ -96,7 +96,7 @@ apply or_id;
 apply lemme1 (j (root b));
 apply lemme5 c b (cr (pair a b) (j (root b))) (and_i _ _ H4 (lemme4 (cr (pair a b) (j (root b))) b (lemme37 a b)));
 end;
-*/
+
 opaque symbol lemme44 : π(∀ g (λ a, ∀ g (λ b, (a ∈ (powerset b)) ⇔ (∀ g (λ c, (c ∈ a) ⇒ (c ∈ b))))))
 ≔ begin
 assume a b;
@@ -136,28 +136,27 @@ apply lemmeSymEg (i z') z H3;
 apply lemmeSymEg z (i z') (and_eg _ _ (and_eg _ _ Hz'));
 assume H;
 abort;
-/*
-opaque symbol lemme45 : Π P : Graph → Prop, π(∀ g (λ a, ∀ g (λ b, (a ∈ (comp b P)) ⇔ ((a ∈ b) ∧ (P a)))))
+
+opaque symbol lemme45 : Π (σ : El valuation), Π (f : El formula), π(∀ g (λ a, ∀ g (λ b, (a ∈ (comp b σ f)) ⇔ ((a ∈ b) ∧ (interpretation (update σ zero a) f)))))
 ≔ begin
-assume P a b;
+assume σ f a b;
 apply and_i;
 assume H;
 apply ExElim n _ H _;
 assume x Hx;
-apply ExElim n _ ((and_eg _ _ (lemme23 P b x)) (and_eg _ _ Hx)) _;
+apply ExElim n _ ((and_eg _ _ (lemme23 σ f b x)) (and_eg _ _ Hx)) _;
 assume y Hy;
 apply and_i;
 apply ExIntro n y _ _;
 apply and_i;
 apply and_ed _ _ (and_eg _ _ Hy);
-apply lemme5 a (cr (comp b P) x) (cr b y) (and_i _ _ (and_ed _ _ Hx) _);
+apply lemme5 a (cr (comp b σ f) x) (cr b y) (and_i _ _ (and_ed _ _ Hx) _);
 apply imp_i (x = i y) _ _ _;
 assume H1;
 apply imp_i (i y = x) _ _ _;
 assume H2;
-apply H2 (λ w, (cr (comp b P) w) simeq (cr b y));
-apply lemme39 P b y;
+apply H2 (λ w, (cr (comp b σ f) w) simeq (cr b y));
+apply lemme39 σ f b y;
 apply lemmeSymEg x (i y) H1;
 apply and_eg _ _ (and_eg _ _ Hy);
 abort;
-*/
