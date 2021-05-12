@@ -2,4 +2,4 @@ Les définitions et règles de réécritures relatives aux connecteurs logiques 
 
 Les fichiers nommés lemmeA_B.lp contiennent les preuves des lemmes A à B.
 
-Le fichier extension.lp permet de réaliser des preuves par induction, en utlisant la définition des entiers du fichier nat.lp.
+Le fichier extension.lp contient les développements des outils pour réaliser des preuves par induction. Le fichier lemme_extension.lp contient les preuves des lemmes 32 et 41, ainsi que du théorème prouvant l'extensionnalité.
