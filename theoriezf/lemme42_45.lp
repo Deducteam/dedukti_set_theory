@@ -136,6 +136,7 @@ apply and_ed _ _ Hz;
 apply lemmeSymEg (i z') z H3;
 apply lemmeSymEg z (i z') (and_eg _ _ (and_eg _ _ Hz'));
 assume H;
+
 abort;
 
 opaque symbol lemme45 : Π (σ : El valuation), Π (f : El formula), π(∀ g (λ a, ∀ g (λ b, (a ∈ (comp b σ f)) ⇔ ((a ∈ b) ∧ (interpretation (update σ zero a) f)))))

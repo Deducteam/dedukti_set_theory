@@ -7,7 +7,7 @@ require open zf.theoriezf.lemme19_21;
 require open zf.theoriezf.lemme28_34;
 //require open zf.theoriezf.lemme35_41;
 //require open zf.theoriezf.lemme42_45;
-require open zf.theoriezf.lemme46_51;
+//require open zf.theoriezf.lemme46_51;
 require open zf.theoriezf.extension;
 
 opaque symbol lemmeSymNP : Π (x y : El nat), π((eqNP x y) ⇒ (eqNP y x)) 
