@@ -1,22 +1,5 @@
 require open zf.theoriezf.logique;
-
-// Nat
-
-constant symbol nat : Set;
-symbol zero : El nat;
-symbol s : El nat → El nat;
-symbol eqN : El nat → El nat → El nat;
-rule eqN (s $x) (s $y) ↪ eqN $x $y;
-rule eqN zero (s $y) ↪ zero;
-rule eqN (s $x) zero ↪ zero;
-rule eqN zero zero ↪ s zero;
-
-symbol eqNP : El nat → El nat → Prop;
-rule π(eqNP $x $y) ↪ Π (P : El nat → Prop), π (P $x ⇒ P $y);
-
-symbol one ≔ s zero;
-symbol two ≔ s one;
-symbol three ≔ s two;
+require open zf.theoriezf.nat;
 
 // Formula
 
@@ -31,12 +14,13 @@ constant symbol impF : El formula → El formula → El formula;
 constant symbol fF : El formula;
 constant symbol tF : El formula;
 
-symbol if : El nat → Graph → Graph → Graph;
-rule if zero $g1 $g2 ↪ $g2;
-rule if (s zero) $g1 $g2 ↪ $g1;
-
 symbol update : (El nat → Graph) → El nat → Graph → (El nat → Graph);
-rule update $σ $x $a $y ↪ if (eqN $x $y) $a ($σ $y);
+symbol update1 : (El nat → Graph) → El nat → Graph → El nat → (El nat → Graph);
+rule update $σ $x $a $y ↪ update1 $σ $x $a $y $y;
+rule update1 $σ zero $a zero $z ↪ $a;
+rule update1 $σ zero $a (s $y) $z ↪ $σ $z;
+rule update1 $σ (s $x) $a zero $z ↪ $σ $z;
+rule update1 $σ (s $x) $a (s $y) $z ↪ update1 $σ $x $a $y $z;
 
 symbol valuation : Set;
 rule El valuation ↪ El nat → El g;
