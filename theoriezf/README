@@ -1,3 +1,5 @@
+L'implémentation de la théorie des ensembles dans Dedukti est décomposée en plusieurs fichiers :
+
 - logique.lp contient les définitions et règles de réécritures relatives aux connecteurs logiques et à la structure des graphes pointés
 
 - les fichiers nommés lemmeA_B.lp contiennent les preuves des lemmes A à B.
