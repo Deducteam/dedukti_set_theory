@@ -10,4 +10,4 @@ L'implémentation de la théorie des ensembles dans Dedukti est décomposée en 
 
 - lemme_formule.lp contient les lemmes intermédiaires utilisant les formules
 
-- lemme_extension.lp contient les preuves des lemmes 32 et 41, ainsi que du théorème prouvant l'extensionnalité
+- lemme_extension.lp contient les preuves des lemmes 32 et 41, ainsi que du théorème prouvant l'extensionnalité.
