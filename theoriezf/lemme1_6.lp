@@ -17,46 +17,29 @@ end;
 opaque symbol lemme3 : π(∀ g (λ a, a simeq a))
 ≔ begin
 assume a;
-apply ExIntro relat (λ a, λ b, a = b) (λ r, ((r (root a) (root a)) ∧ (∀ n (λ x, (∀ n (λ x', (∀ n (λ y, (((eta a x' x) ∧ (r x y)) ⇒ (∃ n (λ y', ((eta a y' y) ∧ (r x' y'))))))))))) ∧ (∀ n (λ y, (∀ n (λ y', (∀ n (λ x, (((eta a y' y) ∧ (r x y)) ⇒ (∃ n (λ x', ((eta a x' x) ∧ (r x' y'))))))))))))) _;
-apply and_i (((root a) = (root a)) ∧ (∀ n (λ x, (∀ n (λ x', (∀ n (λ y, (((eta a x' x) ∧ (x = y)) ⇒ (∃ n (λ y', ((eta a y' y) ∧ (x' = y')))))))))))) ((∀ n (λ y, (∀ n (λ y', (∀ n (λ x, (((eta a y' y) ∧ (x = y)) ⇒ (∃ n (λ x', ((eta a x' x) ∧ (x' = y'))))))))))));
-apply and_i ((root a) = (root a)) (∀ n (λ x, (∀ n (λ x', (∀ n (λ y, (((eta a x' x) ∧ (x = y)) ⇒ (∃ n (λ y', ((eta a y' y) ∧ (x' = y')))))))))));
+apply ExIntro relat (λ a, λ b, a = b) _ _;
+apply and_i;
+apply and_i;
 apply lemme1 (root a);
 assume x x' y H;
-apply ExIntro n x' (λ y', eta a y' y ∧ (x' = y')) _;
-apply and_i (eta a x' y) (x' = x');
+apply ExIntro n x' _ _;
+apply and_i;
 apply imp_e (x = y) (eta a x' y);
 assume Heq;
 apply Heq (λ w, eta a x' w);
-apply and_eg (eta a x' x) (x = y) H;
-apply and_ed (eta a x' x) (x = y) H;
+apply and_eg _ _ H;
+apply and_ed _ _ H;
 apply lemme1 x';
 assume y y' x H;
-apply ExIntro n y' (λ x', eta a x' x ∧ (x' = y')) _;
-apply and_i (eta a y' x) (y' = y');
+apply ExIntro n y' _ _;
+apply and_i;
 apply imp_e (y = x) (eta a y' x);
 assume Heq;
 apply Heq (λ w, eta a y' w);
-apply and_eg (eta a y' y) (x = y) H;
+apply and_eg _ _ H;
 apply lemmeSymEg x y (and_ed (eta a y' y) (x = y) H);
 apply lemme1 y';
 end;
-
-/*
-opaque symbol lemme4 : π(∀ g (λ a, ∀ g (λ b, (a simeq b) ⇒ (b simeq a))))
-≔ begin
-assume a b H;
-apply ExElim relat _ H _;
-assume r Hr;
-apply ExIntro relat (λ x, λ y, r y x) (λ r, ((r (root b) (root a)) ∧ (∀ n (λ x, ∀ n (λ x', ∀ n (λ y, (eta b x' x ∧ r x y) ⇒ (∃ n (λ y', eta a y' y ∧ r x' y')))))) ∧ (∀ n (λ y, ∀ n (λ y', ∀ n (λ x, (eta a y' y ∧ r x y) ⇒ (∃ n (λ x', eta b x' x ∧ r x' y')))))))) _;
-apply and_i (((λ x, λ y, r y x) (root b) (root a)) ∧ (∀ n (λ x, ∀ n (λ x', ∀ n (λ y, (eta b x' x ∧ (λ x, λ y, r y x) x y) ⇒ (∃ n (λ y', eta a y' y ∧ (λ x, λ y, r y x) x' y'))))))) (∀ n (λ y, ∀ n (λ y', ∀ n (λ x, (eta a y' y ∧ (λ x, λ y, r y x) x y) ⇒ (∃ n (λ x', eta b x' x ∧ (λ x, λ y, r y x) x' y'))))));
-apply and_i ((λ x, λ y, r y x) (root b) (root a)) (∀ n (λ x, ∀ n (λ x', ∀ n (λ y, (eta b x' x ∧ (λ x, λ y, r y x) x y) ⇒ (∃ n (λ y', eta a y' y ∧ (λ x, λ y, r y x) x' y'))))));
-apply and_eg (r (root a) (root b)) (∀ n (λ x, ∀ n (λ x', ∀ n (λ y, (eta a x' x ∧ r x y) ⇒ (∃ n (λ y', eta b y' y ∧ r x' y')))))) (and_eg ((r (root a) (root b)) ∧ (∀ n (λ x, ∀ n (λ x', ∀ n (λ y, (eta a x' x ∧ r x y) ⇒ (∃ n (λ y', eta b y' y ∧ r x' y'))))))) (∀ n (λ y, ∀ n (λ y', ∀ n (λ x, (eta b y' y ∧ r x y) ⇒ (∃ n (λ x', eta a x' x ∧ r x' y')))))) Hr);
-assume y y' x H1;
-apply imp_e (eta b y' y ∧ r x y) (∃ n (λ x', eta a x' x ∧ r x' y')) ((and_ed ((r (root a) (root b)) ∧ (∀ n (λ x, ∀ n (λ x', ∀ n (λ y, (eta a x' x ∧ r x y) ⇒ (∃ n (λ y', eta b y' y ∧ r x' y'))))))) (∀ n (λ y, ∀ n (λ y', ∀ n (λ x, (eta b y' y ∧ r x y) ⇒ (∃ n (λ x', eta a x' x ∧ r x' y')))))) Hr) y y' x) H1;
-assume x x' y H2;
-apply imp_e (eta a x' x ∧ r x y) (∃ n (λ y', eta b y' y ∧ r x' y')) (and_ed (r (root a) (root b)) (∀ n (λ x, ∀ n (λ x', ∀ n (λ y, (eta a x' x ∧ r x y) ⇒ (∃ n (λ y', eta b y' y ∧ r x' y')))))) ((and_eg ((r (root a) (root b)) ∧ (∀ n (λ x, ∀ n (λ x', ∀ n (λ y, (eta a x' x ∧ r x y) ⇒ (∃ n (λ y', eta b y' y ∧ r x' y'))))))) (∀ n (λ y, ∀ n (λ y', ∀ n (λ x, (eta b y' y ∧ r x y) ⇒ (∃ n (λ x', eta a x' x ∧ r x' y')))))) Hr)) x x' y) H2;
-end;
-*/
 
 opaque symbol lemme4 : π(∀ g (λ a, ∀ g (λ b, (a simeq b) ⇒ (b simeq a))))
 ≔ begin
@@ -64,20 +47,11 @@ assume a b H;
 apply ExElim relat _ H _;
 assume r Hr;
 apply ExIntro relat (λ x, λ y, r y x) _ _;
-apply and_i _ _;
+apply and_i;
 apply and_i;
 apply and_eg _ _ (and_eg _ _ Hr);
 assume y y' x H1;
-
-//Ancienne version qui ne fonctionne plus
 apply ((and_ed _ _ Hr) y y' x) H1; 
-
-// Mais fonctionne si on enlève les métavariables
-//apply ((and_ed ((r (root a) (root b)) ∧ (∀ n (λ x, ∀ n (λ x', ∀ n (λ y, (eta a x' x ∧ r x y) ⇒ (∃ n (λ y', eta b y' y ∧ r x' y'))))))) (∀ n (λ y, ∀ n (λ y', ∀ n (λ x, (eta b y' y ∧ r x y) ⇒ (∃ n (λ x', eta a x' x ∧ r x' y')))))) Hr) y y' x) H1;
-
-//Nouvelle version qui fonctionne avec imp_e et AllElim:
-//apply imp_e _ _ (AllElim _ _ (AllElim _ _ (AllElim _ _ (and_ed _ _ Hr) y) y') x) H1;
-
 assume x x' y H2;
 apply and_ed _ _ (and_eg _ _ Hr) x x' y H2;
 end;
