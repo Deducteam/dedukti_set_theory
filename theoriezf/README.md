@@ -1,4 +1,4 @@
-The implementation of _Set theory_ in Dedukti is composed of several files :
+The implementation of __Set theory__ in Dedukti is composed of several files :
 
 - *logic.lp* that contains the basis of logic
 
