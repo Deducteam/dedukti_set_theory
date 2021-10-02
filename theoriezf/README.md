@@ -1,10 +1,12 @@
+#Implementation of Set theory in Dedukti
+
 The implementation of __Set theory__ in Dedukti is composed of several files :
 
 - *logic.lp* that contains the basis of logic
 
 - *language.lp* that contains the defintion of the theory of pointed graphs
 
-- the files named *lemmasA_B.lp* contain the proofs of lemmaA to lemmaB.
+- the files named *lemmasA_B.lp* contain the proofs of lemmaA to lemmaB
 
 - *nat.lp* contains the definition of natural numbers
 
