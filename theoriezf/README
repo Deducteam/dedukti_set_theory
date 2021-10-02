@@ -1,13 +1,15 @@
-L'implémentation de la théorie des ensembles dans Dedukti est décomposée en plusieurs fichiers :
+The implementation of set theory in Dedukti is composed of several files :
 
-- logique.lp contient les définitions et règles de réécritures relatives aux connecteurs logiques et à la structure des graphes pointés
+- logic.lp that contains the basis of logic
 
-- les fichiers nommés lemmeA_B.lp contiennent les preuves des lemmes A à B.
+- language.lp that contains the defintion of the theory of pointed graphs
 
-- nat.lp contient le développement des entiers
+- the files named lemmasA_B.lp contain the proofs of lemmaA to lemmaB.
 
-- formule.lp contient le développementdes formules
+- nat.lp contains the definition of natural numbers
 
-- lemme_formule.lp contient les lemmes intermédiaires utilisant les formules
+- formulas.lp contains the development of formulas
 
-- lemme_extension.lp contient les preuves des lemmes 32 et 41, ainsi que du théorème prouvant l'extensionnalité.
+- formulas_lemmas.lp contains intermediate lemmas that are using forumas
+
+- extension.lp contains the proofs of lemmas 32 and 41, but also the proof of the theorem prooving weak extensionality.
