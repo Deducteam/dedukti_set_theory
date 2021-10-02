@@ -1,6 +1,4 @@
-require open zf.theoriezf.logique;
-
-// Nat
+require open zf.theoriezf.logic;
 
 constant symbol nat : Set;
 symbol zero : El nat;
@@ -21,13 +19,13 @@ constant symbol recN : Π (P : El nat → Prop),
 → π(∀ nat (λ x, (P x) ⇒ (P (s x))))
 → π(∀ nat (λ x, (P x)));
 
-opaque symbol lemmeNP : Π (x : El nat), π(eqNP x x) 
+opaque symbol lemmaNP : Π (x : El nat), π(eqNP x x) 
 ≔ begin
 assume x P Px;
 apply Px;
 end;
 
-opaque symbol lemmeSymNP : Π (x y : El nat), π((eqNP x y) ⇒ (eqNP y x)) 
+opaque symbol lemmaSymNP : Π (x y : El nat), π((eqNP x y) ⇒ (eqNP y x)) 
 ≔ begin
 assume x y;
 simpl;
@@ -37,7 +35,7 @@ assume Px;
 apply Px;
 end;
 
-opaque symbol lemmeTransNP : Π (x y z: El nat), π(((eqNP x y) ∧ (eqNP y z)) ⇒ (eqNP x z))
+opaque symbol lemmaTransNP : Π (x y z: El nat), π(((eqNP x y) ∧ (eqNP y z)) ⇒ (eqNP x z))
 ≔ begin
 assume x y z Pxyz P Px;
 apply (and_ed _ _ Pxyz) P ((and_eg _ _ Pxyz) P Px);
@@ -57,7 +55,7 @@ assume x Px;
 apply or_id;
 assume H0;
 apply Peano4 x _;
-apply lemmeSymNP zero (s x) H0;
+apply lemmaSymNP zero (s x) H0;
 assume x Hx;
 apply recN _;
 //Cas s x, y = 0
@@ -69,7 +67,7 @@ apply or_e _ _ _ (Hx y);
 assume Hxy;
 apply or_ig;
 apply Hxy (λ z, eqNP (s x) (s z)) _;
-apply lemmeNP (s x);
+apply lemmaNP (s x);
 assume Hxy;
 apply or_id;
 assume Hsxsy;
