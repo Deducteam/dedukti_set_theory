@@ -16,7 +16,7 @@ require open zf.theoriezf.extension;
 opaque symbol lemma46 : π(∀ g (λ a, ¬ (a ∈ empty_set)))
 ≔ begin
 assume a;
-simpl π;
+simplify π;
 assume H;
 apply ExElim n _ H _;
 assume x Hx;

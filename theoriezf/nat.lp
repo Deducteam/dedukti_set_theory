@@ -28,7 +28,7 @@ end;
 opaque symbol lemmaSymNP : Π (x y : El nat), π((eqNP x y) ⇒ (eqNP y x)) 
 ≔ begin
 assume x y;
-simpl;
+simplify;
 assume Pxy P;
 apply Pxy (λ z, (P z) ⇒ (P x));
 assume Px;
@@ -47,7 +47,7 @@ apply recN _;
 apply recN _;
 //Cas x = 0, y = 0
 apply or_ig;
-simpl;
+simplify;
 assume P Pz;
 apply Pz;
 //Cas x = 0, s y

@@ -14,7 +14,7 @@ assume σ a z;
 apply recN _;
 apply lemma3 a;
 assume x Hx;
-simpl update1;
+simplify update1;
 apply Hx;
 end;
 
@@ -31,17 +31,17 @@ assume P P0;
 apply P0;
 //Cas x = 0, s y
 assume y Hrec Hy;
-simpl update1;
+simplify update1;
 apply lemma3 (σ z);
 assume x Hx;
 apply recN _;
 //Cas s x, y = 0
 assume H0;
-simpl update1;
+simplify update1;
 apply lemma3 (σ z);
 //Cas s x, s y
 assume y Hrec Hy;
-simpl update1;
+simplify update1;
 apply Hx y _;
 assume Hxy;
 apply Hy _;
@@ -73,7 +73,7 @@ apply or_e _ _ _ (eqNPor x y);
 assume H1;
 apply lemma5 (update σ x a y) b (update σ x b y) (and_i _ _ _ _);
 apply lemma5 (update σ x a y) a b (and_i _ _ _ Hab);
-simpl update;
+simplify update;
 apply (and_eg _ _ (axiom1 σ x y y a)) H1;
 apply lemma4 (update σ x b y) b ((and_eg _ _ (axiom1 σ x y y b)) H1);
 assume H0;
@@ -88,12 +88,12 @@ assume σ x y a b c Hab z;
 apply or_e _ _ _ (eqNPor y z);
 assume H1;
 apply lemma5 (update (update σ x a) y c z) c (update (update σ x b) y c z) (and_i _ _ _ _);
-simpl update;
+simplify update;
 apply (and_eg _ _ (axiom1 (update σ x a) y z z c)) H1;
 apply lemma4 (update (update σ x b) y c z) c ((and_eg _ _ (axiom1 (update σ x b) y z z c)) H1);
 assume H0;
 apply lemma5 (update (update σ x a) y c z) (update σ x a z ) (update (update σ x b) y c z) (and_i _ _ _ _);
-simpl update;
+simplify update;
 apply (and_ed _ _ (axiom1 (update σ x a) y z z c)) H0;
 apply lemma5 (update σ x a z) (update σ x b z) (update (update σ x b) y c z) (and_i _ _ _ _);
 apply lemmaUp σ x a b Hab z;
@@ -116,7 +116,7 @@ apply lemma4 (update1 σ' z c z z) c ((and_eg _ _ (axiom1 σ' z z z c)) (lemmaNP
 apply lemmaSymNP x z H1;
 apply H1;
 assume H0;
-simpl update;
+simplify update;
 apply lemma5 (update1 σ x c z z) (σ z) (update1 σ' x c z z) (and_i _ _ _ _);
 apply (and_ed _ _ (axiom1 σ x z z c)) H0;
 apply lemma5 (σ z) (σ' z) (update1 σ' x c z z) (and_i _ _ _ _);
@@ -128,7 +128,7 @@ opaque symbol lemmaInt : Π (f : El formula), π(∀ valuation (λ σ, ∀ valua
 ≔ begin
 apply recF (λ f, ∀ valuation (λ σ, ∀ valuation (λ σ', ((interpretation σ f) ∧ (∀ nat (λ x, (σ x) simeq (σ' x)))) ⇒ (interpretation σ' f))));
 assume x y σ σ' Heq;
-simpl interpretation;
+simplify interpretation;
 apply lemma5 (σ' x) (σ y) (σ' y) (and_i _ _ _ (and_ed _ _ Heq y));
 apply lemma5 (σ' x) (σ x) (σ y) (and_i _ _ _ (and_eg _ _ Heq));
 apply lemma4 (σ x) (σ' x) (and_ed _ _ Heq x);
