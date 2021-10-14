@@ -1,4 +1,6 @@
-# Implementation of Set theory in Dedukti
+```diff
+
+# Implementation of ! __Set theory__ in Dedukti
 
 The implementation of __Set theory__ in Dedukti is composed of several files :
 
@@ -15,3 +17,5 @@ The implementation of __Set theory__ in Dedukti is composed of several files :
 - *formulas_lemmas.lp* contains intermediate lemmas that are using forumas
 
 - *extension.lp* contains the proofs of lemmas 32 and 41, but also the proof of the theorem prooving weak extensionality.
+
+```
