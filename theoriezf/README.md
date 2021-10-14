@@ -1,4 +1,4 @@
-# Implementation of __Set theory__ in Dedukti
+# Implementation of Set theory in Dedukti
 
 The implementation of __Set theory__ in Dedukti is composed of several files :
 
