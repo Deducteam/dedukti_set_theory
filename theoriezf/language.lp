@@ -25,10 +25,6 @@ rule eta (cr $a $z) $x $y ↪ eta $a $x $y;
 rule root (cr $a $x) ↪ $x;
 rule (cr (cr $a $x) $y) ↪ cr $a $y;
 
-constant symbol = : Node → Node → Prop;
-notation = infix 4;
-rule π ($x = $y) ↪ Π (P : Node → Prop), π(P $x) → π(P $y);
-
 constant symbol o : Node;
 constant symbol O : Node;
 

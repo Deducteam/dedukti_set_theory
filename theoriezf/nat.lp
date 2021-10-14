@@ -22,7 +22,7 @@ constant symbol recN : Π (P : El nat → Prop),
 opaque symbol lemmaNP : Π (x : El nat), π(eqNP x x) 
 ≔ begin
 assume x P Px;
-apply Px;
+refine Px;
 end;
 
 opaque symbol lemmaSymNP : Π (x y : El nat), π((eqNP x y) ⇒ (eqNP y x)) 
@@ -30,47 +30,47 @@ opaque symbol lemmaSymNP : Π (x y : El nat), π((eqNP x y) ⇒ (eqNP y x))
 assume x y;
 simplify;
 assume Pxy P;
-apply Pxy (λ z, (P z) ⇒ (P x));
+refine Pxy (λ z, (P z) ⇒ (P x)) _;
 assume Px;
-apply Px;
+refine Px;
 end;
 
 opaque symbol lemmaTransNP : Π (x y z: El nat), π(((eqNP x y) ∧ (eqNP y z)) ⇒ (eqNP x z))
 ≔ begin
 assume x y z Pxyz P Px;
-apply (and_ed _ _ Pxyz) P ((and_eg _ _ Pxyz) P Px);
+refine (and_ed _ _ Pxyz) P ((and_eg _ _ Pxyz) P Px);
 end;
 
 opaque symbol eqNPor : Π (x y : El nat), π((eqNP x y) ∨ (¬(eqNP x y)))
 ≔ begin
-apply recN _;
-apply recN _;
+refine recN _ _ _;
+refine recN _ _ _;
 //Cas x = 0, y = 0
-apply or_ig;
+refine or_ig _ _ _;
 simplify;
 assume P Pz;
-apply Pz;
+refine Pz;
 //Cas x = 0, s y
 assume x Px;
-apply or_id;
+refine or_id _ _ _;
 assume H0;
-apply Peano4 x _;
-apply lemmaSymNP zero (s x) H0;
+refine Peano4 x _;
+refine lemmaSymNP zero (s x) H0;
 assume x Hx;
-apply recN _;
+refine recN _ _ _;
 //Cas s x, y = 0
-apply or_id;
-apply Peano4 x;
+refine or_id _ _ _;
+refine Peano4 x;
 //Cas s x, s y
 assume y Hrec;
-apply or_e _ _ _ (Hx y);
+refine or_e _ _ _ (Hx y) _ _;
 assume Hxy;
-apply or_ig;
-apply Hxy (λ z, eqNP (s x) (s z)) _;
-apply lemmaNP (s x);
+refine or_ig _ _ _;
+refine Hxy (λ z, eqNP (s x) (s z)) _;
+refine lemmaNP (s x);
 assume Hxy;
-apply or_id;
+refine or_id _ _ _;
 assume Hsxsy;
-apply Hxy _;
-apply Peano3 x y Hsxsy;
+refine Hxy _;
+refine Peano3 x y Hsxsy;
 end;

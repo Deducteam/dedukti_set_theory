@@ -110,7 +110,43 @@ end;
 
 symbol Set : TYPE;
 
-symbol El : Set → TYPE;
+injective symbol El : Set → TYPE;
+/*
+constant symbol ∀ {X} : (El X → Prop) → Prop; 
+notation ∀ quantifier;
+rule π (@∀ $x $A) ↪ Π (y : El $x), π ($A y);
+
+constant symbol ∃ {X} : (El X → Prop) → Prop;
+notation ∃ quantifier;
+rule π (@∃ $x $A) ↪ Π P, (Π (y : El $x), π ($A y) → π P) → π P;
+
+opaque symbol AllElim : Π (x : Set), Π (P : El x → Prop), π(`∀ y, P y) → Π (y : El x), π(P y)
+≔ begin
+simplify;
+assume x P H y;
+apply H y;
+end;
+
+opaque symbol AllIntro : Π (x : Set), Π (P : El x → Prop), (Π y : El x, π(P y)) → π(`∀ x, P x)
+≔ begin
+assume x P;
+simplify;
+assume H y;
+apply H y;
+end;
+
+opaque symbol ExIntro : Π (x : Set), Π (a : El x), Π (P : El x → Prop), π(P a ⇒ `∃ y, P y)
+≔ begin
+assume x a P Pa P0 Py0;
+apply Py0 a Pa;
+end;
+
+opaque symbol ExElim : Π (x : Set), Π (P : El x → Prop), π(`∃ y, P y) → Π Q : Prop, π((`∀ y : El x, P y ⇒ Q)) → π(Q)
+≔ begin
+simplify;
+assume x P H P' H';
+apply H P' H';
+end;*/
 
 constant symbol ∀ : Π (x : Set), (El x → Prop) → Prop;
 notation ∀ quantifier;
@@ -146,4 +182,14 @@ opaque symbol ExElim : Π x : Set, Π P : El x → Prop, π(∃ x P) → Π Q : 
 simplify;
 assume x P H P' H';
 apply H P' H';
+end;
+
+constant symbol = {s} : El s → El s → Prop;
+notation = infix 4;
+rule π (@= $s $x $y) ↪ Π (P : El $s → Prop), π(P $x) → π(P $y);
+
+opaque symbol refl : Π (s : Set), π(∀ s (λ x, x = x)) ≔
+begin
+assume s y P Py;
+refine Py;
 end;
