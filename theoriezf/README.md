@@ -1,8 +1,6 @@
-```diff
-
 # Implementation of ! __Set theory__ in Dedukti
 
-The implementation of __Set theory__ in Dedukti is composed of several files :
+```diff The implementation of __Set theory__ in Dedukti is composed of several files :
 
 - *logic.lp* that contains the basis of logic
 
