@@ -6,7 +6,7 @@ The implementation of __Set theory__ in Dedukti is composed of several files :
 
 - *language.lp* that contains the defintion of the theory of pointed graphs
 
-- *bisimilarity.lp*, *injectivity.lp*, *eta1.lp*, *eta2.lp*, *eta3.lp* and *membership.lp* that contain lemmas from 3 to 31.
+- *bisimilarity.lp*, *injectivity.lp*, *eta1.lp*, *eta2.lp*, *eta3.lp* and *membership.lp* that contain lemmas from 3 to 31
 
 - *nat.lp* contains the definition of natural numbers
 
@@ -16,6 +16,6 @@ The implementation of __Set theory__ in Dedukti is composed of several files :
 
 - *lemma32.lp* that contains the proof of lemma 32
 
-- *relocation.lp*, *embedding.lp*, *lemma41.lp*, *finitary.lp*, *infinity.lp* and *closure.lp* that contain the proofs of lemmas 33 to 53
+- *relocation.lp*, *embedding.lp*, *lemma41.lp*, *finitary.lp*, *infinity.lp* and *closure.lp* that contain the proofs of lemmas 33 to 53.
 
 In addition, *weakextensionality.lp* contains the proofs of the theorem prooving weak extensionality.
