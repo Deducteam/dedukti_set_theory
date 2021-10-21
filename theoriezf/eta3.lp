@@ -7,7 +7,7 @@ require open zf.theoriezf.eta2;
 require open zf.theoriezf.formulas;
 require open zf.theoriezf.nat;
 
-opaque symbol lemma22 : Π (σ : El valuation), Π (f : El formula), π(∀ g (λ a, ∀ n (λ x, ∀ n (λ y', (eta (comp a σ f) x (i y') ⇔ (∃ n (λ y, (x = i y) ∧ (eta a y y'))))))))
+opaque symbol lemma22 : Π (σ : El valuation), Π (f : El formula), π(`∀ a, `∀ x, `∀ y', (eta (comp a σ f) x (i y') ⇔ (`∃ y, (x = i y) ∧ (eta a y y'))))
 ≔ begin
 assume σ f;
 assume a x y;
@@ -43,7 +43,7 @@ refine ExIntro n y _ _;
 refine and_i _ _ (and_i _ _ (and_eg _ _ Hz) (refl n (i y))) (and_ed _ _ Hz);
 end;
 
-opaque symbol lemma23 : Π (σ : El valuation), Π (f : El formula), π(∀ g (λ a, ∀ n (λ x, (eta (comp a σ f) x o ⇔ (∃ n (λ y, (x = i y) ∧ (eta a y (root a)) ∧ (interpretation (update σ zero (cr a y)) f)))))))
+opaque symbol lemma23 : Π (σ : El valuation), Π (f : El formula), π(`∀ a, `∀ x, (eta (comp a σ f) x o ⇔ (`∃ y, (x = i y) ∧ (eta a y (root a)) ∧ (interpretation (update σ zero (cr a y)) f))))
 ≔ begin
 assume σ f;
 assume a x;
@@ -78,7 +78,7 @@ refine and_ed _ _ (and_eg _ _ Hy);
 refine and_ed _ _ Hy;
 end;
 
-opaque symbol lemma24 : π(∀ n (λ x, ∀ n (λ y', (eta omega x (i y')) ⇔ (∃ n (λ y, (x = i y) ∧ (y < y'))))))
+opaque symbol lemma24 : π(`∀ x, `∀ y', (eta omega x (i y')) ⇔ (`∃ y, (x = i y) ∧ (y < y')))
 ≔ begin
 assume x y';
 refine and_i _ _ _ _;
@@ -117,7 +117,7 @@ refine refl n (i y');
 refine and_ed _ _ Hy;
 end;
 
-opaque symbol lemma25 : π(∀ n (λ x, (eta omega x o) ⇔ (∃ n (λ y, (x = i y) ∧ (Nat y)))))
+opaque symbol lemma25 : π(`∀ x, (eta omega x o) ⇔ (`∃ y, (x = i y) ∧ (Nat y)))
 ≔ begin
 assume x;
 refine and_i _ _ _ _;
@@ -149,7 +149,7 @@ refine refl n o;
 refine and_ed _ _ Hy;
 end;
 
-opaque symbol lemma26 : π(∀ g (λ a, ∀ n (λ x, ∀ n (λ y', (eta (Cl a) x (i y')) ⇔ (∃ n (λ y, (x = i y) ∧ (eta a y y')))))))
+opaque symbol lemma26 : π(`∀ a, `∀ x, `∀ y', (eta (Cl a) x (i y')) ⇔ (`∃ y, (x = i y) ∧ (eta a y y')))
 ≔ begin
 assume a x y';
 refine and_i _ _ _ _;
@@ -188,7 +188,7 @@ refine refl n (i y');
 refine and_ed _ _ Hy;
 end;
 
-opaque symbol lemma27 : π(∀ g (λ a, ∀ n (λ x, (eta (Cl a) x o) ⇔ (∃ n (λ y, ((x = i y) ∧ (∀ class (λ c, ((∀ n (λ z, (eta a z (root a)) ⇒ (c z))) ∧ (∀ n (λ z, ∀ n (λ z', (((eta a z z') ∧ (c z')) ⇒ (c z)))))) ⇒ c y))))))))
+opaque symbol lemma27 : π(`∀ a, `∀ x, (eta (Cl a) x o) ⇔ (`∃ y, ((x = i y) ∧ (`∀ c : El class, ((`∀ z, (eta a z (root a)) ⇒ (c z)) ∧ (`∀ z, `∀ z', (((eta a z z') ∧ (c z')) ⇒ (c z)))) ⇒ c y))))
 ≔ begin
 assume a x;
 refine and_i _ _ _ _;

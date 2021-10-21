@@ -66,7 +66,7 @@ assume H1;
 refine lemmaUpdate1_2 σ a z x y H1;
 end;
 
-opaque symbol lemmaUp : Π (σ : El nat → Graph), Π (x : El nat), Π (a b : Graph), π((a simeq b) ⇒ (∀ nat (λ y, (update σ x a y) simeq (update σ x b y))))
+opaque symbol lemmaUp : Π (σ : El nat → Graph), Π (x : El nat), Π (a b : Graph), π((a simeq b) ⇒ (`∀ y, (update σ x a y) simeq (update σ x b y)))
 ≔ begin
 assume σ x a b Hab y;
 refine or_e _ _ _ (eqNPor x y) _ _;
@@ -82,7 +82,7 @@ refine (and_ed _ _ (axiom1 σ x y y a)) H0;
 refine lemma4 (update σ x b y) (σ y) ((and_ed _ _ (axiom1 σ x y y b)) H0);
 end;
 
-opaque symbol lemmaUp2 : Π (σ : El nat → Graph), Π (x y : El nat), Π (a b c : Graph), π((a simeq b) ⇒ (∀ nat (λ z, (update (update σ x a) y c z) simeq (update (update σ x b) y c z))))
+opaque symbol lemmaUp2 : Π (σ : El nat → Graph), Π (x y : El nat), Π (a b c : Graph), π((a simeq b) ⇒ (`∀ z, (update (update σ x a) y c z) simeq (update (update σ x b) y c z)))
 ≔ begin
 assume σ x y a b c Hab z;
 refine or_e _ _ _ (eqNPor y z) _ _;
@@ -100,7 +100,7 @@ refine lemmaUp σ x a b Hab z;
 refine lemma4 (update (update σ x b) y c z) (update σ x b z) ((and_ed _ _ (axiom1 (update σ x b) y z z c)) H0);
 end;
 
-opaque symbol lemmaVal : Π (σ σ' : El nat → Graph), Π (x : El nat), Π (c : Graph), π ((∀ nat (λ y, σ y simeq σ' y)) ⇒ (∀ nat (λ z, (update σ x c z) simeq (update σ' x c z))))
+opaque symbol lemmaVal : Π (σ σ' : El nat → Graph), Π (x : El nat), Π (c : Graph), π ((`∀ y, σ y simeq σ' y) ⇒ (`∀ z, (update σ x c z) simeq (update σ' x c z)))
 ≔ begin
 assume σ σ' x c H z;
 refine or_e _ _ _ (eqNPor x z) _ _;
@@ -121,9 +121,9 @@ refine H z;
 refine lemma4 (update1 σ' x c z z) (σ' z) ((and_ed _ _ (axiom1 σ' x z z c)) H0);
 end;
 
-opaque symbol lemmaInt : Π (f : El formula), π(∀ valuation (λ σ, ∀ valuation (λ σ', ((interpretation σ f) ∧ (∀ nat (λ x, (σ x) simeq (σ' x)))) ⇒ (interpretation σ' f))))
+opaque symbol lemmaInt : Π (f : El formula), π(`∀ σ : El valuation, `∀ σ' : El valuation, ((interpretation σ f) ∧ (`∀ x, (σ x) simeq (σ' x))) ⇒ (interpretation σ' f))
 ≔ begin
-refine recF (λ f, ∀ valuation (λ σ, ∀ valuation (λ σ', ((interpretation σ f) ∧ (∀ nat (λ x, (σ x) simeq (σ' x)))) ⇒ (interpretation σ' f)))) _ _ _ _ _ _ _ _ _;
+refine recF (λ f, `∀ σ, `∀ σ', ((interpretation σ f) ∧ (`∀ x, (σ x) simeq (σ' x))) ⇒ (interpretation σ' f)) _ _ _ _ _ _ _ _ _;
 assume x y σ σ' Heq;
 simplify interpretation;
 refine lemma5 (σ' x) (σ y) (σ' y) (and_i _ _ _ (and_ed _ _ Heq y));

@@ -3,7 +3,7 @@ require open zf.theoriezf.language;
 require open zf.theoriezf.bisimilarity;
 require open zf.theoriezf.injectivity;
 
-opaque symbol lemma14 : π(∀ g (λ a, ∀ n (λ x, ∀ n (λ y', (eta (join a) x (i y')) ⇔ (∃ n (λ y, (x = i y) ∧ (eta a y y')))))))
+opaque symbol lemma14 : π(`∀ a, `∀ x, `∀ y', (eta (join a) x (i y')) ⇔ (`∃ y, (x = i y) ∧ (eta a y y')))
 ≔ begin
 assume a x y';
 refine and_i _ _ _ _;
@@ -41,7 +41,7 @@ refine ExIntro n y' _ _;
 refine and_i _ _ (and_i _ _ (and_eg _ _ Hy) (refl n (i y'))) (and_ed _ _ Hy);
 end;
 
-opaque symbol lemma15 : π(∀ g (λ a, ∀ n (λ x, (eta (join a) x o) ⇔ (∃ n (λ y, ∃ n (λ z, (x = i y) ∧ (eta a y z) ∧ (eta a z (root a))))))))
+opaque symbol lemma15 : π(`∀ a, `∀ x, (eta (join a) x o) ⇔ (`∃ y, `∃ z, (x = i y) ∧ (eta a y z) ∧ (eta a z (root a))))
 ≔ begin
 assume a x;
 refine and_i _ _ _ _;
@@ -82,7 +82,7 @@ refine and_ed _ _ (and_eg _ _ Hz);
 refine and_ed _ _ Hz;
 end;
 
-opaque symbol lemma16 : π(∀ g (λ a, ∀ g (λ b, ∀ n (λ x, ∀ n (λ y', (eta (pair a b) x (i y')) ⇔ (∃ n (λ y, (x = i y) ∧ (eta a y y'))))))))
+opaque symbol lemma16 : π(`∀ a, `∀ b, `∀ x, `∀ y', (eta (pair a b) x (i y')) ⇔ (`∃ y, (x = i y) ∧ (eta a y y')))
 ≔ begin
 assume a b x y';
 refine and_i _ _ _ _;
@@ -131,7 +131,7 @@ refine ExIntro n y' _ _;
 refine and_i _ _ (and_i _ _ (and_eg _ _ Hy) (refl n (i y'))) (and_ed _ _ Hy);
 end;
 
-opaque symbol lemma17 : π(∀ g (λ a, ∀ g (λ b, ∀ n (λ x, ∀ n (λ y', (eta (pair a b) x (j y')) ⇔ (∃ n (λ y, (x = j y) ∧ (eta b y y'))))))))
+opaque symbol lemma17 : π(`∀ a, `∀ b, `∀ x, `∀ y', (eta (pair a b) x (j y')) ⇔ (`∃ y, (x = j y) ∧ (eta b y y')))
 ≔ begin
 assume a b x y';
 refine and_i _ _ _ _;
@@ -180,7 +180,7 @@ refine ExIntro n y' _ _;
 refine and_i _ _ (and_i _ _ (and_eg _ _ Hy) (refl n (j y'))) (and_ed _ _ Hy);
 end;
 
-opaque symbol lemma18 : π(∀ g (λ a, ∀ g (λ b, ∀ n (λ x, (eta (pair a b) x o) ⇔ ((x = i (root a)) ∨ (x = j (root b)))))))
+opaque symbol lemma18 : π(`∀ a, `∀ b, `∀ x, (eta (pair a b) x o) ⇔ ((x = i (root a)) ∨ (x = j (root b))))
 ≔ begin
 assume a b x;
 refine and_i _ _ _ _;

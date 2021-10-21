@@ -8,7 +8,7 @@ require open zf.theoriezf.eta3;
 require open zf.theoriezf.membership;
 require open zf.theoriezf.formulas;
 
-opaque symbol lemma33 : π(∀ g (λ a, ∀ g (λ b, (((root b) = i (root a)) ∧ (∀ n (λ x, ∀ n (λ y', ((eta b y' (i x)) ⇔ (∃ n (λ x', (y' = (i x')) ∧ (eta a x' x)))))))) ⇒ (a simeq b))))
+opaque symbol lemma33 : π(`∀ a, `∀ b, (((root b) = i (root a)) ∧ (`∀ x, `∀ y', ((eta b y' (i x)) ⇔ (`∃ x', (y' = (i x')) ∧ (eta a x' x))))) ⇒ (a simeq b))
 ≔ begin
 assume a b H;
 refine ExIntro relat (λ u, λ v, v = i u) _ _;
@@ -42,7 +42,7 @@ refine ExIntro n x' _ _;
 refine and_i _ _ (and_ed _ _ Hx') (and_eg _ _ Hx');
 end;
 
-opaque symbol lemma34 : π(∀ g (λ a, ∀ g (λ b, (((root b) = j (root a)) ∧ (∀ n (λ x, ∀ n (λ y', ((eta b y' (j x)) ⇔ (∃ n (λ x', (y' = (j x')) ∧ (eta a x' x)))))))) ⇒ (a simeq b))))
+opaque symbol lemma34 : π(`∀ a, `∀ b, (((root b) = j (root a)) ∧ (`∀ x, `∀ y', ((eta b y' (j x)) ⇔ (`∃ x', (y' = (j x')) ∧ (eta a x' x))))) ⇒ (a simeq b))
 ≔ begin
 assume a b H;
 refine ExIntro relat (λ u, λ v, v = j u) _ _;

@@ -14,7 +14,7 @@ require open zf.theoriezf.formulas_lemmas;
 require open zf.theoriezf.nat;
 require open zf.theoriezf.weakextensionality;
 
-opaque symbol lemma42 : π(∀ g (λ a, ∀ g (λ c, (c ∈ (join a)) ⇔ (∃ g (λ b, (c ∈ b) ∧ (b ∈ a))))))
+opaque symbol lemma42 : π(`∀ a, `∀ c, (c ∈ (join a)) ⇔ (`∃ b, (c ∈ b) ∧ (b ∈ a)))
 ≔ begin
 assume a c;
 refine and_i _ _ _ _;
@@ -64,7 +64,7 @@ refine and_eg _ _ Hz;
 refine lemma5 c (cr a y) (cr (join a) (i y)) (and_i _ _ (lemma5 c (cr b x) (cr a y) (and_i _ _ (and_ed _ _ Hx) (and_ed _ _ Hy))) (lemma4 (cr (join a) (i y)) (cr a y) (lemma35 a y)));
 end;
 
-opaque symbol lemma43 : π(∀ g (λ a, ∀ g (λ b, ∀ g (λ c, (c ∈ (pair a b)) ⇔ ((c simeq a) ∨ (c simeq b))))))
+opaque symbol lemma43 : π(`∀ a, `∀ b, `∀ c, (c ∈ (pair a b)) ⇔ ((c simeq a) ∨ (c simeq b)))
 ≔ begin
 assume a b c;
 refine and_i _ _ _ _;
@@ -104,7 +104,7 @@ refine refl n (j (root b));
 refine lemma5 c b (cr (pair a b) (j (root b))) (and_i _ _ H4 (lemma4 (cr (pair a b) (j (root b))) b (lemma37 a b)));
 end;
 
-opaque symbol lemma44 : π(∀ g (λ a, ∀ g (λ b, (a ∈ (powerset b)) ⇔ (∀ g (λ c, (c ∈ a) ⇒ (c ∈ b))))))
+opaque symbol lemma44 : π(`∀ a, `∀ b, (a ∈ (powerset b)) ⇔ (`∀ c, (c ∈ a) ⇒ (c ∈ b)))
 ≔ begin
 assume a b;
 refine and_i _ _ _ _;
@@ -142,7 +142,7 @@ refine and_ed _ _ Hz;
 refine lemmaSymEg (i z') z H3;
 refine lemmaSymEg z (i z') (and_eg _ _ (and_eg _ _ Hz'));
 assume H;
-refine imp_e (∃ g (λ e, a simeq (cr (powerset b) (j (ρ e))))) _ _ _;
+refine imp_e (`∃ e, a simeq (cr (powerset b) (j (ρ e)))) _ _ _;
 assume H';
 refine ExElim g _ H' _ _;
 assume e He;
@@ -151,13 +151,13 @@ refine and_i _ _ _ He;
 refine and_ed _ _ (lemma21 b (j (ρ e))) _;
 refine ExIntro g e _ _ ;
 refine (refl n (j (ρ e)));
-refine imp_e (∃ g (λ e, ∀ g (λ c, (c ∈ a) ⇔ (c ∈ (cr (powerset b) (j (ρ e))))))) _ _ _;
+refine imp_e (`∃ e, `∀ c, (c ∈ a) ⇔ (c ∈ (cr (powerset b) (j (ρ e))))) _ _ _;
 assume H';
 refine ExElim g _ H' _ _;
 assume e He;
 refine ExIntro g e _ _;
 refine lemmaExt a (cr (powerset b) (j (ρ e))) He;
-refine imp_e (∃ g (λ e, ∀ g (λ c, (c ∈ a) ⇔ (∃ n (λ y, (eta b y (root b) ∧ ((cr b y) ∈ e) ∧ (c simeq (cr b y)))))))) _ _ _;
+refine imp_e (`∃ e, `∀ c, (c ∈ a) ⇔ (`∃ y, (eta b y (root b) ∧ ((cr b y) ∈ e) ∧ (c simeq (cr b y))))) _ _ _;
 assume H';
 refine ExElim g _ H' _ _;
 assume e He;
@@ -189,7 +189,7 @@ assume K';
 refine K' (λ w, c simeq (cr (powerset b) w)) (and_ed _ _ Hz);
 refine lemmaSymEg (i y) z K;
 refine lemmaSymEg z (i y) (and_eg _ _ (and_eg _ _ Hy));
-refine imp_e (∃ g (λ e, ∀ g (λ c, (c ∈ a) ⇔ (∃ n (λ y, (eta b y (root b) ∧ (c ∈ e) ∧ (c simeq (cr b y)))))))) _ _ _;
+refine imp_e (`∃ e, `∀ c, (c ∈ a) ⇔ (`∃ y, (eta b y (root b) ∧ (c ∈ e) ∧ (c simeq (cr b y))))) _ _ _;
 assume H';
 refine ExElim g _ H' _ _;
 assume e He;
@@ -209,7 +209,7 @@ refine and_ed _ _ (He c) _;
 refine ExIntro n y _ _;
 refine and_i _ _ (and_i _ _ (and_eg _ _ (and_eg _ _ Hy)) _) (and_ed _ _ Hy);
 refine lemma30 (cr b y) e c (and_i _ _ (and_ed _ _ (and_eg _ _ Hy)) (lemma4 c (cr b y) (and_ed _ _ Hy)));
-refine imp_e (∃ g (λ e, ∀ g (λ c, (c ∈ a) ⇔ ((c ∈ b) ∧ (c ∈ e))))) _ _ _;
+refine imp_e (`∃ e, `∀ c, (c ∈ a) ⇔ ((c ∈ b) ∧ (c ∈ e))) _ _ _;
 assume H';
 refine ExElim g _ H' _ _;
 assume e He;
@@ -238,7 +238,7 @@ assume Hba;
 refine and_ed _ _ Hba;
 end;
 
-opaque symbol lemma45 : Π (σ : El valuation), Π (f : El formula), π(∀ g (λ a, ∀ g (λ b, (a ∈ (comp b σ f)) ⇔ ((a ∈ b) ∧ (interpretation (update σ zero a) f)))))
+opaque symbol lemma45 : Π (σ : El valuation), Π (f : El formula), π(`∀ a, `∀ b, (a ∈ (comp b σ f)) ⇔ ((a ∈ b) ∧ (interpretation (update σ zero a) f)))
 ≔ begin
 assume σ f a b;
 refine and_i _ _ _ _;

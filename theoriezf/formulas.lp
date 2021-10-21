@@ -27,16 +27,16 @@ symbol valuation : Set;
 rule El valuation ↪ El nat → El g;
 
 constant symbol recF : Π (P : El formula → Prop), 
-π(∀ nat (λ x, ∀ nat (λ y, P (eqF x y))))
-→ π(∀ nat (λ x, ∀ nat (λ y, P (inF x y))))
-→ π(∀ formula (λ f, ∀ formula (λ g, (P f ∧ P g) ⇒ (P (andF f g)))))
-→ π(∀ formula (λ f, ∀ formula (λ g, (P f ∧ P g) ⇒ (P (orF f g)))))
-→ π(∀ formula (λ f, ∀ formula (λ g, (P f ∧ P g) ⇒ (P (impF f g)))))
-→ π(∀ formula (λ f, (P f) ⇒ (∀ nat (λ x, P (allF x f)))))
-→ π(∀ formula (λ f, (P f) ⇒ (∀ nat (λ x, P (exF x f)))))
+π(`∀ x, `∀ y, P (eqF x y))
+→ π(`∀ x, `∀  y, P (inF x y))
+→ π(`∀ f, `∀ g, (P f ∧ P g) ⇒ (P (andF f g)))
+→ π(`∀ f, `∀ g, (P f ∧ P g) ⇒ (P (orF f g)))
+→ π(`∀ f, `∀ g, (P f ∧ P g) ⇒ (P (impF f g)))
+→ π(`∀ f, (P f) ⇒ (`∀ x, P (allF x f)))
+→ π(`∀ f, (P f) ⇒ (`∀ x, P (exF x f)))
 → π(P tF)
 → π(P fF)
-→ π(∀ formula (λ f, P f));
+→ π(`∀ f, P f);
 
 symbol interpretation : (El nat → Graph) → El formula → Prop;
 rule interpretation $σ (eqF $x $y) ↪ ($σ $x) simeq ($σ $y);
@@ -44,15 +44,15 @@ rule interpretation $σ (inF $x $y) ↪ ($σ $x) ∈ ($σ $y);
 rule interpretation $σ (andF $f $g) ↪ (interpretation $σ $f) ∧ (interpretation $σ $g);
 rule interpretation $σ (orF $f $g) ↪ (interpretation $σ $f) ∨ (interpretation $σ $g);
 rule interpretation $σ (impF $f $g) ↪ (interpretation $σ $f) ⇒ (interpretation $σ $g);
-rule interpretation $σ (allF $x $f) ↪ ∀ g (λ a, interpretation (update $σ $x a) $f);
-rule interpretation $σ (exF $x $f) ↪ ∃ g (λ a, interpretation (update $σ $x a) $f);
+rule interpretation $σ (allF $x $f) ↪ `∀ a, interpretation (update $σ $x a) $f;
+rule interpretation $σ (exF $x $f) ↪ `∃ a, interpretation (update $σ $x a) $f;
 rule interpretation $σ fF ↪ ⊥;
 rule interpretation $σ tF ↪ ⊤;
 
 // Comprehension
 
 symbol comp : Graph → El valuation → El formula → Graph;
-rule eta (comp $a $σ $f) $x $x' ↪ (∃ n (λ y, ∃ n (λ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')))) ∨ (∃ n (λ y, ($x = i y) ∧ ($x' = o) ∧ (eta $a y (root $a)) ∧ (interpretation (update $σ zero (cr $a y)) $f)));
+rule eta (comp $a $σ $f) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) ∨ (`∃ y, ($x = i y) ∧ ($x' = o) ∧ (eta $a y (root $a)) ∧ (interpretation (update $σ zero (cr $a y)) $f));
 rule root (comp $a $σ $f) ↪ o;
 
 // Infinity
@@ -62,4 +62,4 @@ symbol Ind : Graph → Prop;
 
 rule empty_set ↪ comp omega (λ _, empty_set) fF;
 rule root empty_set ↪ o;
-rule Ind $c ↪ (empty_set ∈ $c) ∧ (∀ g (λ a, (a ∈ $c) ⇒ ((join (pair a (pair a a))) ∈ $c)));
+rule Ind $c ↪ (empty_set ∈ $c) ∧ (`∀ a, (a ∈ $c) ⇒ ((join (pair a (pair a a))) ∈ $c));

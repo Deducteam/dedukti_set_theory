@@ -16,8 +16,8 @@ constant symbol Peano4 : Π (x : El nat), π(¬(eqNP (s x) zero));
 
 constant symbol recN : Π (P : El nat → Prop),
 π(P zero) 
-→ π(∀ nat (λ x, (P x) ⇒ (P (s x))))
-→ π(∀ nat (λ x, (P x)));
+→ π(`∀ x, (P x) ⇒ (P (s x)))
+→ π(`∀ x, (P x));
 
 opaque symbol lemmaNP : Π (x : El nat), π(eqNP x x) 
 ≔ begin

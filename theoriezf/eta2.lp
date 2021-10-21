@@ -4,7 +4,7 @@ require open zf.theoriezf.bisimilarity;
 require open zf.theoriezf.injectivity;
 require open zf.theoriezf.eta1;
 
-opaque symbol lemma19 : π(∀ g (λ a, ∀ n (λ x, ∀ n (λ y', (eta (powerset a) x (i y')) ⇔ (∃ n (λ y, (x = i y) ∧ (eta a y y')))))))
+opaque symbol lemma19 : π(`∀ a, `∀ x, `∀ y', (eta (powerset a) x (i y')) ⇔ (`∃ y, (x = i y) ∧ (eta a y y')))
 ≔ begin
 assume a x y';
 refine and_i _ _ _ _;
@@ -49,7 +49,7 @@ refine ExIntro n y' _ _;
 refine and_i _ _ (and_i _ _ (and_eg _ _ Hy) (refl n (i y'))) (and_ed _ _ Hy);
 end;
 
-opaque symbol lemma20 : π(∀ g (λ a, ∀ g (λ c, ∀ n (λ x, (eta (powerset a) x (j (ρ c))) ⇔ (∃ n (λ y, (x = i y) ∧ (eta a y (root a)) ∧ ((cr a y) ∈ c )))))))
+opaque symbol lemma20 : π(`∀ a, `∀ c, `∀ x, (eta (powerset a) x (j (ρ c))) ⇔ (`∃ y, (x = i y) ∧ (eta a y (root a)) ∧ ((cr a y) ∈ c )))
 ≔ begin
 assume a c x;
 refine and_i _ _ _ _;
@@ -142,7 +142,7 @@ refine and_ed _ _ (and_eg _ _ Hy);
 refine and_ed _ _ Hy;
 end;
 
-opaque symbol lemma21 : π(∀ g (λ a, ∀ n (λ x, (eta (powerset a) x o) ⇔ (∃ g (λ c, (x = j (ρ c)))))))
+opaque symbol lemma21 : π(`∀ a, `∀ x, (eta (powerset a) x o) ⇔ (`∃ c, (x = j (ρ c))))
 ≔ begin
 assume a x;
 refine and_i _ _ _ _;

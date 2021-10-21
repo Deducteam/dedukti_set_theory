@@ -13,7 +13,7 @@ require open zf.theoriezf.nat;
 require open zf.theoriezf.formulas_lemmas;
 require open zf.theoriezf.weakextensionality;
 
-opaque symbol lemma46 : π(∀ g (λ a, ¬ (a ∈ empty_set)))
+opaque symbol lemma46 : π(`∀ a, ¬ (a ∈ empty_set))
 ≔ begin
 assume a;
 simplify π;
@@ -44,7 +44,7 @@ assume z Hz;
 refine f_e (x ∈ empty_set) (and_ed _ _ Hz);
 end;
 
-opaque symbol lemmaJoinPair : π(∀ g (λ a, ∀ g (λ c, (c ∈ (join (pair a (pair a a)))) ⇔ ((c ∈ a) ∨ (c simeq a)))))
+opaque symbol lemmaJoinPair : π(`∀ a, `∀ c, (c ∈ (join (pair a (pair a a)))) ⇔ ((c ∈ a) ∨ (c simeq a)))
 ≔ begin
 assume a c;
 refine and_i _ _ _ _;
@@ -82,14 +82,14 @@ refine or_id _ _ _;
 refine lemma3 (pair a a);
 end;
 
-opaque symbol lemma48 : π(∀ g (λ a, ∀ n (λ y, (a simeq (cr omega (i y))) ⇒ ((join (pair a (pair a a))) simeq (cr omega (i (Succ y)))))))
+opaque symbol lemma48 : π(`∀ a, `∀ y, (a simeq (cr omega (i y))) ⇒ ((join (pair a (pair a a))) simeq (cr omega (i (Succ y)))))
 ≔ begin
 assume a y H;
 refine lemmaExt (join (pair a (pair a a))) (cr omega (i (Succ y))) _;
 assume c;
 refine and_i _ _ _ _;
 assume H1;
-refine imp_e (∃ n (λ z, ((z < y) ∨ (z = y)) ∧ (c simeq (cr omega (i z))))) _ _ _;
+refine imp_e (`∃ z, ((z < y) ∨ (z = y)) ∧ (c simeq (cr omega (i z)))) _ _ _;
 assume H';
 refine ExElim n _ H' _ _;
 assume z Hz;
@@ -99,7 +99,7 @@ refine (and_ed _ _ (lemma24 (i z) (Succ y))) _;
 refine ExIntro n z _ _;
 refine and_i _ _ (refl n (i z)) (and_eg _ _ Hz);
 refine and_ed _ _ Hz;
-refine imp_e ((∃ n (λ z, (z < y) ∧ (c simeq (cr omega (i z))))) ∨ (c simeq (cr omega (i y)))) _ _ _;
+refine imp_e ((`∃ z, (z < y) ∧ (c simeq (cr omega (i z)))) ∨ (c simeq (cr omega (i y)))) _ _ _;
 assume H';
 refine or_e _ _ _ H' _ _;
 assume H'';
@@ -161,7 +161,7 @@ refine lemma31 c (cr omega (i y)) a (and_i _ _ K (lemma4 a (cr omega (i y)) H));
 assume K';
 refine or_id _ _ _;
 refine lemma5 c (cr omega (i y)) a (and_i _ _ K' (lemma4 a (cr omega (i y)) H));
-refine imp_e ((∃ n (λ z, (z < y) ∧ (c simeq (cr omega (i z))))) ∨ (c simeq (cr omega (i y)))) _ _ _;
+refine imp_e ((`∃ z, (z < y) ∧ (c simeq (cr omega (i z)))) ∨ (c simeq (cr omega (i y)))) _ _ _;
 assume H';
 refine or_e _ _ _ H' _ _;
 assume K;
@@ -176,7 +176,7 @@ refine and_i _ _ (refl n (i z)) (and_eg _ _ Hz);
 assume K';
 refine or_id _ _ _;
 refine K';
-refine imp_e (∃ n (λ z, ((z < y) ∨ (z = y)) ∧ (c simeq (cr omega (i z))))) _ _ _;
+refine imp_e (`∃ z, ((z < y) ∨ (z = y)) ∧ (c simeq (cr omega (i z)))) _ _ _;
 assume H';
 refine ExElim n _ H' _ _;
 assume z Hz;
@@ -223,7 +223,7 @@ refine Vrai;
 refine lemma47;
 end;
 
-opaque symbol lemma50 : π(∀ g (λ a, (a ∈ omega) ⇒ ((join (pair a (pair a a))) ∈ omega)))
+opaque symbol lemma50 : π(`∀ a, (a ∈ omega) ⇒ ((join (pair a (pair a a))) ∈ omega))
 ≔ begin
 assume a Ha;
 refine ExElim n _ Ha _ _;

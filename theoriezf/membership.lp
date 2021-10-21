@@ -4,7 +4,7 @@ require open zf.theoriezf.bisimilarity;
 require open zf.theoriezf.injectivity;
 require open zf.theoriezf.eta1;
 
-opaque symbol lemma28 : π(∀ g (λ a, ∀ n (λ x, (eta a x (root a)) ⇒ ((cr a x) ∈ a))))
+opaque symbol lemma28 : π(`∀ a, `∀ x, (eta a x (root a)) ⇒ ((cr a x) ∈ a))
 ≔ begin
 assume a x H;
 refine ExIntro n x _ _;
@@ -38,7 +38,7 @@ refine and_ed _ _ H4;
 refine refl n v';
 end;
 
-opaque symbol lemma29 : π(∀ g (λ a, ∀ g (λ b, (a simeq b) ⇒ (∀ n (λ x, (eta a x (root a)) ⇒ (∃ n (λ y, ((eta b y (root b)) ∧ ((cr a x) simeq (cr b y))))))))))
+opaque symbol lemma29 : π(`∀ a, `∀ b, (a simeq b) ⇒ (`∀ x, (eta a x (root a)) ⇒ (`∃ y, ((eta b y (root b)) ∧ ((cr a x) simeq (cr b y))))))
 ≔ begin
 assume a b H x Heta;
 refine ExElim relat _ H _ _;
@@ -56,7 +56,7 @@ refine and_ed _ _  (and_eg _ _ Hr);
 refine and_ed _ _ Hr;
 end;
 
-opaque symbol lemma30 : π(∀ g (λ a, ∀ g (λ b, ∀ g (λ c, ((a ∈ b) ∧ (a simeq c)) ⇒ (c ∈ b)))))
+opaque symbol lemma30 : π(`∀ a, `∀ b, `∀ c, ((a ∈ b) ∧ (a simeq c)) ⇒ (c ∈ b))
 ≔ begin
 assume a b c H;
 refine ExElim n _ (and_eg _ _ H) _ _;
@@ -67,7 +67,7 @@ refine and_eg _ _ Hx;
 refine lemma5 c a (cr b x) (and_i _ _ (lemma4 a c (and_ed _ _ H)) (and_ed _ _ Hx));
 end;
 
-opaque symbol lemma31 : π(∀ g (λ a, ∀ g (λ b, ∀ g (λ c, ((a ∈ b) ∧ (b simeq c)) ⇒ (a ∈ c)))))
+opaque symbol lemma31 : π(`∀ a, `∀ b, `∀ c, ((a ∈ b) ∧ (b simeq c)) ⇒ (a ∈ c))
 ≔ begin
 assume a b c H;
 refine ExElim n _ (and_eg _ _ H) _ _;

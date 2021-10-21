@@ -9,7 +9,7 @@ require open zf.theoriezf.membership;
 require open zf.theoriezf.embedding;
 require open zf.theoriezf.finitary;
 
-opaque symbol lemma52 : π(∀ g (λ a, ∀ g (λ c, (a ∈ c) ⇒ (a ∈ (Cl c)))))
+opaque symbol lemma52 : π(`∀ a, `∀ c, (a ∈ c) ⇒ (a ∈ (Cl c)))
 ≔ begin
 assume a c Hac;
 refine ExElim n _ Hac _ _;
@@ -27,7 +27,7 @@ refine lemma5 a (cr c x) (cr (Cl c) (i x)) (and_i _ _ (and_ed _ _ Hx) _);
 refine lemma4 (cr (Cl c) (i x)) (cr c x) (lemma40 c x);
 end;
 
-opaque symbol lemma53 : π(∀ g (λ a, ∀ g (λ b, ∀ g (λ c, ((a ∈ b) ∧ (b ∈ (Cl c))) ⇒ (a ∈ (Cl c))))))
+opaque symbol lemma53 : π(`∀ a, `∀ b, `∀ c, ((a ∈ b) ∧ (b ∈ (Cl c))) ⇒ (a ∈ (Cl c)))
 ≔ begin
 assume a b c H;
 refine ExElim n _ (and_ed _ _ H) _ _;
