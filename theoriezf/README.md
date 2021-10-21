@@ -6,11 +6,13 @@ The implementation of __Set theory__ in Dedukti is composed of several files :
 
 - *language.lp* that contains the defintion of the theory of pointed graphs
 
-- *bisimilarity.lp*, *injectivity.lp*, *eta1.lp*, *eta2.lp*, *eta3.lp* and *membership.lp* that contain lemmas from 3 to 31
+- *bisimilarity.lp*, *injectivity.lp*, *eta1.lp*, *eta2.lp* and *membership.lp* that contain lemmas 3 to 21 and 28 to 31
 
 - *nat.lp* contains the definition of natural numbers
 
 - *formulas.lp* contains the development of formulas
+
+- *eta3.lp* contains lemmas 22 to 27
 
 - *formulas_lemmas.lp* contains intermediate lemmas that are using formulas
 
