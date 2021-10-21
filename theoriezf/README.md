@@ -18,6 +18,8 @@ The implementation of __Set theory__ in Dedukti is composed of several files :
 
 - *lemma32.lp* that contains the proof of lemma 32
 
-- *relocation.lp*, *embedding.lp*, *lemma41.lp*, *finitary.lp*, *infinity.lp* and *closure.lp* that contain the proofs of lemmas 33 to 53.
+- *relocation.lp*, *embedding.lp* and *lemma41.lp* that contain the proofs of lemma 33 to 41
 
-In addition, *weakextensionality.lp* contains the proofs of the theorem prooving weak extensionality.
+- *weakextensionality.lp* contains the proofs of the theorem prooving weak extensionality
+
+- *finitary.lp*, *infinity.lp* and *closure.lp* that contain the proofs of lemmas 42 to 53.
