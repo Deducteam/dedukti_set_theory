@@ -10,12 +10,6 @@ rule El g ↪ Graph;
 symbol n : Set;
 rule El n ↪ Node;
 
-symbol relat : Set;
-rule El relat ↪ Node → Node → Prop;
-
-symbol class : Set;
-rule El class ↪ Node → Prop;
-
 symbol eta : Graph → Node → Node → Prop;
 symbol root : Graph → Node;
 
@@ -68,7 +62,7 @@ rule $x < (Succ $y) ↪ ($x < $y) ∨ ($x = $y);
 
 symbol simeq : Graph → Graph → Prop;
 notation simeq infix 5;
-rule $a simeq $b ↪ `∃ r : El relat, (r (root $a) (root $b)) ∧ (`∀ x, `∀ x', `∀ y, (((eta $a x' x) ∧ (r x y)) ⇒ (`∃ y', ((eta $b y' y) ∧ (r x' y'))))) ∧ (`∀ y, `∀ y', `∀ x, (((eta $b y' y) ∧ (r x y)) ⇒ (`∃ x', ((eta $a x' x) ∧ (r x' y')))));
+rule $a simeq $b ↪ `∃ r : El (n arrow (n arrow omicron)), (r (root $a) (root $b)) ∧ (`∀ x, `∀ x', `∀ y, (((eta $a x' x) ∧ (r x y)) ⇒ (`∃ y', ((eta $b y' y) ∧ (r x' y'))))) ∧ (`∀ y, `∀ y', `∀ x, (((eta $b y' y) ∧ (r x y)) ⇒ (`∃ x', ((eta $a x' x) ∧ (r x' y')))));
 
 symbol ∈ : Graph → Graph → Prop;
 notation ∈ infix 7;
@@ -91,5 +85,5 @@ rule eta omega $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ (y 
 rule root omega ↪ o;
 
 symbol Cl : Graph → Graph;
-rule eta (Cl $a) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) ∨ (`∃ y, (($x = i y) ∧ ($x' = o) ∧ (`∀ c : El class, ((`∀ z, (eta $a z (root $a)) ⇒ (c z)) ∧ (`∀ z, `∀ z', (((eta $a z z') ∧ (c z')) ⇒ (c z)))) ⇒ c y)));
+rule eta (Cl $a) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) ∨ (`∃ y, (($x = i y) ∧ ($x' = o) ∧ (`∀ c : El (n arrow omicron), ((`∀ z, (eta $a z (root $a)) ⇒ (c z)) ∧ (`∀ z, `∀ z', (((eta $a z z') ∧ (c z')) ⇒ (c z)))) ⇒ c y)));
 rule root (Cl $a) ↪ o;

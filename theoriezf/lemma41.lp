@@ -15,7 +15,7 @@ opaque symbol lemma41 : Π (x y : El nat), Π (f : El formula), Π (c d : Graph)
 ∧ (`∀ b, `∀ b', `∀ a, ((b' ∈ b) ∧ (interpretation (update (update σ x a) y b) f)) ⇒ (`∃ a', ((a' ∈ a) ∧ (interpretation (update (update σ x a') y b') f))))) ⇒ (c simeq d))
 ≔ begin
 assume x y f c d σ H;
-refine ExIntro relat (λ u, λ v, interpretation (update (update σ x (cr c u)) y (cr d v)) f) _ _;
+refine ExIntro (n arrow (n arrow omicron)) (λ u, λ v, interpretation (update (update σ x (cr c u)) y (cr d v)) f) _ _;
 refine and_i _ _ _ _;
 refine and_i _ _ _ _;
 refine lemmaInt f (update (update σ x c) y (cr d (root d))) (update (update σ x (cr c (root c))) y (cr d (root d))) (and_i _ _ _ _);

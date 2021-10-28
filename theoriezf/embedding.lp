@@ -8,6 +8,7 @@ require open zf.theoriezf.eta3;
 require open zf.theoriezf.relocation;
 require open zf.theoriezf.membership;
 require open zf.theoriezf.formulas;
+require open zf.theoriezf.language2;
 
 opaque symbol lemma35 : π(`∀ a, `∀ y, (cr (join a) (i y)) simeq (cr a y))
 ≔ begin

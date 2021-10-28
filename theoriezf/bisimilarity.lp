@@ -1,29 +1,10 @@
 require open zf.theoriezf.logic;
 require open zf.theoriezf.language;
 
-/*opaque symbol lemmaSymEg : π(`∀ n (λ x, `∀ n (λ y, (x = y) ⇒ (y = x)))) 
-≔ begin
-assume x y Pxy P;
-assume Py;
-refine Pxy (λ z, (P z) ⇒ (P x));
-assume Px;
-refine Px;
-refine Py;
-end;*/
-opaque symbol lemmaSymEg : π(`∀ x : El n, `∀ y : El n, (x = y) ⇒ (y = x)) 
-≔ begin
-assume x y;
-simplify;
-assume Pxy P;
-refine Pxy (λ z, (P z) ⇒ (P x)) _;
-assume Px;
-refine refl n x P Px;
-end;
-
 opaque symbol lemma3 : π(`∀ a : El g, a simeq a)
 ≔ begin
 assume a;
-refine ExIntro relat (λ a, λ b, a = b) _ _;
+refine ExIntro (n arrow (n arrow omicron)) (λ a, λ b, a = b) _ _;
 refine and_i _ _ _ _;
 refine and_i _ _ _ _;
 refine refl n (root a);
@@ -43,16 +24,16 @@ refine imp_e (y = x) (eta a y' x) _ _;
 assume Heq;
 refine Heq (λ w, eta a y' w) _;
 refine and_eg _ _ H;
-refine lemmaSymEg x y (and_ed (eta a y' y) (x = y) H);
+refine lemmaSymEg n x y (and_ed (eta a y' y) (x = y) H);
 refine refl n y';
 end;
 
 opaque symbol lemma4 : π(`∀ a, `∀ b, (a simeq b) ⇒ (b simeq a))
 ≔ begin
 assume a b H;
-refine ExElim relat _ H _ _;
+refine ExElim (n arrow (n arrow omicron)) _ H _ _;
 assume r Hr;
-refine ExIntro relat (λ x, λ y, r y x) _ _;
+refine ExIntro (n arrow (n arrow omicron)) (λ x, λ y, r y x) _ _;
 refine and_i _ _ _ _;
 refine and_i _ _ _ _;
 refine and_eg _ _ (and_eg _ _ Hr);
@@ -65,11 +46,11 @@ end;
 opaque symbol lemma5 : π(`∀ a, `∀ b, `∀ c, ((a simeq b) ∧ (b simeq c)) ⇒ (a simeq c))
 ≔ begin
 assume a b c H;
-refine ExElim relat _ (and_eg _ _ H) _ _;
+refine ExElim (n arrow (n arrow omicron)) _ (and_eg _ _ H) _ _;
 assume rab Hab;
-refine ExElim relat _ (and_ed _ _ H) _ _;
+refine ExElim (n arrow (n arrow omicron)) _ (and_ed _ _ H) _ _;
 assume rbc Hbc;
-refine ExIntro relat (λ x, λ z, `∃ y, rab x y ∧ rbc y z) _ _;
+refine ExIntro (n arrow (n arrow omicron)) (λ x, λ z, `∃ y, rab x y ∧ rbc y z) _ _;
 refine and_i _ _ _ _;
 refine and_i _ _ _ _;
 refine ExIntro n (root b) _ _;
@@ -103,7 +84,7 @@ end;
 opaque symbol lemma6 : π(`∀ a, a simeq (cr a (root a)))
 ≔ begin
 assume a;
-refine ExIntro relat (λ x, λ y, x = y) _ _;
+refine ExIntro (n arrow (n arrow omicron)) (λ x, λ y, x = y) _ _;
 refine and_i _ _ _ _;
 refine and_i _ _ _ _;
 refine refl n _;
@@ -128,7 +109,7 @@ assume H2;
 refine imp_e (y = x) _ _ _;
 assume H3;
 refine H3 (λ z, eta a y' z) H1;
-refine lemmaSymEg _ _ H2;
+refine lemmaSymEg n _ _ H2;
 refine and_ed _ _ H;
 refine and_eg _ _ H;
 refine refl n _;

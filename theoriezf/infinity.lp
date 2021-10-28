@@ -10,6 +10,7 @@ require open zf.theoriezf.embedding;
 require open zf.theoriezf.finitary;
 require open zf.theoriezf.formulas;
 require open zf.theoriezf.nat;
+require open zf.theoriezf.language2;
 require open zf.theoriezf.formulas_lemmas;
 require open zf.theoriezf.weakextensionality;
 
@@ -134,7 +135,7 @@ assume K';
 refine K' (λ w, c simeq (cr omega w)) _;
 refine and_ed _ _ Hx;
 refine and_eg _ _ Hz;
-refine lemmaSymEg x (i z) (and_eg _ _ Hz);
+refine lemmaSymEg n x (i z) (and_eg _ _ Hz);
 assume H'';
 refine or_id _ _ _;
 refine H'';
@@ -194,7 +195,7 @@ assume M';
 refine M' (λ w, c simeq (cr omega (i w))) _;
 refine and_ed _ _ Hz;
 refine K';
-refine lemmaSymEg z y K';
+refine lemmaSymEg n z y K';
 refine ExElim n _ H2 _ _;
 assume x Hx;
 refine ExElim n _ (and_eg _ _ (lemma24 x (Succ y)) (and_eg _ _ Hx)) _ _;
@@ -208,7 +209,7 @@ assume M';
 refine M' (λ w, c simeq (cr omega w)) _;
 refine and_ed _ _ Hx;
 refine and_eg _ _ Hz;
-refine lemmaSymEg x (i z) (and_eg _ _ Hz);
+refine lemmaSymEg n x (i z) (and_eg _ _ Hz);
 end;
 
 opaque symbol lemma49 : π(empty_set ∈ omega)
@@ -243,8 +244,8 @@ assume H1;
 refine imp_i (x = i y) _ _ _;
 assume H2;
 refine H2 (λ w, a simeq (cr omega w)) (and_ed _ _ Hx);
-refine lemmaSymEg (i y) x H1;
-refine lemmaSymEg x (i y) (and_eg _ _ Hy);
+refine lemmaSymEg n (i y) x H1;
+refine lemmaSymEg n x (i y) (and_eg _ _ Hy);
 end;
 
 opaque symbol lemma51 : π(Ind omega)

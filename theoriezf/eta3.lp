@@ -6,6 +6,7 @@ require open zf.theoriezf.eta1;
 require open zf.theoriezf.eta2;
 require open zf.theoriezf.formulas;
 require open zf.theoriezf.nat;
+require open zf.theoriezf.language2;
 
 opaque symbol lemma22 : Π (σ : El valuation), Π (f : El formula), π(`∀ a, `∀ x, `∀ y', (eta (comp a σ f) x (i y') ⇔ (`∃ y, (x = i y) ∧ (eta a y y'))))
 ≔ begin
@@ -27,7 +28,7 @@ assume H2;
 refine imp_i (y' = y) _ _ _;
 assume H3;
 refine H3 (λ w, eta a z w) (and_ed _ _ Hy');
-refine lemmaSymEg _ _ H2;
+refine lemmaSymEg n _ _ H2;
 refine lemma9 _ _ (and_ed _ _ (and_eg _ _ Hy'));
 assume H4;
 refine f_e _ _;
@@ -56,7 +57,7 @@ refine ExElim n _ H1 _ _;
 assume y Hy;
 refine ExElim n _ Hy _ _; 
 assume y' Hy';
-refine lemma11 y' (lemmaSymEg _ _ (and_ed _ _ (and_eg _ _ Hy')));
+refine lemma11 y' (lemmaSymEg n _ _ (and_ed _ _ (and_eg _ _ Hy')));
 assume H2;
 refine ExElim n _ H2 _ _;
 assume y Hy;
@@ -97,7 +98,7 @@ assume H2;
 refine imp_i (z = y') _ _ _;
 assume H3;
 refine H3 (λ w, y < w) (and_ed _ _ Hz);
-refine lemmaSymEg _ _ H2;
+refine lemmaSymEg n _ _ H2;
 refine lemma9 _ _ (and_ed _ _ (and_eg _ _ Hz));
 assume H4;
 refine f_e _ _;
@@ -129,7 +130,7 @@ refine ExElim n _ H1 _ _;
 assume y Hy;
 refine ExElim n _ Hy _ _; 
 assume y' Hy';
-refine lemma11 y' (lemmaSymEg _ _ (and_ed _ _ (and_eg _ _ Hy')));
+refine lemma11 y' (lemmaSymEg n _ _ (and_ed _ _ (and_eg _ _ Hy')));
 assume H2;
 refine ExElim n _ H2 _ _;
 assume y Hy;
@@ -168,7 +169,7 @@ assume H2;
 refine imp_i (z = y') _ _ _;
 assume H3;
 refine H3 (λ w, eta a y w) (and_ed _ _ Hz);
-refine lemmaSymEg _ _ H2;
+refine lemmaSymEg n _ _ H2;
 refine lemma9 _ _ (and_ed _ _ (and_eg _ _ Hz));
 assume H4;
 refine f_e _ _;
@@ -188,7 +189,7 @@ refine refl n (i y');
 refine and_ed _ _ Hy;
 end;
 
-opaque symbol lemma27 : π(`∀ a, `∀ x, (eta (Cl a) x o) ⇔ (`∃ y, ((x = i y) ∧ (`∀ c : El class, ((`∀ z, (eta a z (root a)) ⇒ (c z)) ∧ (`∀ z, `∀ z', (((eta a z z') ∧ (c z')) ⇒ (c z)))) ⇒ c y))))
+opaque symbol lemma27 : π(`∀ a, `∀ x, (eta (Cl a) x o) ⇔ (`∃ y, ((x = i y) ∧ (`∀ c : El (n arrow omicron), ((`∀ z, (eta a z (root a)) ⇒ (c z)) ∧ (`∀ z, `∀ z', (((eta a z z') ∧ (c z')) ⇒ (c z)))) ⇒ c y))))
 ≔ begin
 assume a x;
 refine and_i _ _ _ _;
@@ -200,7 +201,7 @@ refine ExElim n _ H1 _ _;
 assume y Hy;
 refine ExElim n _ Hy _ _; 
 assume y' Hy';
-refine lemma11 y' (lemmaSymEg _ _ (and_ed _ _ (and_eg _ _ Hy')));
+refine lemma11 y' (lemmaSymEg n _ _ (and_ed _ _ (and_eg _ _ Hy')));
 assume H2;
 refine ExElim n _ H2 _ _;
 assume y Hy;

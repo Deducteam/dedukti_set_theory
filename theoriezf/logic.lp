@@ -157,3 +157,20 @@ begin
 assume s y P Py;
 refine Py;
 end;
+
+opaque symbol lemmaSymEg : Π (s : Set), π(`∀ x : El s, `∀ y : El s, (x = y) ⇒ (y = x)) 
+≔ begin
+assume s x y;
+simplify;
+assume Pxy P;
+refine Pxy (λ z, (P z) ⇒ (P x)) _;
+assume Px;
+refine refl s x P Px;
+end;
+
+symbol omicron : Set;
+rule El omicron ↪ Prop;
+
+symbol arrow : Set → Set → Set;
+notation arrow infix 4;
+rule El($x arrow $y) ↪ El $x → El $y;

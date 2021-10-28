@@ -10,6 +10,7 @@ require open zf.theoriezf.lemma41;
 require open zf.theoriezf.nat;
 require open zf.theoriezf.formulas;
 require open zf.theoriezf.formulas_lemmas;
+require open zf.theoriezf.language2;
 
 opaque symbol lemmaHypExt : Π (c d : Graph), π((`∀ z, (z ∈ c) ⇔ (z ∈ d)) ⇒ ((((c simeq c) ∧ (d simeq d)) ∨ (c simeq d))
 ∧ (`∀ a, `∀ a', `∀ b, ((a' ∈ a) ∧ (((a simeq c) ∧ (b simeq d)) ∨ (a simeq b))) ⇒ (`∃ b', ((b' ∈ b) ∧ (((a' simeq c) ∧ (b' simeq d)) ∨ (a' simeq b')))))

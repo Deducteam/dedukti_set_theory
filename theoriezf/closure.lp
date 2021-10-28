@@ -43,7 +43,7 @@ assume H1;
 refine imp_i (i x = u) _ _ _;
 assume H2;
 refine H2 (λ w, (cr (Cl c) w) simeq (cr c x)) (lemma40 c x);
-refine lemmaSymEg u (i x) H1;
+refine lemmaSymEg n u (i x) H1;
 refine and_eg _ _ Hx;
 assume z Hz;
 refine ExIntro n (i z) _ _;
