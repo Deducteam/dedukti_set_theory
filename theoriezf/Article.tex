@@ -27,7 +27,7 @@
 \input{macros.tex}
 
 \begin{document}
-
+\thispagestyle{empty}
 \section{Introduction}
 
 papier + dedukti + bout de théorie U (arrow, omicron)
@@ -36,42 +36,99 @@ papier + dedukti + bout de théorie U (arrow, omicron)
 
 \subsection{Sorts}
 
-The langage of the theory IZmod uses four sorts. The two first ones
-are for the pointed graphs and for the nodes of the pointed graphs.
-
-In Dedukti, we thus introduce two constants $\Graph$ and $\Node$ of
-type $\Type$
+The langage of the theory IZmod uses four sorts. The first two are for
+the pointed graphs and for the nodes of the pointed graphs.  In
+\dedukti, we thus introduce two constants $\Graph$ and $\Node$ of type
+$\Type$
 \begin{verbatim}
 constant symbol Graph : TYPE;
 constant symbol Node : TYPE;
 \end{verbatim}
-As we have two sorts, we would need two universal quantifiers and two 
-existential quantifiers, one on each sort. 
-We rather use another solution \cite{theoryU} that is to declare a constant
-$\Set$ of type $\Type$ for codes of sorts,
-a function $\El$ of type $\Set \ra \Type$, two 
-$g$ and $n$ of sort $\Set$ and rewrite rules 
+As we have two sorts, we would need two universal quantifiers and two
+existential quantifiers, one for each sort.  We rather use another
+solution \cite{theoryU} that is to declare a constant $\Set$ of type
+$\Type$ for codes of sorts, a function $\El$ of type $\Set \ra \Type$,
+two constants $g$ and $n$ of sort $\Set$ and rewrite rules
 $$\El~g \lra \Graph$$
 $$\El~n \lra \Node$$
 
 The two other sorts of the theory IZmod are for classes of nodes and
-for binary relations on nodes.
+for binary relations on nodes.  In \dedukti, the sort of classes is
+just $\Node \ra \Prop$ and that of binary relations
+$\Node \ra \Node \ra \Prop$. To quantify on such sorts, we introduce
+constants $\omicron$ of type $\Set$ and $\arr $ of type
+$\Set \ra \Set \ra \Set$ and rewrite rules
+$$\El~\omicron \lra \Prop$$
+$$\El~(x~\arr~y) \lra (\El~x) \ra (\El~y)$$
+Note that $\El~(n~\arr~\omicron)$ reduces to $\Node \ra \Prop$ and 
+$\El~(n~\arr~(n~\arr~\omicron))$ reduces to $\Node \ra \Node \ra \Prop$. 
 
-In Dedukti, the sort of classes is just $\Node \ra \Prop$ and that of
-binary relations $\Node \ra \Node \ra \Prop$. To be able to quantify on 
-such sorts, we introduce constants $\omicron$ of type $\Set$ 
-$\arr $ of type
-$\Set \ra \Set \ra \Set$ 
-and rewrite rules
-$$El~\omicron \lra \Prop$$
-$$(El~(x \arr y)) \lra (El x) \ra (El y)$$
+The symbols $\Graph$, $\Node$, $g$ and $n$ are specific to the
+expression of $IZmod$ in \dedukti. In contrast the symbols $\Set$,
+$\El$, $\omicron$, and $\arr$ are part of the standard library of 
+\dedukti.
 
-Note that $El (n \arr \omicron) \lra \Node \ra \Prop$ and 
-$El (n \arr (n \arr \omicron)) \lra \Node \ra \Node \ra \Prop$. 
+\subsection{Signature}
+
+The signature of $IZmod$ contains 31 symbols. As we have replaced the
+sorts for classes and relations with the \dedukti types
+$\Node \ra \Prop$ and $\Node \ra \Node \ra \Prop$, we do not need
+specific predicate symbols to apply a class to a node or a relations
+to two. In the same way, we do not need comprehension axioms for 
+classes and relations. 
+
+In the same way, the equality symbol is part of the standard library of 
+\dedukti.
+
+So the signature is reduced to 26 symbols. 
 
 
+$$eta : \Graph \ra \Node \ra \Node \ra \Prop$$
+$$root : \Graph \ra \Node$$
+$$cr : \Graph \ra \Node \ra \Graph$$
+$$o : \Node$$
+$$O : \Node$$
+$$i : \Node \ra \Node$$
+$$i' : \Node \ra \Node$$
+$$j : \Node \ra \Node$$
+$$j' : \Node \ra \Node$$
+$$I : \Node \ra \Prop$$
+$$J : \Node \ra \Prop$$
+$$\rho : \Graph \ra \Node$$
+$$\hat{\rho} : \Node \ra \Graph$$
+$$Succ : \Node \ra \Node$$
+$$Pred : \Node \ra \Node$$
+$$Null : \Node \ra \Prop$$
+$$Nat : \Node \ra \Prop$$
+$$< : \Node \ra \Node \ra \Prop$$
+$$simeq : \Graph \ra \Graph \ra \Prop$$
+$$\in : \Graph \ra \Graph \ra \Prop$$
+$$join : \Graph \ra \Graph$$
+$$pair : \Graph \ra \Graph \ra \Graph$$
+$$powerset : \Graph \ra \Graph$$
+$$comp : \Graph \ra \El valuation \ra \El formula \ra \Graph$$
+$$omega : \Graph$$
+$$Cl : \Graph \ra \Graph$$
+
+À faire en verbatim plutôt qu'en math mode, mais un pb avec certains
+caractères unicode
 
 \section{Formulas}
+
+
+$$comp : \Graph \ra \El valuation \ra \El formula \ra \Graph$$
+
+In $comp$ we may have noticed the presence of valuation and formula. 
+Indeed.
+
+\section{The theory of pointed graphs}
+
+
+
+
+
+
+
 
 \section{Lemmas}
 
