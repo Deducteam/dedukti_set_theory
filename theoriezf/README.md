@@ -10,6 +10,8 @@ The implementation of __Set theory__ in Dedukti is composed of several files :
 
 - *formulas.lp* contains the development of formulas
 
+- *language2.lp* contains the development of language with formulas
+
 - *bisimilarity.lp*, *injectivity.lp*, *eta1.lp*, *eta2.lp* and *eta3.lp* contains lemmas 3 to 27
 
 - *membership.lp* that contains lemmas 28 to 31
