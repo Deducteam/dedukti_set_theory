@@ -6,6 +6,26 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
+%\usepackage{paralist, tabularx}
+\usepackage{oldlfont,amssymb,epsf,stmaryrd,epsfig,color}\usepackage{amsmath}
+%\usepackage{hyperref}
+%\usepackage{framed,multicol,changepage}
+%\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor}
+%\usepackage{skull,ifoddpage,marginnote}
+%\usepackage{pifont}
+%\usepackage{graphicx}
+%\usepackage{ebproof}
+%\usepackage{mathtools}
+%\usepackage{bm}
+%\usepackage{stmaryrd}
+%\usepackage{cleveref}
+%\usepackage{tikz}
+%\usepackage{import} % For inkscape generated files
+
+
+\input{macros.tex}
+
 \begin{document}
 
 \section{Introduction}
@@ -13,6 +33,42 @@
 papier + dedukti + bout de théorie U (arrow, omicron)
 
 \section{The language of pointed graphs}
+
+\subsection{Sorts}
+
+The langage of the theory IZmod uses four sorts. The two first ones
+are for the pointed graphs and for the nodes of the pointed graphs.
+
+In Dedukti, we thus introduce two constants $\Graph$ and $\Node$ of
+type $\Type$
+\begin{verbatim}
+constant symbol Graph : TYPE;
+constant symbol Node : TYPE;
+\end{verbatim}
+As we have two sorts, we would need two universal quantifiers and two 
+existential quantifiers, one on each sort. 
+We rather use another solution \cite{theoryU} that is to declare a constant
+$\Set$ of type $\Type$ for codes of sorts,
+a function $\El$ of type $\Set \ra \Type$, two 
+$g$ and $n$ of sort $\Set$ and rewrite rules 
+$$\El~g \lra \Graph$$
+$$\El~n \lra \Node$$
+
+The two other sorts of the theory IZmod are for classes of nodes and
+for binary relations on nodes.
+
+In Dedukti, the sort of classes is just $\Node \ra \Prop$ and that of
+binary relations $\Node \ra \Node \ra \Prop$. To be able to quantify on 
+such sorts, we introduce constants $\omicron$ of type $\Set$ 
+$\arr $ of type
+$\Set \ra \Set \ra \Set$ 
+and rewrite rules
+$$El~\omicron \lra \Prop$$
+$$(El~(x \arr y)) \lra (El x) \ra (El y)$$
+
+Note that $El (n \arr \omicron) \lra \Node \ra \Prop$ and 
+$El (n \arr (n \arr \omicron)) \lra \Node \ra \Node \ra \Prop$. 
+
 
 
 \section{Formulas}
