@@ -5,6 +5,9 @@
 \usepackage[francais]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{mathtools}
 
 %\usepackage{paralist, tabularx}
 \usepackage{oldlfont,amssymb,epsf,stmaryrd,epsfig,color}\usepackage{amsmath}
@@ -25,6 +28,7 @@
 
 
 \input{macros.tex}
+\input{lambdapi.tex}
 
 \begin{document}
 \thispagestyle{empty}
@@ -40,10 +44,10 @@ The langage of the theory IZmod uses four sorts. The first two are for
 the pointed graphs and for the nodes of the pointed graphs.  In
 \dedukti, we thus introduce two constants $\Graph$ and $\Node$ of type
 $\Type$
-\begin{verbatim}
+\begin{lstlisting}
 constant symbol Graph : TYPE;
 constant symbol Node : TYPE;
-\end{verbatim}
+\end{lstlisting}
 As we have two sorts, we would need two universal quantifiers and two
 existential quantifiers, one for each sort.  We rather use another
 solution \cite{theoryU} that is to declare a constant $\Set$ of type
@@ -82,36 +86,35 @@ In the same way, the equality symbol is part of the standard library of
 
 So the signature is reduced to 26 symbols. 
 
+\begin{lstlisting}
+symbol eta : Graph → Node → Node → Prop;
+symbol root : Graph → Node;
+symbol cr : Graph → Node → Graph;
+constant symbol o : Node;
+constant symbol O : Node;
+symbol i : Node → Node;
+symbol i' : Node → Node;
+symbol j : Node → Node;
+symbol j' : Node → Node;
+symbol I : Node → Prop;
+symbol J : Node → Prop;
+symbol ρ : Graph → Node;
+symbol ρ^ : Node → Graph;
+symbol Succ : Node → Node;
+symbol Pred : Node → Node;
+symbol Null : Node → Prop;
+symbol Nat : Node → Prop;
+symbol < : Node → Node → Prop;
+symbol simeq : Graph → Graph → Prop;
+symbol ∈ : Graph → Graph → Prop;
+symbol join : Graph → Graph;
+symbol pair : Graph → Graph → Graph;
+symbol powerset : Graph → Graph;
+symbol comp : Graph → El valuation → El formula → Graph;
+symbol omega : Graph;
+symbol Cl : Graph → Graph;
+\end{lstlisting}
 
-$$eta : \Graph \ra \Node \ra \Node \ra \Prop$$
-$$root : \Graph \ra \Node$$
-$$cr : \Graph \ra \Node \ra \Graph$$
-$$o : \Node$$
-$$O : \Node$$
-$$i : \Node \ra \Node$$
-$$i' : \Node \ra \Node$$
-$$j : \Node \ra \Node$$
-$$j' : \Node \ra \Node$$
-$$I : \Node \ra \Prop$$
-$$J : \Node \ra \Prop$$
-$$\rho : \Graph \ra \Node$$
-$$\hat{\rho} : \Node \ra \Graph$$
-$$Succ : \Node \ra \Node$$
-$$Pred : \Node \ra \Node$$
-$$Null : \Node \ra \Prop$$
-$$Nat : \Node \ra \Prop$$
-$$< : \Node \ra \Node \ra \Prop$$
-$$simeq : \Graph \ra \Graph \ra \Prop$$
-$$\in : \Graph \ra \Graph \ra \Prop$$
-$$join : \Graph \ra \Graph$$
-$$pair : \Graph \ra \Graph \ra \Graph$$
-$$powerset : \Graph \ra \Graph$$
-$$comp : \Graph \ra \El valuation \ra \El formula \ra \Graph$$
-$$omega : \Graph$$
-$$Cl : \Graph \ra \Graph$$
-
-À faire en verbatim plutôt qu'en math mode, mais un pb avec certains
-caractères unicode
 
 \section{Formulas}
 
