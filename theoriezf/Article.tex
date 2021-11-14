@@ -1,6 +1,6 @@
 \documentclass[a4paper]{article}
 
-\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage[top=3.5cm, bottom=3.5cm, left=3.5cm, right=3.5cm]{geometry}
 \usepackage{ae,lmodern}
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
@@ -23,12 +23,31 @@
 %\usepackage{tikz}
 %\usepackage{import} % For inkscape generated files
 
+\title{Implementation of Set theory in \dedukti}
+\date{}
 
 \input{macros.tex}
 \input{lambdapi.tex}
 
 \begin{document}
 \thispagestyle{empty}
+\maketitle
+
+
+\section*{Plan}
+
+Introduction : papier précédent, explications de la structure des graphes pointés, apparition de Dedukti depuis (passage de Deduction modulo à Lambpdapi calcul modulo), théorie U (arrow, omicron) \\
+
+The theory of pointed graphs : règles de réécritures \\
+
+The language of pointed graphs : types, signature \\
+
+Formulas : nécessité de restreindre l'ensemble des propositions dans la compréhension, définition des formules et des connecteurs sur les formules, principe de l'induction, principe de l'interprétation/valuation/update, présentations des nouveaux lemmes ajoutés pour prouver les résultats sur les formules (formulas-lemmas.lp) \\
+
+Lemmas : expliquer qu'on n'a pas besoin des lemmes 1 et 2, explication des mécanismes classiques réutilisés dans chaque preuve, détails de preuves pour certains lemmes intéressants, extensionalité faible ajoutée entre 41 et 42 parce qu'elle est utilisée dans 44, 47, 48 \\
+
+Conclusion : tableau récapitulatif du nombre de lignes de chaque preuve
+
 \section{Introduction}
 
 papier + dedukti + bout de théorie U (arrow, omicron)
@@ -113,28 +132,84 @@ symbol Cl : Graph → Graph;
 \end{lstlisting}
 
 
-\section{Formulas}
+\section{The language of formulas}
+\subsection{Formulas}
 
-
-$$comp : \Graph \ra \El valuation \ra \El formula \ra \Graph$$
+$$comp : \Graph \ra \El \ valuation \ra \El \ formula \ra \Graph$$
 
 In $comp$ we may have noticed the presence of valuation and formula. 
-Indeed.
+Indeed, the lemmas in which the $comp$ symbol is used are only valid for a subset of formula. The formulas need to have all of its quantifiers of sort $Graph$ and can only use the language $\in$, $\simeq$ and the classic logical connectives.
+
+Thus we need to introduce a set to caraterize the validity domain of such lemmas. In order to achieve this goal, we define the constant $formula$ of type $\Set$ and the logical connectives related to this constant.
+
+\begin{lstlisting}
+constant symbol formula : Set;
+constant symbol eqF : El nat → El nat → El formula;
+constant symbol inF : El nat → El nat → El formula;
+constant symbol andF : El formula → El formula → El formula;
+constant symbol orF : El formula → El formula → El formula;
+constant symbol allF : El nat → El formula → El formula;
+constant symbol exF : El nat → El formula → El formula;
+constant symbol impF : El formula → El formula → El formula;
+constant symbol fF : El formula;
+constant symbol tF : El formula;
+\end{lstlisting}
+
+\subsection{Interpretation}
+
+The next step is to interpret an object of type $formula$ into $Prop$. We introduce the constant $interpretation$ which receives a valuation of type $\El \ valuation$ and a formula of type $\El \ formula$ and return a $\Prop$.
+
+\begin{lstlisting}
+symbol interpretation : (El nat → Graph) → El formula → Prop;
+\end{lstlisting}
+
+The interpreation of formulas obeys the following rewriting rules :
+
+$$interpretation \ \sigma \ (eqF \ x \ y) \lra (\sigma \ x) \ \simeq \ (\sigma \ y)$$
+$$interpretation \ \sigma \ (inF \ x \ y) \lra (\sigma \ x) \ \in \ (\sigma \ y)$$
+$$interpretation \ \sigma \ (andF \ f \ g) \lra (interpretation \ \sigma \ f) \conj (interpretation \ \sigma \ g)$$
+$$interpretation \ \sigma \ (orF \ f \ g) \lra (interpretation \ \sigma \ f) \disj  (interpretation \sigma \ g)$$
+$$interpretation \ \sigma \ (impF \ f \ g) \lra (interpretation \ \sigma \ f) \imp (interpretation \ \sigma \ g)$$
+$$interpretation \ \sigma \ fF \lra \blbot$$
+$$interpretation \ \sigma \ tF \lra \bltop$$
+
+We need to have a tool to update a valuation when we assign a variable. To do so, we introduce the constant $update$ of type $(\El \ nat \ra Graph) \ra \El \ nat \ra Graph \ra (\El \ nat \ra Graph)$ which takes as arguments a valuation, a natural number and a graph and returns a new valuation. 
+
++ A finir avec update1
++ supprimer El valuation ou pas ?
+
+\subsection{Theorems about valuation}
+
+\begin{theorem}
+$\fa \ \sigma, \fa \ x, y, z, \fa \ a, [(eqNP \ x \ y) \ \imp \ (((update1 \ \sigma \ x \ a) \ y \ z) \ \simeq \ a)] \ \conj \ [\blneg(eqNP \ x \ y) \ \imp \ (((update1 \ \sigma \ x \ a) \ y \ z) \ \simeq \ (\sigma \ z))]$
+\end{theorem}
+
+\begin{theorem}
+$\fa \ \sigma, \fa \ x, \fa \ a, b, (a \ \simeq \ b) \ \imp \ [\fa y, (update \ \sigma \ x \ a \ y) \ \simeq \ (update \ \sigma \ x \ b \ y)]$
+\end{theorem}
+
+\begin{theorem}
+$\fa \ \sigma, \fa \ x, y, \fa \ a, b, c, (a \ \simeq \ b) \ \imp \ (\fa z, (update \ (update \ \sigma \ x \ a) \ y \ c \ z) \ \simeq \ (update \  (update \ \sigma \ x \ b) \ y \ c \ z))$
+\end{theorem}
+
+\begin{theorem}
+$\fa \ \sigma, \sigma', \fa \ x, \fa \ c, (\fa y, \sigma \ y \ \simeq \ \sigma' \ y) \ \imp \ (\fa z, (update \ \sigma \ x \ c \ z) \ \simeq \ (update \ \sigma' \ x \ c \ z))$
+\end{theorem}
+
+\begin{theorem}
+$\fa \ f, \fa \ \sigma, \sigma', (interpretation \ \sigma \ f) \ \conj \ (\fa x, (\sigma \ x) \ \simeq \ (\sigma' \ x))) \ \imp \ (interpretation \ \sigma' \ f)$
+\end{theorem}
 
 \section{The theory of pointed graphs}
 
 
-
-
-
-
-
-
 \section{Lemmas}
 
-Expliquer qu'on n'a pas besoin des lemmes 1 et 2
-Extensionnalité faible ajoutée entre 41 et 42 parce qu'elle est utilisée dans 44, 47, 48 
 
+\section{Conclusion}
+
+
+\section*{References}
 
 
 \end{document}
