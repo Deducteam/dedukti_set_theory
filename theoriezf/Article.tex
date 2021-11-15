@@ -138,7 +138,7 @@ symbol Cl : Graph → Graph;
 $$comp : \Graph \ra \El \ valuation \ra \El \ formula \ra \Graph$$
 
 In $comp$ we may have noticed the presence of valuation and formula. 
-Indeed, the lemmas in which the $comp$ symbol is used are only valid for a subset of formula. The formulas need to have all of its quantifiers of sort $Graph$ and can only use the language $\in$, $\simeq$ and the classic logical connectives.
+Indeed, the lemmas in which the $comp$ symbol is used are only valid for a subset of formulas. The formulas need to have all of its quantifiers of sort $Graph$ and can only use the language $\in$, $\simeq$ and the classic logical connectives.
 
 Thus we need to introduce a set to caraterize the validity domain of such lemmas. In order to achieve this goal, we define the constant $formula$ of type $\Set$ and the logical connectives related to this constant.
 
@@ -153,6 +153,22 @@ constant symbol exF : El nat → El formula → El formula;
 constant symbol impF : El formula → El formula → El formula;
 constant symbol fF : El formula;
 constant symbol tF : El formula;
+\end{lstlisting}
+
+Then we are able to define an induction over formulas, using the language $\in$, $\simeq$ and the classic logical connectives.
+
+\begin{lstlisting}
+constant symbol recF : Π (P : El formula → Prop), 
+π(`∀ x, `∀ y, P (eqF x y))
+→ π(`∀ x, `∀  y, P (inF x y))
+→ π(`∀ f, `∀ g, (P f ∧ P g) ⇒ (P (andF f g)))
+→ π(`∀ f, `∀ g, (P f ∧ P g) ⇒ (P (orF f g)))
+→ π(`∀ f, `∀ g, (P f ∧ P g) ⇒ (P (impF f g)))
+→ π(`∀ f, (P f) ⇒ (`∀ x, P (allF x f)))
+→ π(`∀ f, (P f) ⇒ (`∀ x, P (exF x f)))
+→ π(P tF)
+→ π(P fF)
+→ π(`∀ f, P f);
 \end{lstlisting}
 
 \subsection{Interpretation}
@@ -180,9 +196,17 @@ We need to have a tool to update a valuation when we assign a variable. To do so
 
 \subsection{Theorems about valuation}
 
+Thanks to the introduction of $interpretation$, we can deduce five theorems. \\
+
+The first theorem is used to simplify the terms when updating a valuation.
+
 \begin{theorem}
 $\fa \ \sigma, \fa \ x, y, z, \fa \ a, [(eqNP \ x \ y) \ \imp \ (((update1 \ \sigma \ x \ a) \ y \ z) \ \simeq \ a)] \ \conj \ [\blneg(eqNP \ x \ y) \ \imp \ (((update1 \ \sigma \ x \ a) \ y \ z) \ \simeq \ (\sigma \ z))]$
 \end{theorem}
+
+The first term of the conjonction is proved by simple recurrence over natural numbers. The second term of the conjonction is proved by double recurrence. \\
+
+The second theorem conveys the idea that if two graphs are bisimilar then it is identical to update a valuation by either of theses two graphs.
 
 \begin{theorem}
 $\fa \ \sigma, \fa \ x, \fa \ a, b, (a \ \simeq \ b) \ \imp \ [\fa y, (update \ \sigma \ x \ a \ y) \ \simeq \ (update \ \sigma \ x \ b \ y)]$
