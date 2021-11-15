@@ -38,9 +38,9 @@
 
 Introduction : papier précédent, explications de la structure des graphes pointés, apparition de Dedukti depuis (passage de Deduction modulo à Lambpdapi calcul modulo), théorie U (arrow, omicron) \\
 
-The theory of pointed graphs : règles de réécritures \\
-
 The language of pointed graphs : types, signature \\
+
+The theory of pointed graphs : règles de réécritures \\
 
 Formulas : nécessité de restreindre l'ensemble des propositions dans la compréhension, définition des formules et des connecteurs sur les formules, principe de l'induction, principe de l'interprétation/valuation/update, présentations des nouveaux lemmes ajoutés pour prouver les résultats sur les formules (formulas-lemmas.lp) \\
 
@@ -191,10 +191,19 @@ $$interpretation \ \sigma \ tF \lra \bltop$$
 
 We need to have a tool to update a valuation when we assign a variable. To do so, we introduce the constant $update$ of type $(\El \ nat \ra Graph) \ra \El \ nat \ra Graph \ra (\El \ nat \ra Graph)$ which takes as arguments a valuation, a natural number and a graph and returns a new valuation. 
 
+We define the symbol $update1$ of type $(\El \ nat \ \ra \ Graph) \ \ra \ \El \ nat \ \ra \ Graph \ \ra \ \El \ nat \ \ra \ (\El \ nat \ \ra \ Graph)$ which obeys the following rewriting rules : 
+
+$$update \ \sigma \ x \ a \ y \ \lra \ update1 \ \sigma \ x \ a \ y \ y$$
+$$update \ \sigma \ zero \ a \ zero \ z \ \lra \ a$$
+$$update \ \sigma \ zero \ a \ (s \ y) \ z \ \lra \ \sigma \ z$$
+$$update \ \sigma \ (s \ x) \ a \ zero \ z \ \lra \ \sigma \ z$$
+$$update \ \sigma \ (s \ x) \ a \ (s \ y) \ z \ \lra \ update1 \ \sigma \ x \ a \ y \ z$$
+
+
 + A finir avec update1
 + supprimer El valuation ou pas ?
 
-\subsection{Theorems about valuation}
+\subsection{Results concerning valuation}
 
 Thanks to the introduction of $interpretation$, we can deduce five theorems. \\
 
@@ -204,7 +213,9 @@ The first theorem is used to simplify the terms when updating a valuation.
 $\fa \ \sigma, \fa \ x, y, z, \fa \ a, [(eqNP \ x \ y) \ \imp \ (((update1 \ \sigma \ x \ a) \ y \ z) \ \simeq \ a)] \ \conj \ [\blneg(eqNP \ x \ y) \ \imp \ (((update1 \ \sigma \ x \ a) \ y \ z) \ \simeq \ (\sigma \ z))]$
 \end{theorem}
 
-The first term of the conjonction is proved by simple recurrence over natural numbers. The second term of the conjonction is proved by double recurrence. \\
+\begin{proof}
+The first term of the conjonction is proved by simple recurrence over natural numbers. The second term of the conjonction is proved by double recurrence.
+\end{proof}
 
 The second theorem conveys the idea that if two graphs are bisimilar then it is identical to update a valuation by either of theses two graphs.
 
@@ -216,6 +227,8 @@ $\fa \ \sigma, \fa \ x, \fa \ a, b, (a \ \simeq \ b) \ \imp \ [\fa y, (update \ 
 $\fa \ \sigma, \fa \ x, y, \fa \ a, b, c, (a \ \simeq \ b) \ \imp \ (\fa z, (update \ (update \ \sigma \ x \ a) \ y \ c \ z) \ \simeq \ (update \  (update \ \sigma \ x \ b) \ y \ c \ z))$
 \end{theorem}
 
+The fourth theorem states that if two valuations are equal they keep being equal after an update.
+
 \begin{theorem}
 $\fa \ \sigma, \sigma', \fa \ x, \fa \ c, (\fa y, \sigma \ y \ \simeq \ \sigma' \ y) \ \imp \ (\fa z, (update \ \sigma \ x \ c \ z) \ \simeq \ (update \ \sigma' \ x \ c \ z))$
 \end{theorem}
@@ -224,6 +237,11 @@ $\fa \ \sigma, \sigma', \fa \ x, \fa \ c, (\fa y, \sigma \ y \ \simeq \ \sigma' 
 $\fa \ f, \fa \ \sigma, \sigma', (interpretation \ \sigma \ f) \ \conj \ (\fa x, (\sigma \ x) \ \simeq \ (\sigma' \ x))) \ \imp \ (interpretation \ \sigma' \ f)$
 \end{theorem}
 
+\begin{proof}
+The fifth theorem is proved by induction over formulas.
+\end{proof}
+
+
 \section{The theory of pointed graphs}
 
 
@@ -231,6 +249,39 @@ $\fa \ f, \fa \ \sigma, \sigma', (interpretation \ \sigma \ f) \ \conj \ (\fa x,
 
 
 \section{Conclusion}
+
+\begin{center}
+\begin{tabular}{|c|c||c|c|}
+\hline Lemma & Number of lines in the proof & Lemma & Number of lines in the proof \\
+\hline 3 & ? & 29 & ? \\
+\hline 4 & ? & 30 & ? \\
+\hline 5 & ? & 31 & ? \\
+\hline 6 & ? & 32 & ? \\
+\hline 7 & ? & 33 & ? \\
+\hline 8 & ? & 34 & ? \\
+\hline 9 & ? & 35 & ? \\
+\hline 10 & ? & 36 & ? \\
+\hline 11 & ? & 37 & ? \\
+\hline 12 & ? & 38 & ? \\
+\hline 13 & ? & 39 & ? \\
+\hline 14 & ? & 40 & ? \\
+\hline 15 & ? & 41 & ? \\
+\hline 16 & ? & 42 & ? \\
+\hline 17 & ? & 43 & ? \\
+\hline 18 & ? & 44 & ? \\
+\hline 19 & ? & 45 & ? \\
+\hline 20 & ? & 46 & ? \\
+\hline 21 & ? & 47 & ? \\
+\hline 22 & ? & 48 & ? \\
+\hline 23 & ? & 49 & ? \\
+\hline 24 & ? & 50 & ? \\
+\hline 25 & ? & 51 & ? \\
+\hline 26 & ? & 52 & ? \\
+\hline 27 & ? & 53 & ? \\
+\hline 28 & ? & & \\
+\hline
+\end{tabular}
+\end{center}
 
 
 \section*{References}
