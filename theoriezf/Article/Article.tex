@@ -1,0 +1,346 @@
+\documentclass[a4paper]{article}
+
+\usepackage[top=3.5cm, bottom=3.5cm, left=3.5cm, right=3.5cm]{geometry}
+\usepackage{ae,lmodern}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+%\usepackage{paralist, tabularx}
+\usepackage{oldlfont,amssymb,epsf,stmaryrd,epsfig,color}\usepackage{amsmath}
+%\usepackage{hyperref}
+%\usepackage{framed,multicol,changepage}
+%\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor}
+%\usepackage{skull,ifoddpage,marginnote}
+%\usepackage{pifont}
+%\usepackage{graphicx}
+%\usepackage{ebproof}
+%\usepackage{mathtools}
+%\usepackage{bm}
+%\usepackage{stmaryrd}
+%\usepackage{cleveref}
+%\usepackage{tikz}
+%\usepackage{import} % For inkscape generated files
+\usepackage{biblatex}
+\usepackage{url}
+
+\title{Implementation of Set theory in \dedukti}
+\date{}
+
+\input{macros.tex}
+\input{lambdapi.tex}
+\addbibresource{ref.bib}
+
+\begin{document}
+\thispagestyle{empty}
+\maketitle
+
+
+\section*{Plan}
+
+Introduction : introduction du papier précédent, apparition de Dedukti depuis (passage de Deduction modulo à Lambpdapi calcul modulo), théorie U (arrow, omicron) \\
+
+The theory of pointed graphs :  explications détaillées de la structure des graphes pointés \\
+
+The language of pointed graphs : types, signature, règles de réécritures \\
+
+Formulas : nécessité de restreindre l'ensemble des propositions dans la compréhension, définition des formules et des connecteurs sur les formules, principe de l'induction, principe de l'interprétation/valuation/update, présentations des nouveaux lemmes ajoutés pour prouver les résultats sur les formules (formulas-lemmas.lp) \\
+
+Lemmas : expliquer qu'on n'a pas besoin des lemmes 1 et 2, explication des mécanismes classiques réutilisés dans chaque preuve, détails de preuves pour certains lemmes intéressants, extensionalité faible ajoutée entre 41 et 42 parce qu'elle est utilisée dans 44, 47, 48 \\
+
+Conclusion : tableau récapitulatif du nombre de lignes de chaque preuve
+
+\section{Introduction}
+
+
+\section{The theory of pointed graphs}
+
+\section{The language of pointed graphs}
+
+\subsection{Sorts}
+
+The langage of the theory IZmod uses four sorts. The first two are for
+the pointed graphs and for the nodes of the pointed graphs.  In
+\dedukti, we thus introduce two constants $\Graph$ and $\Node$ of type
+$\Type$
+\begin{lstlisting}
+constant symbol Graph : TYPE;
+constant symbol Node : TYPE;
+\end{lstlisting}
+As we have two sorts, we would need two universal quantifiers and two
+existential quantifiers, one for each sort.  We rather use another
+solution \cite{theoryU} that is to declare a constant $\Set$ of type
+$\Type$ for codes of sorts, a function $\El$ of type $\Set \ra \Type$,
+two constants $g$ and $n$ of sort $\Set$ and rewrite rules
+$$\El~g \lra \Graph$$
+$$\El~n \lra \Node$$
+
+The two other sorts of the theory IZmod are for classes of nodes and
+for binary relations on nodes.  In \dedukti, the sort of classes is
+just $\Node \ra \Prop$ and that of binary relations
+$\Node \ra \Node \ra \Prop$. To quantify on such sorts, we introduce
+constants $\omicron$ of type $\Set$ and $\arr $ of type
+$\Set \ra \Set \ra \Set$ and rewrite rules
+$$\El~\omicron \lra \Prop$$
+$$\El~(x~\arr~y) \lra (\El~x) \ra (\El~y)$$
+Note that $\El~(n~\arr~\omicron)$ reduces to $\Node \ra \Prop$ and 
+$\El~(n~\arr~(n~\arr~\omicron))$ reduces to $\Node \ra \Node \ra \Prop$. 
+
+The symbols $\Graph$, $\Node$, $g$ and $n$ are specific to the
+expression of $IZmod$ in \dedukti. In contrast the symbols $\Set$,
+$\El$, $\omicron$, and $\arr$ are part of the standard library of 
+\dedukti.
+
+\subsection{Signature}
+
+The signature of $IZmod$ contains 31 symbols. As we have replaced the
+sorts for classes and relations with the \dedukti types
+$\Node \ra \Prop$ and $\Node \ra \Node \ra \Prop$, we do not need
+specific predicate symbols to apply a class to a node or a relations
+to two. In the same way, we do not need comprehension axioms for 
+classes and relations. 
+
+In the same way, the equality symbol is part of the standard library of 
+\dedukti.
+
+So the signature is reduced to 26 symbols. 
+
+\begin{lstlisting}
+symbol eta : Graph → Node → Node → Prop;
+symbol root : Graph → Node;
+symbol cr : Graph → Node → Graph;
+constant symbol o : Node;
+constant symbol O : Node;
+symbol i : Node → Node;
+symbol i' : Node → Node;
+symbol j : Node → Node;
+symbol j' : Node → Node;
+symbol I : Node → Prop;
+symbol J : Node → Prop;
+symbol ρ : Graph → Node;
+symbol ρ^ : Node → Graph;
+symbol Succ : Node → Node;
+symbol Pred : Node → Node;
+symbol Null : Node → Prop;
+symbol Nat : Node → Prop;
+symbol < : Node → Node → Prop;
+symbol simeq : Graph → Graph → Prop;
+symbol ∈ : Graph → Graph → Prop;
+symbol join : Graph → Graph;
+symbol pair : Graph → Graph → Graph;
+symbol powerset : Graph → Graph;
+symbol comp : Graph → (El nat → Graph) → El formula → Graph;
+symbol omega : Graph;
+symbol Cl : Graph → Graph;
+\end{lstlisting}
+
+\subsection{Rewriting rules}
+
+
+\section{The language of formulas}
+
+We may have notice that the lemmas in which the $comp$ symbol is used are only valid for a subset of formulas. The formulas need to have all of its quantifiers of sort $Graph$ and can only use the language $\in$, $\simeq$ and the classic logical connectives.
+
+Thus we need to introduce a set to caraterize the validity domain of such lemmas.
+
+\subsection{Formulas}
+
+In order to achieve this goal, we define the constant $formula$ of type $\Set$ and the logical connectives related to this constant.
+
+\begin{lstlisting}
+constant symbol formula : Set;
+constant symbol eqF : El nat → El nat → El formula;
+constant symbol inF : El nat → El nat → El formula;
+constant symbol andF : El formula → El formula → El formula;
+constant symbol orF : El formula → El formula → El formula;
+constant symbol allF : El nat → El formula → El formula;
+constant symbol exF : El nat → El formula → El formula;
+constant symbol impF : El formula → El formula → El formula;
+constant symbol fF : El formula;
+constant symbol tF : El formula;
+\end{lstlisting}
+
+
+Henceforth, we are able to define in \dedukti
+$$comp : \Graph \ra (\El \ nat \ \ra \ Graph) \  \ra \El \ formula \ra \Graph$$
+
+Then we are able to define an induction over formulas, using the language $\in$, $\simeq$ and the classic logical connectives.
+
+\begin{lstlisting}
+constant symbol recF : Π (P : El formula → Prop), 
+π(`∀ x, `∀ y, P (eqF x y))
+→ π(`∀ x, `∀  y, P (inF x y))
+→ π(`∀ f, `∀ g, (P f ∧ P g) ⇒ (P (andF f g)))
+→ π(`∀ f, `∀ g, (P f ∧ P g) ⇒ (P (orF f g)))
+→ π(`∀ f, `∀ g, (P f ∧ P g) ⇒ (P (impF f g)))
+→ π(`∀ f, (P f) ⇒ (`∀ x, P (allF x f)))
+→ π(`∀ f, (P f) ⇒ (`∀ x, P (exF x f)))
+→ π(P tF)
+→ π(P fF)
+→ π(`∀ f, P f);
+\end{lstlisting}
+
+\subsection{Interpretation}
+
+The next step is to interpret an object of type $formula$ into $Prop$. We introduce the constant $interpretation$ which receives a valuation of type $\El \ nat \ \ra \ Graph$ and a formula of type $\El \ formula$ and return a $\Prop$.
+
+\begin{lstlisting}
+symbol interpretation : (El nat → Graph) → El formula → Prop;
+\end{lstlisting} 
+
+We need to have a tool to update a valuation when we assign a variable. To do so, we introduce the constant $update$ of type $(\El \ nat \ra Graph) \ra \El \ nat \ra Graph \ra (\El \ nat \ra Graph)$ which takes as arguments a valuation, a natural number and a graph and returns a new valuation: $(update \ \sigma \ x \ a)$ is a new valuation that substitues $x$ by $a$ and acts like $\sigma$ for the other natural numbers.
+
+To write a rewriting rule upon $update$, we need to be able to check if we apply $(update \ \sigma \ x \ a)$ to $z = x$ or to $z \neq x$.
+
+We define the symbol $update1$ of type $(\El \ nat \ \ra \ Graph) \ \ra \ \El \ nat \ \ra \ Graph \ \ra \ \El \ nat \ \ra \ (\El \ nat \ \ra \ Graph)$. We keep in memory the argument of the valuation with the rewriting rule:
+
+$$update \ \sigma \ x \ a \ y \ \lra \ update1 \ \sigma \ x \ a \ y \ y$$
+
+We have two natural numbers to compare: $x$, which is substitued by $a$ by the $update$, and $y$ that is the argument we apply to the valuation. The technique we use to compare $x$ and $y$ is the following: we keep in memory $y$ in the variable $z$, we decrement the two numbers until either one or both are equal to zero. If both are equal to zero, then $x$ and $y$ are equal and we return $a$. If only one equals zero, then they are different and we return $\sigma \ z$.
+
+$$update1 \ \sigma \ (s \ x) \ a \ (s \ y) \ z \ \lra \ update1 \ \sigma \ x \ a \ y \ z$$
+$$ update1 \ \sigma \ zero \ a \ zero \ z \ \lra \ a$$
+$$update1 \ \sigma \ zero \ a \ (s \ y) \ z \ \lra \ \sigma \ z$$
+$$update1 \ \sigma \ (s \ x) \ a \ zero \ z \ \lra \ \sigma \ z$$
+
+
+Now we have all the tools to define the rewiting rules of the interpreation of formulas:
+
+$$interpretation \ \sigma \ (eqF \ x \ y) \lra (\sigma \ x) \ \simeq \ (\sigma \ y)$$
+$$interpretation \ \sigma \ (inF \ x \ y) \lra (\sigma \ x) \ \in \ (\sigma \ y)$$
+$$interpretation \ \sigma \ (andF \ f \ g) \lra (interpretation \ \sigma \ f) \conj (interpretation \ \sigma \ g)$$
+$$interpretation \ \sigma \ (orF \ f \ g) \lra (interpretation \ \sigma \ f) \disj  (interpretation \sigma \ g)$$
+$$interpretation \ \sigma \ (impF \ f \ g) \lra (interpretation \ \sigma \ f) \imp (interpretation \ \sigma \ g)$$
+$$interpretation \ \sigma \ (allF \ x \ f) \ \lra \ \fa \ a, interpretation \ (update \ \sigma \ x \ a) \ f$$
+$$interpretation \ \sigma \ (exF \ x \ f) \ \lra \ \ex \ a, interpretation \ (update \ \sigma \ x \ a) \ f$$
+$$interpretation \ \sigma \ fF \lra \blbot$$
+$$interpretation \ \sigma \ tF \lra \bltop$$
+
+
+\subsection{Results concerning valuation}
+
+Thanks to the introduction of $interpretation$, we can deduce five theorems. \\
+
+The first theorem is used to simplify the terms when updating a valuation.
+
+\begin{theorem}
+$\fa \ \sigma, \fa \ x, y, z, \fa \ a, [(eqNP \ x \ y) \ \imp \ (((update1 \ \sigma \ x \ a) \ y \ z) \ \simeq \ a)] \ \conj \ [\blneg(eqNP \ x \ y) \ \imp \ (((update1 \ \sigma \ x \ a) \ y \ z) \ \simeq \ (\sigma \ z))]$
+\end{theorem}
+
+\begin{proof}
+The first term of the conjonction is proved by simple recurrence over natural numbers. The second term of the conjonction is proved by double recurrence.
+\end{proof}
+
+The second theorem conveys the idea that if two graphs are bisimilar then it is identical to update a valuation by either of theses two graphs.
+
+\begin{theorem}
+$\fa \ \sigma, \fa \ x, \fa \ a, b, (a \ \simeq \ b) \ \imp \ [\fa y, (update \ \sigma \ x \ a \ y) \ \simeq \ (update \ \sigma \ x \ b \ y)]$
+\end{theorem}
+
+\begin{theorem}
+$\fa \ \sigma, \fa \ x, y, \fa \ a, b, c, (a \ \simeq \ b) \ \imp \ (\fa z, (update \ (update \ \sigma \ x \ a) \ y \ c \ z) \ \simeq \ (update \  (update \ \sigma \ x \ b) \ y \ c \ z))$
+\end{theorem}
+
+The fourth theorem states that if two valuations are equal they keep being equal after an update.
+
+\begin{theorem}
+$\fa \ \sigma, \sigma', \fa \ x, \fa \ c, (\fa y, \sigma \ y \ \simeq \ \sigma' \ y) \ \imp \ (\fa z, (update \ \sigma \ x \ c \ z) \ \simeq \ (update \ \sigma' \ x \ c \ z))$
+\end{theorem}
+
+\begin{theorem}
+$\fa \ f, \fa \ \sigma, \sigma', (interpretation \ \sigma \ f) \ \conj \ (\fa x, (\sigma \ x) \ \simeq \ (\sigma' \ x))) \ \imp \ (interpretation \ \sigma' \ f)$
+\end{theorem}
+
+\begin{proof}
+The fifth theorem is proved by induction over formulas.
+\end{proof}
+
+
+\section{Lemmas}
+
+The first lemma $x=x$ does not need to be implemented since it is already part of the standard library of \dedukti \ under the name $refl$ (which is polymorphic).
+
+The second lemma is not required as it is a consequence of the rewriting rule of the polumorphic $=$ implemented in the stardard library of \dedukti: 
+\begin{lstlisting}
+constant symbol = {s} : El s → El s → Prop;
+notation = infix 4;
+rule π (@= $s $x $y) ↪ Π (P : El $s → Prop), π(P $x) → π(P $y);
+\end{lstlisting}
+
+\subsection{Useful mechanisms}
+
+All the other lemmas except the ones where $comp$ is involved are proved using the blueprint in \cite{zermodulo53}. The complete proofs can be found in \url{https://github.com/ttraversie/zf/tree/main/theoriezf}.
+
+\subsection{Some interesting proofs}
+
+Lemma32
+
+\subsection{Weak extensionnality}
+
+We want to deduce $weak \ extensionality$ from $strong \ extensionality$ (i.e. lemma 41).
+
+\begin{lstlisting}
+opaque symbol lemma41 : Π (x y : El nat), Π (f : El formula), Π (c d : Graph), π(`∀ σ : (El nat → Graph), ((interpretation (update (update σ x c) y d) f)
+∧ (`∀ a, `∀ a', `∀ b, ((a' ∈ a) ∧ (interpretation (update (update σ x a) y b) f)) ⇒ (`∃ b', ((b' ∈ b) ∧ (interpretation (update (update σ x a') y b') f))))
+∧ (`∀ b, `∀ b', `∀ a, ((b' ∈ b) ∧ (interpretation (update (update σ x a) y b) f)) ⇒ (`∃ a', ((a' ∈ a) ∧ (interpretation (update (update σ x a') y b') f))))) ⇒ (c simeq d))
+
+opaque symbol lemmaExt : Π (c d : Graph), π((`∀ x, (x ∈ c) ⇔ (x ∈ d)) ⇒ (c simeq d))
+\end{lstlisting}
+
+To do this, we need to prove the following intermediry lemma:
+
+\begin{lstlisting}
+opaque symbol lemmaHypExt : Π (c d : Graph), π((`∀ z, (z ∈ c) ⇔ (z ∈ d)) ⇒ ((((c simeq c) ∧ (d simeq d)) ∨ (c simeq d))
+∧ (`∀ a, `∀ a', `∀ b, ((a' ∈ a) ∧ (((a simeq c) ∧ (b simeq d)) ∨ (a simeq b))) ⇒ (`∃ b', ((b' ∈ b) ∧ (((a' simeq c) ∧ (b' simeq d)) ∨ (a' simeq b')))))
+∧ (`∀ b, `∀ b', `∀ a, ((b' ∈ b) ∧ (((a simeq c) ∧ (b simeq d)) ∨ (a simeq b))) ⇒ (`∃ a', ((a' ∈ a) ∧ (((a' simeq c) ∧ (b' simeq d)) ∨ (a' simeq b')))))))
+\end{lstlisting}
+
+We thus can prove $weak \ extensionality$ thanks to:
+
+\begin{lstlisting}
+opaque symbol lemmaExt : Π (c d : Graph), π((`∀ x, (x ∈ c) ⇔ (x ∈ d)) ⇒ (c simeq d))
+≔ begin
+assume c d H;
+refine lemma41 zero one (orF (andF (eqF zero two) (eqF one three)) (eqF zero one)) c d (update (update (λ _, empty_set) two c) three d) (lemmaHypExt c d H);
+end;
+\end{lstlisting}
+
+\section{Conclusion}
+
+\begin{center}
+\begin{tabular}{|c|c||c|c|}
+\hline Lemma & Number of lines in the proof & Lemma & Number of lines in the proof \\
+\hline 3 & ? & 29 & ? \\
+\hline 4 & ? & 30 & ? \\
+\hline 5 & ? & 31 & ? \\
+\hline 6 & ? & 32 & ? \\
+\hline 7 & ? & 33 & ? \\
+\hline 8 & ? & 34 & ? \\
+\hline 9 & ? & 35 & ? \\
+\hline 10 & ? & 36 & ? \\
+\hline 11 & ? & 37 & ? \\
+\hline 12 & ? & 38 & ? \\
+\hline 13 & ? & 39 & ? \\
+\hline 14 & ? & 40 & ? \\
+\hline 15 & ? & 41 & ? \\
+\hline 16 & ? & 42 & ? \\
+\hline 17 & ? & 43 & ? \\
+\hline 18 & ? & 44 & ? \\
+\hline 19 & ? & 45 & ? \\
+\hline 20 & ? & 46 & ? \\
+\hline 21 & ? & 47 & ? \\
+\hline 22 & ? & 48 & ? \\
+\hline 23 & ? & 49 & ? \\
+\hline 24 & ? & 50 & ? \\
+\hline 25 & ? & 51 & ? \\
+\hline 26 & ? & 52 & ? \\
+\hline 27 & ? & 53 & ? \\
+\hline 28 & ? & Weak extensionality & ? \\
+\hline
+\end{tabular}
+\end{center}
+
+\printbibliography
+
+\end{document}
