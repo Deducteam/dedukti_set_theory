@@ -22,12 +22,15 @@
 %\usepackage{cleveref}
 %\usepackage{tikz}
 %\usepackage{import} % For inkscape generated files
+\usepackage{biblatex}
+\usepackage{url}
 
 \title{Implementation of Set theory in \dedukti}
 \date{}
 
 \input{macros.tex}
 \input{lambdapi.tex}
+\addbibresource{ref.bib}
 
 \begin{document}
 \thispagestyle{empty}
@@ -36,11 +39,11 @@
 
 \section*{Plan}
 
-Introduction : papier précédent, explications de la structure des graphes pointés, apparition de Dedukti depuis (passage de Deduction modulo à Lambpdapi calcul modulo), théorie U (arrow, omicron) \\
+Introduction : introduction du papier précédent, apparition de Dedukti depuis (passage de Deduction modulo à Lambpdapi calcul modulo), théorie U (arrow, omicron) \\
 
-The language of pointed graphs : types, signature \\
+The theory of pointed graphs :  explications détaillées de la structure des graphes pointés \\
 
-The theory of pointed graphs : règles de réécritures \\
+The language of pointed graphs : types, signature, règles de réécritures \\
 
 Formulas : nécessité de restreindre l'ensemble des propositions dans la compréhension, définition des formules et des connecteurs sur les formules, principe de l'induction, principe de l'interprétation/valuation/update, présentations des nouveaux lemmes ajoutés pour prouver les résultats sur les formules (formulas-lemmas.lp) \\
 
@@ -50,7 +53,8 @@ Conclusion : tableau récapitulatif du nombre de lignes de chaque preuve
 
 \section{Introduction}
 
-papier + dedukti + bout de théorie U (arrow, omicron)
+
+\section{The theory of pointed graphs}
 
 \section{The language of pointed graphs}
 
@@ -126,21 +130,23 @@ symbol ∈ : Graph → Graph → Prop;
 symbol join : Graph → Graph;
 symbol pair : Graph → Graph → Graph;
 symbol powerset : Graph → Graph;
-symbol comp : Graph → El valuation → El formula → Graph;
+symbol comp : Graph → (El nat → Graph) → El formula → Graph;
 symbol omega : Graph;
 symbol Cl : Graph → Graph;
 \end{lstlisting}
 
+\subsection{Rewriting rules}
+
 
 \section{The language of formulas}
+
+We may have notice that the lemmas in which the $comp$ symbol is used are only valid for a subset of formulas. The formulas need to have all of its quantifiers of sort $Graph$ and can only use the language $\in$, $\simeq$ and the classic logical connectives.
+
+Thus we need to introduce a set to caraterize the validity domain of such lemmas.
+
 \subsection{Formulas}
 
-$$comp : \Graph \ra \El \ valuation \ra \El \ formula \ra \Graph$$
-
-In $comp$ we may have noticed the presence of valuation and formula. 
-Indeed, the lemmas in which the $comp$ symbol is used are only valid for a subset of formulas. The formulas need to have all of its quantifiers of sort $Graph$ and can only use the language $\in$, $\simeq$ and the classic logical connectives.
-
-Thus we need to introduce a set to caraterize the validity domain of such lemmas. In order to achieve this goal, we define the constant $formula$ of type $\Set$ and the logical connectives related to this constant.
+In order to achieve this goal, we define the constant $formula$ of type $\Set$ and the logical connectives related to this constant.
 
 \begin{lstlisting}
 constant symbol formula : Set;
@@ -154,6 +160,10 @@ constant symbol impF : El formula → El formula → El formula;
 constant symbol fF : El formula;
 constant symbol tF : El formula;
 \end{lstlisting}
+
+
+Henceforth, we are able to define in \dedukti
+$$comp : \Graph \ra (\El \ nat \ \ra \ Graph) \  \ra \El \ formula \ra \Graph$$
 
 Then we are able to define an induction over formulas, using the language $\in$, $\simeq$ and the classic logical connectives.
 
@@ -173,35 +183,40 @@ constant symbol recF : Π (P : El formula → Prop),
 
 \subsection{Interpretation}
 
-The next step is to interpret an object of type $formula$ into $Prop$. We introduce the constant $interpretation$ which receives a valuation of type $\El \ valuation$ and a formula of type $\El \ formula$ and return a $\Prop$.
+The next step is to interpret an object of type $formula$ into $Prop$. We introduce the constant $interpretation$ which receives a valuation of type $\El \ nat \ \ra \ Graph$ and a formula of type $\El \ formula$ and return a $\Prop$.
 
 \begin{lstlisting}
 symbol interpretation : (El nat → Graph) → El formula → Prop;
-\end{lstlisting}
+\end{lstlisting} 
 
-The interpreation of formulas obeys the following rewriting rules :
+We need to have a tool to update a valuation when we assign a variable. To do so, we introduce the constant $update$ of type $(\El \ nat \ra Graph) \ra \El \ nat \ra Graph \ra (\El \ nat \ra Graph)$ which takes as arguments a valuation, a natural number and a graph and returns a new valuation: $(update \ \sigma \ x \ a)$ is a new valuation that substitues $x$ by $a$ and acts like $\sigma$ for the other natural numbers.
+
+To write a rewriting rule upon $update$, we need to be able to check if we apply $(update \ \sigma \ x \ a)$ to $z = x$ or to $z \neq x$.
+
+We define the symbol $update1$ of type $(\El \ nat \ \ra \ Graph) \ \ra \ \El \ nat \ \ra \ Graph \ \ra \ \El \ nat \ \ra \ (\El \ nat \ \ra \ Graph)$. We keep in memory the argument of the valuation with the rewriting rule:
+
+$$update \ \sigma \ x \ a \ y \ \lra \ update1 \ \sigma \ x \ a \ y \ y$$
+
+We have two natural numbers to compare: $x$, which is substitued by $a$ by the $update$, and $y$ that is the argument we apply to the valuation. The technique we use to compare $x$ and $y$ is the following: we keep in memory $y$ in the variable $z$, we decrement the two numbers until either one or both are equal to zero. If both are equal to zero, then $x$ and $y$ are equal and we return $a$. If only one equals zero, then they are different and we return $\sigma \ z$.
+
+$$update1 \ \sigma \ (s \ x) \ a \ (s \ y) \ z \ \lra \ update1 \ \sigma \ x \ a \ y \ z$$
+$$ update1 \ \sigma \ zero \ a \ zero \ z \ \lra \ a$$
+$$update1 \ \sigma \ zero \ a \ (s \ y) \ z \ \lra \ \sigma \ z$$
+$$update1 \ \sigma \ (s \ x) \ a \ zero \ z \ \lra \ \sigma \ z$$
+
+
+Now we have all the tools to define the rewiting rules of the interpreation of formulas:
 
 $$interpretation \ \sigma \ (eqF \ x \ y) \lra (\sigma \ x) \ \simeq \ (\sigma \ y)$$
 $$interpretation \ \sigma \ (inF \ x \ y) \lra (\sigma \ x) \ \in \ (\sigma \ y)$$
 $$interpretation \ \sigma \ (andF \ f \ g) \lra (interpretation \ \sigma \ f) \conj (interpretation \ \sigma \ g)$$
 $$interpretation \ \sigma \ (orF \ f \ g) \lra (interpretation \ \sigma \ f) \disj  (interpretation \sigma \ g)$$
 $$interpretation \ \sigma \ (impF \ f \ g) \lra (interpretation \ \sigma \ f) \imp (interpretation \ \sigma \ g)$$
+$$interpretation \ \sigma \ (allF \ x \ f) \ \lra \ \fa \ a, interpretation \ (update \ \sigma \ x \ a) \ f$$
+$$interpretation \ \sigma \ (exF \ x \ f) \ \lra \ \ex \ a, interpretation \ (update \ \sigma \ x \ a) \ f$$
 $$interpretation \ \sigma \ fF \lra \blbot$$
 $$interpretation \ \sigma \ tF \lra \bltop$$
 
-We need to have a tool to update a valuation when we assign a variable. To do so, we introduce the constant $update$ of type $(\El \ nat \ra Graph) \ra \El \ nat \ra Graph \ra (\El \ nat \ra Graph)$ which takes as arguments a valuation, a natural number and a graph and returns a new valuation. 
-
-We define the symbol $update1$ of type $(\El \ nat \ \ra \ Graph) \ \ra \ \El \ nat \ \ra \ Graph \ \ra \ \El \ nat \ \ra \ (\El \ nat \ \ra \ Graph)$ which obeys the following rewriting rules : 
-
-$$update \ \sigma \ x \ a \ y \ \lra \ update1 \ \sigma \ x \ a \ y \ y$$
-$$update \ \sigma \ zero \ a \ zero \ z \ \lra \ a$$
-$$update \ \sigma \ zero \ a \ (s \ y) \ z \ \lra \ \sigma \ z$$
-$$update \ \sigma \ (s \ x) \ a \ zero \ z \ \lra \ \sigma \ z$$
-$$update \ \sigma \ (s \ x) \ a \ (s \ y) \ z \ \lra \ update1 \ \sigma \ x \ a \ y \ z$$
-
-
-+ A finir avec update1
-+ supprimer El valuation ou pas ?
 
 \subsection{Results concerning valuation}
 
@@ -242,11 +257,54 @@ The fifth theorem is proved by induction over formulas.
 \end{proof}
 
 
-\section{The theory of pointed graphs}
-
-
 \section{Lemmas}
 
+The first lemma $x=x$ does not need to be implemented since it is already part of the standard library of \dedukti \ under the name $refl$ (which is polymorphic).
+
+The second lemma is not required as it is a consequence of the rewriting rule of the polumorphic $=$ implemented in the stardard library of \dedukti: 
+\begin{lstlisting}
+constant symbol = {s} : El s → El s → Prop;
+notation = infix 4;
+rule π (@= $s $x $y) ↪ Π (P : El $s → Prop), π(P $x) → π(P $y);
+\end{lstlisting}
+
+\subsection{Useful mechanisms}
+
+All the other lemmas except the ones where $comp$ is involved are proved using the blueprint in \cite{zermodulo53}. The complete proofs can be found in \url{https://github.com/ttraversie/zf/tree/main/theoriezf}.
+
+\subsection{Some interesting proofs}
+
+Lemma32
+
+\subsection{Weak extensionnality}
+
+We want to deduce $weak \ extensionality$ from $strong \ extensionality$ (i.e. lemma 41).
+
+\begin{lstlisting}
+opaque symbol lemma41 : Π (x y : El nat), Π (f : El formula), Π (c d : Graph), π(`∀ σ : (El nat → Graph), ((interpretation (update (update σ x c) y d) f)
+∧ (`∀ a, `∀ a', `∀ b, ((a' ∈ a) ∧ (interpretation (update (update σ x a) y b) f)) ⇒ (`∃ b', ((b' ∈ b) ∧ (interpretation (update (update σ x a') y b') f))))
+∧ (`∀ b, `∀ b', `∀ a, ((b' ∈ b) ∧ (interpretation (update (update σ x a) y b) f)) ⇒ (`∃ a', ((a' ∈ a) ∧ (interpretation (update (update σ x a') y b') f))))) ⇒ (c simeq d))
+
+opaque symbol lemmaExt : Π (c d : Graph), π((`∀ x, (x ∈ c) ⇔ (x ∈ d)) ⇒ (c simeq d))
+\end{lstlisting}
+
+To do this, we need to prove the following intermediry lemma:
+
+\begin{lstlisting}
+opaque symbol lemmaHypExt : Π (c d : Graph), π((`∀ z, (z ∈ c) ⇔ (z ∈ d)) ⇒ ((((c simeq c) ∧ (d simeq d)) ∨ (c simeq d))
+∧ (`∀ a, `∀ a', `∀ b, ((a' ∈ a) ∧ (((a simeq c) ∧ (b simeq d)) ∨ (a simeq b))) ⇒ (`∃ b', ((b' ∈ b) ∧ (((a' simeq c) ∧ (b' simeq d)) ∨ (a' simeq b')))))
+∧ (`∀ b, `∀ b', `∀ a, ((b' ∈ b) ∧ (((a simeq c) ∧ (b simeq d)) ∨ (a simeq b))) ⇒ (`∃ a', ((a' ∈ a) ∧ (((a' simeq c) ∧ (b' simeq d)) ∨ (a' simeq b')))))))
+\end{lstlisting}
+
+We thus can prove $weak \ extensionality$ thanks to:
+
+\begin{lstlisting}
+opaque symbol lemmaExt : Π (c d : Graph), π((`∀ x, (x ∈ c) ⇔ (x ∈ d)) ⇒ (c simeq d))
+≔ begin
+assume c d H;
+refine lemma41 zero one (orF (andF (eqF zero two) (eqF one three)) (eqF zero one)) c d (update (update (λ _, empty_set) two c) three d) (lemmaHypExt c d H);
+end;
+\end{lstlisting}
 
 \section{Conclusion}
 
@@ -278,13 +336,11 @@ The fifth theorem is proved by induction over formulas.
 \hline 25 & ? & 51 & ? \\
 \hline 26 & ? & 52 & ? \\
 \hline 27 & ? & 53 & ? \\
-\hline 28 & ? & & \\
+\hline 28 & ? & Weak extensionality & ? \\
 \hline
 \end{tabular}
 \end{center}
 
-
-\section*{References}
-
+\printbibliography
 
 \end{document}
