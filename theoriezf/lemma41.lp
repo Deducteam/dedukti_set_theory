@@ -10,7 +10,7 @@ require open zf.theoriezf.nat;
 require open zf.theoriezf.formulas;
 require open zf.theoriezf.formulas_lemmas;
 
-opaque symbol lemma41 : Π (x y : El nat), Π (f : El formula), Π (c d : Graph), π(`∀ σ : El valuation, ((interpretation (update (update σ x c) y d) f)
+opaque symbol lemma41 : Π (x y : El nat), Π (f : El formula), Π (c d : Graph), π(`∀ σ : (El nat → Graph), ((interpretation (update (update σ x c) y d) f)
 ∧ (`∀ a, `∀ a', `∀ b, ((a' ∈ a) ∧ (interpretation (update (update σ x a) y b) f)) ⇒ (`∃ b', ((b' ∈ b) ∧ (interpretation (update (update σ x a') y b') f))))
 ∧ (`∀ b, `∀ b', `∀ a, ((b' ∈ b) ∧ (interpretation (update (update σ x a) y b) f)) ⇒ (`∃ a', ((a' ∈ a) ∧ (interpretation (update (update σ x a') y b') f))))) ⇒ (c simeq d))
 ≔ begin

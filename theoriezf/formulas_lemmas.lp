@@ -121,7 +121,7 @@ refine H z;
 refine lemma4 (update1 σ' x c z z) (σ' z) ((and_ed _ _ (axiom1 σ' x z z c)) H0);
 end;
 
-opaque symbol lemmaInt : Π (f : El formula), π(`∀ σ : El valuation, `∀ σ' : El valuation, ((interpretation σ f) ∧ (`∀ x, (σ x) simeq (σ' x))) ⇒ (interpretation σ' f))
+opaque symbol lemmaInt : Π (f : El formula), π(`∀ σ : (El nat → Graph), `∀ σ' : (El nat → Graph), ((interpretation σ f) ∧ (`∀ x, (σ x) simeq (σ' x))) ⇒ (interpretation σ' f))
 ≔ begin
 refine recF (λ f, `∀ σ, `∀ σ', ((interpretation σ f) ∧ (`∀ x, (σ x) simeq (σ' x))) ⇒ (interpretation σ' f)) _ _ _ _ _ _ _ _ _;
 assume x y σ σ' Heq;

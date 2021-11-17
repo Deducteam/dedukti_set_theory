@@ -1,5 +1,6 @@
 require open zf.theoriezf.logic;
 require open zf.theoriezf.language;
+require open zf.theoriezf.nat;
 require open zf.theoriezf.bisimilarity;
 require open zf.theoriezf.injectivity;
 require open zf.theoriezf.eta1;
@@ -50,7 +51,7 @@ assume x y';
 refine lemma19 a y' x;
 end;
 
-opaque symbol lemma39 : Π (σ : El valuation), Π (f : El formula), π(`∀ a, `∀ y, (cr (comp a σ f) (i y)) simeq (cr a y))
+opaque symbol lemma39 : Π (σ : (El nat → Graph)), Π (f : El formula), π(`∀ a, `∀ y, (cr (comp a σ f) (i y)) simeq (cr a y))
 ≔ begin
 assume σ f a y;
 refine lemma4 (cr a y) (cr (comp a σ f) (i y)) (lemma33 (cr a y) (cr (comp a σ f) (i y)) _);

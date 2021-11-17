@@ -5,7 +5,7 @@ require open zf.theoriezf.formulas;
 
 // Comprehension
 
-symbol comp : Graph → El valuation → El formula → Graph;
+symbol comp : Graph → (El nat → Graph) → El formula → Graph;
 rule eta (comp $a $σ $f) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) ∨ (`∃ y, ($x = i y) ∧ ($x' = o) ∧ (eta $a y (root $a)) ∧ (interpretation (update $σ zero (cr $a y)) $f));
 rule root (comp $a $σ $f) ↪ o;
 

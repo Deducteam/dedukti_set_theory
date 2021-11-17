@@ -21,9 +21,6 @@ rule update1 $σ zero $a (s $y) $z ↪ $σ $z;
 rule update1 $σ (s $x) $a zero $z ↪ $σ $z;
 rule update1 $σ (s $x) $a (s $y) $z ↪ update1 $σ $x $a $y $z;
 
-symbol valuation : Set;
-rule El valuation ↪ El nat → El g;
-
 constant symbol recF : Π (P : El formula → Prop), 
 π(`∀ x, `∀ y, P (eqF x y))
 → π(`∀ x, `∀  y, P (inF x y))

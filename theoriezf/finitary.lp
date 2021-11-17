@@ -239,7 +239,7 @@ assume Hba;
 refine and_ed _ _ Hba;
 end;
 
-opaque symbol lemma45 : Π (σ : El valuation), Π (f : El formula), π(`∀ a, `∀ b, (a ∈ (comp b σ f)) ⇔ ((a ∈ b) ∧ (interpretation (update σ zero a) f)))
+opaque symbol lemma45 : Π (σ : (El nat → Graph)), Π (f : El formula), π(`∀ a, `∀ b, (a ∈ (comp b σ f)) ⇔ ((a ∈ b) ∧ (interpretation (update σ zero a) f)))
 ≔ begin
 assume σ f a b;
 refine and_i _ _ _ _;

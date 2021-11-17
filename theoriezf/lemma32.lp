@@ -9,7 +9,7 @@ require open zf.theoriezf.nat;
 require open zf.theoriezf.formulas;
 require open zf.theoriezf.formulas_lemmas;
 
-opaque symbol lemma32 : Π (z : El nat), Π (f : El formula), π(`∀ a, `∀ b, (`∀ σ : El valuation, ((interpretation (update σ z a) f) ∧ (a simeq b)) ⇒ (interpretation (update σ z b) f)))
+opaque symbol lemma32 : Π (z : El nat), Π (f : El formula), π(`∀ a, `∀ b, (`∀ σ : (El nat → Graph), ((interpretation (update σ z a) f) ∧ (a simeq b)) ⇒ (interpretation (update σ z b) f)))
 ≔ begin
 assume z;
 refine recF (λ f, `∀ a, `∀ b, `∀ σ, (interpretation (update σ z a) f ∧ (a simeq b)) ⇒ interpretation (update σ z b) f) _ _ _ _ _ _ _ _ _;

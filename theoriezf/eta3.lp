@@ -8,7 +8,7 @@ require open zf.theoriezf.formulas;
 require open zf.theoriezf.nat;
 require open zf.theoriezf.language2;
 
-opaque symbol lemma22 : Π (σ : El valuation), Π (f : El formula), π(`∀ a, `∀ x, `∀ y', (eta (comp a σ f) x (i y') ⇔ (`∃ y, (x = i y) ∧ (eta a y y'))))
+opaque symbol lemma22 : Π (σ : (El nat → Graph)), Π (f : El formula), π(`∀ a, `∀ x, `∀ y', (eta (comp a σ f) x (i y') ⇔ (`∃ y, (x = i y) ∧ (eta a y y'))))
 ≔ begin
 assume σ f;
 assume a x y;
@@ -44,7 +44,7 @@ refine ExIntro n y _ _;
 refine and_i _ _ (and_i _ _ (and_eg _ _ Hz) (refl n (i y))) (and_ed _ _ Hz);
 end;
 
-opaque symbol lemma23 : Π (σ : El valuation), Π (f : El formula), π(`∀ a, `∀ x, (eta (comp a σ f) x o ⇔ (`∃ y, (x = i y) ∧ (eta a y (root a)) ∧ (interpretation (update σ zero (cr a y)) f))))
+opaque symbol lemma23 : Π (σ : (El nat → Graph)), Π (f : El formula), π(`∀ a, `∀ x, (eta (comp a σ f) x o ⇔ (`∃ y, (x = i y) ∧ (eta a y (root a)) ∧ (interpretation (update σ zero (cr a y)) f))))
 ≔ begin
 assume σ f;
 assume a x;
