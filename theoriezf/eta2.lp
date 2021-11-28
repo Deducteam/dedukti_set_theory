@@ -7,173 +7,171 @@ require open zf.theoriezf.eta1;
 opaque symbol lemma19 : π(`∀ a, `∀ x, `∀ y', (eta (powerset a) x (i y')) ⇔ (`∃ y, (x = i y) ∧ (eta a y y')))
 ≔ begin
 assume a x y';
-refine and_i _ _ _ _;
-assume H;
-refine or_e _ _ _ H _ _;
-assume H';
-refine or_e _ _ _ H' _ _;
-assume H1;
+refine and_i _ _ _ _
+{assume H;
+refine or_e _ _ _ H _ _
+{assume H';
+refine or_e _ _ _ H' _ _
+{assume H1;
 refine ExElim n _ H1 _ _; 
 assume y Hy;
 refine ExElim n _ Hy _ _; 
 assume z Hz;
 refine ExIntro n y _ _;
-refine and_i _ _ _ _;
-refine and_eg _ _ (and_eg _ _ Hz);
-refine imp_i (y' = z) _ _ _;
-assume H2;
-refine imp_i (z = y') _ _ _;
-assume H3;
-refine H3 (λ w, eta a y w) (and_ed _ _ Hz);
-refine lemmaSymEg n _ _ H2;
-refine lemma9 _ _ (and_ed _ _ (and_eg _ _ Hz));
-assume H4;
+refine and_i _ _ _ _
+{refine and_eg _ _ (and_eg _ _ Hz)}
+{refine imp_i (y' = z) _ _ _
+{assume H2;
+refine imp_i (z = y') _ _ _
+{assume H3;
+refine H3 (λ w, eta a y w) (and_ed _ _ Hz)}
+{refine lemmaSymEg n _ _ H2}}
+{refine lemma9 _ _ (and_ed _ _ (and_eg _ _ Hz))}}}
+{assume H4;
 refine f_e _ _;
 refine ExElim n _ H4 _ _; 
 assume y Hy;
 refine ExElim g _ Hy _ _; 
 assume c Hc;
-refine lemma13 y' (ρ c) (and_ed _ _ (and_eg _ _ (and_eg _ _ Hc)));
-assume H5;
+refine lemma13 y' (ρ c) (and_ed _ _ (and_eg _ _ (and_eg _ _ Hc)))}}
+{assume H5;
 refine f_e _ _;
 refine ExElim g _ H5 _ _; 
 assume c Hc;
-refine lemma11 y' (and_ed _ _ Hc);
-assume H;
+refine lemma11 y' (and_ed _ _ Hc)}}
+{assume H;
 refine ExElim n _ H _ _;
 assume y Hy;
 refine or_ig _ _ _;
 refine or_ig _ _ _;
 refine ExIntro n y _ _;
 refine ExIntro n y' _ _;
-refine and_i _ _ (and_i _ _ (and_eg _ _ Hy) (refl n (i y'))) (and_ed _ _ Hy);
+refine and_i _ _ (and_i _ _ (and_eg _ _ Hy) (refl n (i y'))) (and_ed _ _ Hy)}
 end;
 
 opaque symbol lemma20 : π(`∀ a, `∀ c, `∀ x, (eta (powerset a) x (j (ρ c))) ⇔ (`∃ y, (x = i y) ∧ (eta a y (root a)) ∧ ((cr a y) ∈ c )))
 ≔ begin
 assume a c x;
-refine and_i _ _ _ _;
-assume H;
-refine or_e _ _ _ H _ _;
-assume H';
-refine or_e _ _ _ H' _ _;
-assume H1;
+refine and_i _ _ _ _
+{assume H;
+refine or_e _ _ _ H _ _
+{assume H';
+refine or_e _ _ _ H' _ _
+{assume H1;
 refine f_e _ _;
 refine ExElim n _ H1 _ _; 
 assume y Hy;
 refine ExElim n _ Hy _ _; 
 assume y' Hy';
-refine lemma13 y' (ρ c) (lemmaSymEg n _ _ (and_ed _ _ (and_eg _ _ Hy')));
-assume H2;
+refine lemma13 y' (ρ c) (lemmaSymEg n _ _ (and_ed _ _ (and_eg _ _ Hy')))}
+{assume H2;
 refine ExElim n _ H2 _ _; 
 assume y Hy;
 refine ExElim g _ Hy _ _; 
 assume c' Hc';
 refine ExIntro n y _ _;
-refine and_i _ _ _ _;
-refine and_i _ _ _ _;
-refine and_eg _ _ (and_eg _ _ (and_eg _ _ Hc'));
-refine and_ed _ _ (and_eg _ _ Hc');
-refine ExElim n _ (and_ed _ _ Hc') _ _;
+refine and_i _ _ _ _
+{refine and_i _ _ _ _
+{refine and_eg _ _ (and_eg _ _ (and_eg _ _ Hc'))}
+{refine and_ed _ _ (and_eg _ _ Hc')}}
+{refine ExElim n _ (and_ed _ _ Hc') _ _;
 assume z Hz;
 refine ExIntro n z _ _;
-refine and_i _ _ _ _;
-refine imp_e (ρ c = ρ c') _ _ _;
-assume H3;
-refine imp_e (ρ c' = ρ c) _ _ _;
-assume H4;
-refine imp_e (eta (ρ^ (ρ c)) z (root (ρ^ (ρ c)))) (eta c z (root c)) _ _;
-assume P;
-refine P;
-refine H4 (λ w, eta (ρ^ w) z (root (ρ^ w))) _;
-refine and_eg _ _ Hz;
-refine lemmaSymEg n _ _ H3;
-refine lemma10 _ _ (and_ed _ _ (and_eg _ _ (and_eg _ _ Hc')));
-refine ExElim (n arrow (n arrow omicron)) _ (and_ed _ _ Hz) _ _; 
+refine and_i _ _ _ _
+{refine imp_e (ρ c = ρ c') _ _ _
+{assume H3;
+refine imp_e (ρ c' = ρ c) _ _ _
+{assume H4;
+refine imp_e (eta (ρ^ (ρ c)) z (root (ρ^ (ρ c)))) (eta c z (root c)) _ _
+{assume P;
+refine P}
+{refine H4 (λ w, eta (ρ^ w) z (root (ρ^ w))) _;
+refine and_eg _ _ Hz}}
+{refine lemmaSymEg n _ _ H3}}
+{refine lemma10 _ _ (and_ed _ _ (and_eg _ _ (and_eg _ _ Hc')))}}
+{refine ExElim (n arrow (n arrow omicron)) _ (and_ed _ _ Hz) _ _; 
 assume r Hr;
 refine ExIntro (n arrow (n arrow omicron)) r _ _;
-refine and_i _ _ _ _;
-refine and_i _ _ _ _;
-refine and_eg _ _ (and_eg _ _ Hr);
-assume u u' v Heta;
-refine imp_e (ρ c = ρ c') _ _ _;
-assume H5;
-refine imp_e (ρ c' = ρ c) _ _ _;
-assume H6;
+refine and_i _ _ _ _
+{refine and_i _ _ _ _
+{refine and_eg _ _ (and_eg _ _ Hr)}
+{assume u u' v Heta;
+refine imp_e (ρ c = ρ c') _ _ _
+{assume H5;
+refine imp_e (ρ c' = ρ c) _ _ _
+{assume H6;
 refine ExElim n _ ((and_ed _ _ (and_eg _ _ Hr)) u u' v Heta) _ _;
 assume y' Hy';
 refine ExIntro n y' _ _;
-refine imp_e (eta (ρ^ (ρ c)) y' v ∧ r u' y') (eta c y' v ∧ r u' y') _ _;
-assume P;
-refine P;
-refine H6 (λ w, eta (ρ^ w) y' v ∧ r u' y') _;
-refine Hy';
-refine lemmaSymEg n _ _ H5;
-refine lemma10 _ _ (and_ed _ _ (and_eg _ _ (and_eg _ _ Hc')));
-assume v v' u Heta;
+refine imp_e (eta (ρ^ (ρ c)) y' v ∧ r u' y') (eta c y' v ∧ r u' y') _ _
+{assume P;
+refine P}
+{refine H6 (λ w, eta (ρ^ w) y' v ∧ r u' y') Hy'}}
+{refine lemmaSymEg n _ _ H5}}
+{refine lemma10 _ _ (and_ed _ _ (and_eg _ _ (and_eg _ _ Hc')))}}}
+{assume v v' u Heta;
 refine (and_ed _ _ Hr) v v' u _;
-refine imp_e (ρ c' = ρ c) _ _ _;
-assume H7;
-refine imp_e (ρ c = ρ c') _ _ _;
-assume H8;
-refine imp_e (eta (ρ^ (ρ c')) v' v ∧ r u v) (eta c' v' v ∧ r u v) _ _;
-assume P;
-refine P;
-refine H8 (λ w, eta (ρ^ w) v' v ∧ r u v) _;
-refine Heta;
-refine lemmaSymEg n _ _ H7;
-refine lemma10 _ _ (lemmaSymEg n _ _ (and_ed _ _ (and_eg _ _ (and_eg _ _ Hc'))));
-assume H9;
+refine imp_e (ρ c' = ρ c) _ _ _
+{assume H7;
+refine imp_e (ρ c = ρ c') _ _ _
+{assume H8;
+refine imp_e (eta (ρ^ (ρ c')) v' v ∧ r u v) (eta c' v' v ∧ r u v) _ _
+{assume P;
+refine P}
+{refine H8 (λ w, eta (ρ^ w) v' v ∧ r u v) Heta}}
+{refine lemmaSymEg n _ _ H7}}
+{refine lemma10 _ _ (lemmaSymEg n _ _ (and_ed _ _ (and_eg _ _ (and_eg _ _ Hc'))))}}}}}}
+{assume H9;
 refine f_e _ _;
 refine ExElim g _ H9 _ _; 
 assume c' Hc';
-refine lemma12 (ρ c) (and_ed _ _ Hc');
-assume H;
+refine lemma12 (ρ c) (and_ed _ _ Hc')}}
+{assume H;
 refine or_ig _ _ _;
 refine or_id _ _ _;
 refine ExElim n _ H _ _;
 assume y Hy;
 refine ExIntro n y _ _;
 refine ExIntro g c _ _;
-refine and_i _ _ _ _;
-refine and_i _ _ _ _;
-refine and_i _ _ (and_eg _ _ (and_eg _ _ Hy)) (refl n (j (ρ c)));
-refine and_ed _ _ (and_eg _ _ Hy);
-refine and_ed _ _ Hy;
+refine and_i _ _ _ _
+{refine and_i _ _ _ _
+{refine and_i _ _ (and_eg _ _ (and_eg _ _ Hy)) (refl n (j (ρ c)))}
+{refine and_ed _ _ (and_eg _ _ Hy)}}
+{refine and_ed _ _ Hy}}
 end;
 
 opaque symbol lemma21 : π(`∀ a, `∀ x, (eta (powerset a) x o) ⇔ (`∃ c, (x = j (ρ c))))
 ≔ begin
 assume a x;
-refine and_i _ _ _ _;
-assume H;
-refine or_e _ _ _ H _ _;
-assume H';
-refine or_e _ _ _ H' _ _;
-assume H1;
+refine and_i _ _ _ _
+{assume H;
+refine or_e _ _ _ H _ _
+{assume H';
+refine or_e _ _ _ H' _ _
+{assume H1;
 refine f_e _ _;
 refine ExElim n _ H1 _ _;
 assume y Hy;
 refine ExElim n _ Hy _ _; 
 assume y' Hy';
-refine lemma11 y' (lemmaSymEg n _ _ (and_ed _ _ (and_eg _ _ Hy')));
-assume H2;
+refine lemma11 y' (lemmaSymEg n _ _ (and_ed _ _ (and_eg _ _ Hy')))}
+{assume H2;
 refine f_e _ _;
 refine ExElim n _ H2 _ _;
 assume y Hy;
 refine ExElim g _ Hy _ _; 
 assume c Hc;
-refine lemma12 (ρ c) (lemmaSymEg n _ _ (and_ed _ _ (and_eg _ _ (and_eg _ _ Hc))));
-assume H3;
+refine lemma12 (ρ c) (lemmaSymEg n _ _ (and_ed _ _ (and_eg _ _ (and_eg _ _ Hc))))}}
+{assume H3;
 refine ExElim g _ H3 _ _;
 assume c Hc;
 refine ExIntro g c _ _;
-refine and_eg _ _ Hc;
-assume H;
+refine and_eg _ _ Hc}}
+{assume H;
 refine ExElim g _ H _ _;
 assume c Hc;
 refine or_id _ _ _;
 refine ExIntro g c _ _;
-refine and_i _ _ Hc (refl n o);
+refine and_i _ _ Hc (refl n o)}
 end;
 

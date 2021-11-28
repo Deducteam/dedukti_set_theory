@@ -7,19 +7,19 @@ opaque symbol lemmaPred : π(`∀ a, `∀ b, (a = b) ⇒ (Pred a = Pred b))
 assume a b Pegal;
 refine Pegal (λ x, Pred a = Pred x) _;
 assume P Pa;
-refine Pa;
+refine Pa
 end;
 
 opaque symbol lemma7 : π(`∀ x, `∀ y, (Succ x = Succ y) ⇒ (x = y))
 ≔ begin
 assume x y Pegal ;
-refine lemmaPred (Succ x) (Succ y) Pegal;
+refine lemmaPred (Succ x) (Succ y) Pegal
 end;
 
 opaque symbol lemma8 : π(`∀ x, ¬(O = Succ x))
 ≔ begin
 assume x Pegal;
-refine Pegal Null Vrai;
+refine Pegal Null Vrai
 end;
 
 
@@ -28,13 +28,13 @@ opaque symbol lemmaI : π(`∀ a, `∀ b, (a = b) ⇒ (i' a = i' b))
 assume a b Pegal;
 refine Pegal (λ x, i' a = i' x) _;
 assume P Pa;
-refine Pa;
+refine Pa
 end;
 
 opaque symbol lemma9 : π(`∀ x, `∀ y, (i x = i y) ⇒ (x = y))
 ≔ begin
 assume x y Pegal;
-refine lemmaI (i x) (i y) Pegal;
+refine lemmaI (i x) (i y) Pegal
 end;
 
 opaque symbol lemmaJ : π(`∀ a, `∀ b, (a = b) ⇒ (j' a = j' b))
@@ -42,29 +42,29 @@ opaque symbol lemmaJ : π(`∀ a, `∀ b, (a = b) ⇒ (j' a = j' b))
 assume a b Pegal;
 refine Pegal (λ x, j' a = j' x) _;
 assume P Pa;
-refine Pa;
+refine Pa
 end;
 
 opaque symbol lemma10 : π(`∀ x, `∀ y, (j x = j y) ⇒ (x = y))
 ≔ begin
 assume x y Pegal;
-refine lemmaJ (j x) (j y) Pegal;
+refine lemmaJ (j x) (j y) Pegal
 end;
 
 opaque symbol lemma11 : π(`∀ x, ¬(i x = o))
 ≔ begin
 assume x Pegal;
-refine Pegal I Vrai;
+refine Pegal I Vrai
 end;
 
 opaque symbol lemma12 : π(`∀ x, ¬(j x = o))
 ≔ begin
 assume x Pegal;
-refine Pegal J Vrai;
+refine Pegal J Vrai
 end;
 
 opaque symbol lemma13 : π(`∀ x, `∀ y, ¬(i x = j y))
 ≔ begin
 assume x y Pegal;
-refine Pegal I Vrai;
+refine Pegal I Vrai
 end;

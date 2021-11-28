@@ -23,64 +23,64 @@ refine ExElim n _ H _ _;
 assume x Hx;
 refine ExElim n _ ((and_eg _ _ (lemma23 (λ _, empty_set) fF omega x)) (and_eg _ _ Hx)) _ _;
 assume y Hy;
-refine and_ed _ _ Hy;
+refine and_ed _ _ Hy
 end;
 
 opaque symbol lemma47 : π(empty_set simeq (cr omega (i O)))
 ≔ begin
 refine lemmaExt empty_set (cr omega (i O)) _;
 assume x;
-refine and_i _ _ _ _;
-assume H;
+refine and_i _ _ _ _
+{assume H;
 refine ExElim n _ H _ _;
 assume y Hy;
 refine ExElim n _ ((and_eg _ _ (lemma23 (λ _, empty_set) fF omega y)) (and_eg _ _ Hy)) _ _;
 assume z Hz;
-refine f_e (x ∈ cr omega (i O)) (and_ed _ _ Hz);
-assume H;
+refine f_e (x ∈ cr omega (i O)) (and_ed _ _ Hz)}
+{assume H;
 refine ExElim n _ H _ _;
 assume y Hy;
 refine ExElim n _ ((and_eg _ _ (lemma24 y O)) (and_eg _ _ Hy)) _ _;
 assume z Hz;
-refine f_e (x ∈ empty_set) (and_ed _ _ Hz);
+refine f_e (x ∈ empty_set) (and_ed _ _ Hz)}
 end;
 
 opaque symbol lemmaJoinPair : π(`∀ a, `∀ c, (c ∈ (join (pair a (pair a a)))) ⇔ ((c ∈ a) ∨ (c simeq a)))
 ≔ begin
 assume a c;
-refine and_i _ _ _ _;
-assume H1;
+refine and_i _ _ _ _
+{assume H1;
 refine ExElim g _ (and_eg _ _ (lemma42 (pair a (pair a a)) c) H1) _ _;
 assume x Hx;
-refine or_e _ _ _ ((and_eg _ _ (lemma43 a (pair a a) x)) (and_ed _ _ Hx)) _ _;
-assume Hxa;
+refine or_e _ _ _ ((and_eg _ _ (lemma43 a (pair a a) x)) (and_ed _ _ Hx)) _ _
+{assume Hxa;
 refine or_ig _ _ _;
-refine lemma31 c x a (and_i _ _ (and_eg _ _ Hx) Hxa);
-assume Hxaa;
+refine lemma31 c x a (and_i _ _ (and_eg _ _ Hx) Hxa)}
+{assume Hxaa;
 refine or_id _ _ _;
-refine or_e _ _ _ (and_eg _ _ (lemma43 a a c) (lemma31 c x (pair a a) (and_i _ _ (and_eg _ _ Hx) Hxaa))) _ _;
-assume Hca;
-refine Hca;
-assume Hca;
-refine Hca;
-assume H2;
+refine or_e _ _ _ (and_eg _ _ (lemma43 a a c) (lemma31 c x (pair a a) (and_i _ _ (and_eg _ _ Hx) Hxaa))) _ _
+{assume Hca;
+refine Hca}
+{assume Hca;
+refine Hca}}}
+{assume H2;
 refine and_ed _ _ (lemma42 (pair a (pair a a)) c) _;
-refine or_e _ _ _ H2 _ _;
-assume Hca;
+refine or_e _ _ _ H2 _ _
+{assume Hca;
 refine ExIntro g a _ _;
 refine and_i _ _ Hca _;
 refine (and_ed _ _ (lemma43 a (pair a a) a)) _;
 refine or_ig _ _ _;
-refine lemma3 a;
-assume Hca;
+refine lemma3 a}
+{assume Hca;
 refine ExIntro g (pair a a) _ _;
-refine and_i _ _ _ _;
-refine (and_ed _ _ (lemma43 a a c)) _;
+refine and_i _ _ _ _
+{refine (and_ed _ _ (lemma43 a a c)) _;
 refine or_ig _ _ _;
-refine Hca;
-refine (and_ed _ _ (lemma43 a (pair a a) (pair a a))) _;
+refine Hca}
+{refine (and_ed _ _ (lemma43 a (pair a a) (pair a a))) _;
 refine or_id _ _ _;
-refine lemma3 (pair a a);
+refine lemma3 (pair a a)}}}
 end;
 
 opaque symbol lemma48 : π(`∀ a, `∀ y, (a simeq (cr omega (i y))) ⇒ ((join (pair a (pair a a))) simeq (cr omega (i (Succ y)))))
@@ -88,39 +88,39 @@ opaque symbol lemma48 : π(`∀ a, `∀ y, (a simeq (cr omega (i y))) ⇒ ((join
 assume a y H;
 refine lemmaExt (join (pair a (pair a a))) (cr omega (i (Succ y))) _;
 assume c;
-refine and_i _ _ _ _;
-assume H1;
-refine imp_e (`∃ z, ((z < y) ∨ (z = y)) ∧ (c simeq (cr omega (i z)))) _ _ _;
-assume H';
+refine and_i _ _ _ _
+{assume H1;
+refine imp_e (`∃ z, ((z < y) ∨ (z = y)) ∧ (c simeq (cr omega (i z)))) _ _ _
+{assume H';
 refine ExElim n _ H' _ _;
 assume z Hz;
 refine ExIntro n (i z) _ _;
-refine and_i _ _ _ _;
-refine (and_ed _ _ (lemma24 (i z) (Succ y))) _;
+refine and_i _ _ _ _
+{refine (and_ed _ _ (lemma24 (i z) (Succ y))) _;
 refine ExIntro n z _ _;
-refine and_i _ _ (refl n (i z)) (and_eg _ _ Hz);
-refine and_ed _ _ Hz;
-refine imp_e ((`∃ z, (z < y) ∧ (c simeq (cr omega (i z)))) ∨ (c simeq (cr omega (i y)))) _ _ _;
-assume H';
-refine or_e _ _ _ H' _ _;
-assume H'';
+refine and_i _ _ (refl n (i z)) (and_eg _ _ Hz)}
+{refine and_ed _ _ Hz}}
+{refine imp_e ((`∃ z, (z < y) ∧ (c simeq (cr omega (i z)))) ∨ (c simeq (cr omega (i y)))) _ _ _
+{assume H';
+refine or_e _ _ _ H' _ _
+{assume H'';
 refine ExElim n _ H'' _ _;
 assume z Hz;
 refine ExIntro n z _ _;
-refine and_i _ _ _ _;
-refine or_ig _ _ _;
-refine and_eg _ _ Hz;
-refine and_ed _ _ Hz;
-assume H'';
+refine and_i _ _ _ _
+{refine or_ig _ _ _;
+refine and_eg _ _ Hz}
+{refine and_ed _ _ Hz}}
+{assume H'';
 refine ExIntro n y _ _;
-refine and_i _ _ _ _;
-refine or_id _ _ _;
-refine refl n y;
-refine H'';
-refine imp_e ((c ∈ (cr omega (i y))) ∨ (c simeq (cr omega (i y)))) _ _ _;
-assume H';
-refine or_e _ _ _ H' _ _;
-assume H'';
+refine and_i _ _ _ _
+{refine or_id _ _ _;
+refine refl n y}
+{refine H''}}}
+{refine imp_e ((c ∈ (cr omega (i y))) ∨ (c simeq (cr omega (i y)))) _ _ _
+{assume H';
+refine or_e _ _ _ H' _ _
+{assume H'';
 refine or_ig _ _ _;
 refine ExElim n _ H'' _ _;
 assume x Hx;
@@ -128,44 +128,44 @@ refine ExElim n _ (and_eg _ _ (lemma24 x y) (and_eg _ _ Hx)) _ _;
 assume z Hz;
 refine ExIntro n z _ _;
 refine and_i _ _ (and_ed _ _ Hz) _;
-refine imp_i (i z = x) _ _ _;
-assume K;
-refine imp_i (x = i z) _ _ _;
-assume K';
+refine imp_i (i z = x) _ _ _
+{assume K;
+refine imp_i (x = i z) _ _ _
+{assume K';
 refine K' (λ w, c simeq (cr omega w)) _;
-refine and_ed _ _ Hx;
-refine and_eg _ _ Hz;
-refine lemmaSymEg n x (i z) (and_eg _ _ Hz);
-assume H'';
+refine and_ed _ _ Hx}
+{refine and_eg _ _ Hz}}
+{refine lemmaSymEg n x (i z) (and_eg _ _ Hz)}}
+{assume H'';
 refine or_id _ _ _;
-refine H'';
-refine imp_e ((c ∈ a) ∨ (c simeq a)) _ _ _;
-assume H';
-refine or_e _ _ _ H' _ _;
-assume Hca;
+refine H''}}
+{refine imp_e ((c ∈ a) ∨ (c simeq a)) _ _ _
+{assume H';
+refine or_e _ _ _ H' _ _
+{assume Hca;
 refine or_ig _ _ _;
-refine lemma31 c a (cr omega (i y)) (and_i _ _ Hca H);
-assume Hca;
+refine lemma31 c a (cr omega (i y)) (and_i _ _ Hca H)}
+{assume Hca;
 refine or_id _ _ _;
-refine lemma5 c a (cr omega (i y)) (and_i _ _ Hca H);
-refine and_eg _ _ (lemmaJoinPair a c) H1;
-assume H2;
-refine imp_e ((c ∈ a) ∨ (c simeq a)) _ _ _;
-assume H';
-refine and_ed _ _ (lemmaJoinPair a c) H';
-refine imp_e ((c ∈ (cr omega (i y))) ∨ (c simeq (cr omega (i y)))) _ _ _;
-assume H';
-refine or_e _ _ _ H' _ _;
-assume K;
+refine lemma5 c a (cr omega (i y)) (and_i _ _ Hca H)}}
+{refine and_eg _ _ (lemmaJoinPair a c) H1}}}}}
+{assume H2;
+refine imp_e ((c ∈ a) ∨ (c simeq a)) _ _ _
+{assume H';
+refine and_ed _ _ (lemmaJoinPair a c) H'}
+{refine imp_e ((c ∈ (cr omega (i y))) ∨ (c simeq (cr omega (i y)))) _ _ _
+{assume H';
+refine or_e _ _ _ H' _ _
+{assume K;
 refine or_ig _ _ _;
-refine lemma31 c (cr omega (i y)) a (and_i _ _ K (lemma4 a (cr omega (i y)) H));
-assume K';
+refine lemma31 c (cr omega (i y)) a (and_i _ _ K (lemma4 a (cr omega (i y)) H))}
+{assume K';
 refine or_id _ _ _;
-refine lemma5 c (cr omega (i y)) a (and_i _ _ K' (lemma4 a (cr omega (i y)) H));
-refine imp_e ((`∃ z, (z < y) ∧ (c simeq (cr omega (i z)))) ∨ (c simeq (cr omega (i y)))) _ _ _;
-assume H';
-refine or_e _ _ _ H' _ _;
-assume K;
+refine lemma5 c (cr omega (i y)) a (and_i _ _ K' (lemma4 a (cr omega (i y)) H))}}
+{refine imp_e ((`∃ z, (z < y) ∧ (c simeq (cr omega (i z)))) ∨ (c simeq (cr omega (i y)))) _ _ _
+{assume H';
+refine or_e _ _ _ H' _ _
+{assume K;
 refine or_ig _ _ _;
 refine ExElim n _ K _ _;
 assume z Hz;
@@ -173,55 +173,55 @@ refine ExIntro n (i z) _ _;
 refine and_i _ _ _ (and_ed _ _ Hz);
 refine (and_ed _ _ (lemma24 (i z) y)) _;
 refine ExIntro n z _ _;
-refine and_i _ _ (refl n (i z)) (and_eg _ _ Hz);
-assume K';
+refine and_i _ _ (refl n (i z)) (and_eg _ _ Hz)}
+{assume K';
 refine or_id _ _ _;
-refine K';
-refine imp_e (`∃ z, ((z < y) ∨ (z = y)) ∧ (c simeq (cr omega (i z)))) _ _ _;
-assume H';
+refine K'}}
+{refine imp_e (`∃ z, ((z < y) ∨ (z = y)) ∧ (c simeq (cr omega (i z)))) _ _ _
+{assume H';
 refine ExElim n _ H' _ _;
 assume z Hz;
-refine or_e _ _ _ (and_eg _ _ Hz) _ _;
-assume K;
+refine or_e _ _ _ (and_eg _ _ Hz) _ _
+{assume K;
 refine or_ig _ _ _;
 refine ExIntro n z _ _;
-refine and_i _ _ K (and_ed _ _ Hz);
-assume K';
+refine and_i _ _ K (and_ed _ _ Hz)}
+{assume K';
 refine or_id _ _ _;
-refine imp_i (y = z) _ _ _;
-assume M;
-refine imp_i (z = y) _ _ _;
-assume M';
+refine imp_i (y = z) _ _ _
+{assume M;
+refine imp_i (z = y) _ _ _
+{assume M';
 refine M' (λ w, c simeq (cr omega (i w))) _;
-refine and_ed _ _ Hz;
-refine K';
-refine lemmaSymEg n z y K';
-refine ExElim n _ H2 _ _;
+refine and_ed _ _ Hz}
+{refine K'}}
+{refine lemmaSymEg n z y K'}}}
+{refine ExElim n _ H2 _ _;
 assume x Hx;
 refine ExElim n _ (and_eg _ _ (lemma24 x (Succ y)) (and_eg _ _ Hx)) _ _;
 assume z Hz;
 refine ExIntro n z _ _;
 refine and_i _ _ (and_ed _ _ Hz) _;
-refine imp_i (i z = x) _ _ _;
-assume M;
-refine imp_i (x = i z) _ _ _;
-assume M';
+refine imp_i (i z = x) _ _ _
+{assume M;
+refine imp_i (x = i z) _ _ _
+{assume M';
 refine M' (λ w, c simeq (cr omega w)) _;
-refine and_ed _ _ Hx;
-refine and_eg _ _ Hz;
-refine lemmaSymEg n x (i z) (and_eg _ _ Hz);
+refine and_ed _ _ Hx}
+{refine and_eg _ _ Hz}}
+{refine lemmaSymEg n x (i z) (and_eg _ _ Hz)}}}}}}
 end;
 
 opaque symbol lemma49 : π(empty_set ∈ omega)
 ≔ begin
 refine ExIntro n (i O) _ _;
-refine and_i _ _ _ _;
-refine (and_ed _ _ (lemma25 (i O))) _;
+refine and_i _ _ _ _
+{refine (and_ed _ _ (lemma25 (i O))) _;
 refine ExIntro n O _ _;
-refine and_i _ _ _ _;
-refine refl n (i O);
-refine Vrai;
-refine lemma47;
+refine and_i _ _ _ _
+{refine refl n (i O)}
+{refine Vrai}}
+{refine lemma47}
 end;
 
 opaque symbol lemma50 : π(`∀ a, (a ∈ omega) ⇒ ((join (pair a (pair a a))) ∈ omega))
@@ -232,25 +232,25 @@ assume x Hx;
 refine ExElim n _ ((and_eg _ _ (lemma25 x)) (and_eg _ _ Hx)) _ _;
 assume y Hy;
 refine ExIntro n (i (Succ y)) _ _;
-refine and_i _ _ _ _;
-refine (and_ed _ _ (lemma25 (i (Succ y)))) _;
+refine and_i _ _ _ _
+{refine (and_ed _ _ (lemma25 (i (Succ y)))) _;
 refine ExIntro n (Succ y) _ _;
-refine and_i _ _ _ _;
-refine refl n (i (Succ y));
-refine and_ed _ _ Hy;
-refine lemma48 a y _;
-refine imp_i (i y = x) _ _ _;
-assume H1;
-refine imp_i (x = i y) _ _ _;
-assume H2;
-refine H2 (λ w, a simeq (cr omega w)) (and_ed _ _ Hx);
-refine lemmaSymEg n (i y) x H1;
-refine lemmaSymEg n x (i y) (and_eg _ _ Hy);
+refine and_i _ _ _ _
+{refine refl n (i (Succ y))}
+{refine and_ed _ _ Hy}}
+{refine lemma48 a y _;
+refine imp_i (i y = x) _ _ _
+{assume H1;
+refine imp_i (x = i y) _ _ _
+{assume H2;
+refine H2 (λ w, a simeq (cr omega w)) (and_ed _ _ Hx)}
+{refine lemmaSymEg n (i y) x H1}}
+{refine lemmaSymEg n x (i y) (and_eg _ _ Hy)}}
 end;
 
 opaque symbol lemma51 : π(Ind omega)
 ≔ begin
-refine and_i _ _ _ _;
-refine lemma49;
-refine lemma50;
+refine and_i _ _ _ _
+{refine lemma49}
+{refine lemma50}
 end;

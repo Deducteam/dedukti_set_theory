@@ -62,6 +62,15 @@ rule $x < (Succ $y) ↪ ($x < $y) ∨ ($x = $y);
 
 symbol simeq : Graph → Graph → Prop;
 notation simeq infix 5;
+/*rule $a simeq $b ↪ `∃ r : El (n arrow (n arrow omicron)), 
+    r (root $a) (root $b) 
+    ∧ (`∀ x, `∀ x', `∀ y, 
+        eta $a x' x ∧ r x y 
+            ⇒ `∃ y', eta $b y' y ∧ r x' y')
+    ∧ (`∀ y, `∀ y', `∀ x, 
+        eta $b y' y ∧ r x y 
+            ⇒ `∃ x', eta $a x' x ∧ r x' y');
+*/
 rule $a simeq $b ↪ `∃ r : El (n arrow (n arrow omicron)), (r (root $a) (root $b)) ∧ (`∀ x, `∀ x', `∀ y, (((eta $a x' x) ∧ (r x y)) ⇒ (`∃ y', ((eta $b y' y) ∧ (r x' y'))))) ∧ (`∀ y, `∀ y', `∀ x, (((eta $b y' y) ∧ (r x y)) ⇒ (`∃ x', ((eta $a x' x) ∧ (r x' y')))));
 
 symbol ∈ : Graph → Graph → Prop;

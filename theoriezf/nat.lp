@@ -22,7 +22,7 @@ constant symbol recN : Π (P : El nat → Prop),
 opaque symbol lemmaNP : Π (x : El nat), π(eqNP x x) 
 ≔ begin
 assume x P Px;
-refine Px;
+refine Px
 end;
 
 opaque symbol lemmaSymNP : Π (x y : El nat), π((eqNP x y) ⇒ (eqNP y x)) 
@@ -32,45 +32,45 @@ simplify;
 assume Pxy P;
 refine Pxy (λ z, (P z) ⇒ (P x)) _;
 assume Px;
-refine Px;
+refine Px
 end;
 
 opaque symbol lemmaTransNP : Π (x y z: El nat), π(((eqNP x y) ∧ (eqNP y z)) ⇒ (eqNP x z))
 ≔ begin
 assume x y z Pxyz P Px;
-refine (and_ed _ _ Pxyz) P ((and_eg _ _ Pxyz) P Px);
+refine (and_ed _ _ Pxyz) P ((and_eg _ _ Pxyz) P Px)
 end;
 
 opaque symbol eqNPor : Π (x y : El nat), π((eqNP x y) ∨ (¬(eqNP x y)))
 ≔ begin
-refine recN _ _ _;
-refine recN _ _ _;
+refine recN _ _ _
+{refine recN _ _ _
 //Cas x = 0, y = 0
-refine or_ig _ _ _;
+{refine or_ig _ _ _;
 simplify;
 assume P Pz;
-refine Pz;
+refine Pz}
 //Cas x = 0, s y
-assume x Px;
+{assume x Px;
 refine or_id _ _ _;
 assume H0;
 refine Peano4 x _;
 refine lemmaSymNP zero (s x) H0;
-assume x Hx;
-refine recN _ _ _;
+assume x Hx}}
+{refine recN _ _ _
 //Cas s x, y = 0
-refine or_id _ _ _;
-refine Peano4 x;
+{refine or_id _ _ _;
+refine Peano4 x}
 //Cas s x, s y
-assume y Hrec;
-refine or_e _ _ _ (Hx y) _ _;
-assume Hxy;
+{assume y Hrec;
+refine or_e _ _ _ (Hx y) _ _
+{assume Hxy;
 refine or_ig _ _ _;
 refine Hxy (λ z, eqNP (s x) (s z)) _;
-refine lemmaNP (s x);
-assume Hxy;
+refine lemmaNP (s x)}
+{assume Hxy;
 refine or_id _ _ _;
 assume Hsxsy;
 refine Hxy _;
-refine Peano3 x y Hsxsy;
+refine Peano3 x y Hsxsy}}}
 end;

@@ -11,7 +11,7 @@ opaque symbol and_i A B : π A → π B → π (A ∧ B)
 assume A B pA pB;
 simplify;
 assume P H;
-apply H pA pB;
+apply H pA pB
 end;
 
 opaque symbol and_eg A B : π (A ∧ B) → π A
@@ -21,7 +21,7 @@ simplify;
 assume H;
 apply H A;
 assume pA pB;
-apply pA;
+apply pA
 end;
 
 opaque symbol and_ed A B : π (A ∧ B) → π B
@@ -31,7 +31,7 @@ simplify;
 assume H;
 apply H B;
 assume pA pB;
-apply pB;
+apply pB
 end;
 
 constant symbol ∨ : Prop → Prop → Prop;
@@ -43,7 +43,7 @@ opaque symbol or_ig A B : π A → π (A ∨ B)
 assume A B pA;
 simplify;
 assume P pAP pBP;
-apply pAP pA;
+apply pAP pA
 end;
 
 opaque symbol or_id A B : π B → π (A ∨ B)
@@ -51,7 +51,7 @@ opaque symbol or_id A B : π B → π (A ∨ B)
 assume A B pA;
 simplify;
 assume P pAP pBP;
-apply pBP pA;
+apply pBP pA
 end;
 
 opaque symbol or_e A B C : π (A ∨ B) → (π A → π C) → (π B → π C) → π C
@@ -59,7 +59,7 @@ opaque symbol or_e A B C : π (A ∨ B) → (π A → π C) → (π B → π C) 
 assume A B C;
 simplify;
 assume H pAC pBC;
-apply H C pAC pBC;
+apply H C pAC pBC
 end;
 
 constant symbol ⇒ : Prop → Prop → Prop;
@@ -71,7 +71,7 @@ opaque symbol imp_i A B : (π A → π B) → π (A ⇒ B)
 assume A B pAB;
 simplify;
 assume pA;
-apply pAB pA;
+apply pAB pA
 end;
 
 opaque symbol imp_e A B : π (A ⇒ B) → π A → π B
@@ -80,7 +80,7 @@ assume A B;
 simplify;
 assume pAB;
 assume pA;
-apply pAB pA;
+apply pAB pA
 end;
 
 symbol ⇔ : Prop → Prop → Prop;
@@ -93,7 +93,7 @@ rule π ⊥ ↪ Π (P : Prop), π P;
 opaque symbol f_e A : π ⊥ → π A
 ≔ begin
 assume A P;
-apply P A;
+apply P A
 end;
 
 constant symbol ¬ : Prop → Prop;
@@ -105,18 +105,18 @@ rule π ⊤ ↪ Π (P : Prop), π P → π P;
 opaque symbol Vrai : π ⊤ ≔
 begin
 assume P pP;
-apply pP;
+apply pP
 end;
 
 symbol Set : TYPE;
 
 injective symbol El : Set → TYPE;
 
-constant symbol ∀ {s} : (El s → Prop) → Prop; 
+constant symbol ∀ [s] : (El s → Prop) → Prop; 
 notation ∀ quantifier;
 rule π (@∀ $x $A) ↪ Π (y : El $x), π ($A y);
 
-constant symbol ∃ {s} : (El s → Prop) → Prop;
+constant symbol ∃ [s] : (El s → Prop) → Prop;
 notation ∃ quantifier;
 rule π (@∃ $x $A) ↪ Π P, (Π (y : El $x), π ($A y) → π P) → π P;
 
@@ -124,7 +124,7 @@ opaque symbol AllElim : Π (x : Set), Π (P : El x → Prop), π(`∀ y, P y) �
 ≔ begin
 simplify;
 assume x P H y;
-apply H y;
+apply H y
 end;
 
 opaque symbol AllIntro : Π (x : Set), Π (P : El x → Prop), (Π y : El x, π(P y)) → π(`∀ x, P x)
@@ -132,30 +132,30 @@ opaque symbol AllIntro : Π (x : Set), Π (P : El x → Prop), (Π y : El x, π(
 assume x P;
 simplify;
 assume H y;
-apply H y;
+apply H y
 end;
 
 opaque symbol ExIntro : Π (x : Set), Π (a : El x), Π (P : El x → Prop), π(P a ⇒ `∃ y, P y)
 ≔ begin
 assume x a P Pa P0 Py0;
-apply Py0 a Pa;
+apply Py0 a Pa
 end;
 
 opaque symbol ExElim : Π (x : Set), Π (P : El x → Prop), π(`∃ y, P y) → Π Q : Prop, π((`∀ y : El x, P y ⇒ Q)) → π(Q)
 ≔ begin
 simplify;
 assume x P H P' H';
-apply H P' H';
+apply H P' H'
 end;
 
-constant symbol = {s} : El s → El s → Prop;
+constant symbol = [s] : El s → El s → Prop;
 notation = infix 4;
 rule π (@= $s $x $y) ↪ Π (P : El $s → Prop), π(P $x) → π(P $y);
 
 opaque symbol refl : Π (s : Set), π(`∀ x : El s, x = x) ≔
 begin
 assume s y P Py;
-refine Py;
+refine Py
 end;
 
 opaque symbol lemmaSymEg : Π (s : Set), π(`∀ x : El s, `∀ y : El s, (x = y) ⇒ (y = x)) 
@@ -165,7 +165,7 @@ simplify;
 assume Pxy P;
 refine Pxy (λ z, (P z) ⇒ (P x)) _;
 assume Px;
-refine refl s x P Px;
+refine refl s x P Px
 end;
 
 symbol omicron : Set;
