@@ -1,44 +1,37 @@
 require open zf.theoriezf.logic;
 
-constant symbol Graph : TYPE;
+constant symbol graph : Set;
+constant symbol node : Set;
 
-constant symbol Node : TYPE;
+symbol eta : El graph → El node → El node → El prop;
+symbol root : El graph → El node;
 
-symbol g : Set;
-rule El g ↪ Graph;
-
-symbol n : Set;
-rule El n ↪ Node;
-
-symbol eta : Graph → Node → Node → Prop;
-symbol root : Graph → Node;
-
-symbol cr : Graph → Node → Graph;
+symbol cr : El graph → El node → El graph;
 //cr = change root;
 rule eta (cr $a $z) $x $y ↪ eta $a $x $y;
 rule root (cr $a $x) ↪ $x;
 rule (cr (cr $a $x) $y) ↪ cr $a $y;
 
-constant symbol o : Node;
-constant symbol O : Node;
+constant symbol o : El node;
+constant symbol O : El node;
 
-symbol i : Node → Node;
-symbol i' : Node → Node;
-symbol j : Node → Node;
-symbol j' : Node → Node;
-symbol I : Node → Prop;
-symbol J : Node → Prop;
+symbol i : El node → El node;
+symbol i' : El node → El node;
+symbol j : El node → El node;
+symbol j' : El node → El node;
+symbol I : El node → El prop;
+symbol J : El node → El prop;
 
 // ρ^ car ρ' affiche un message d'erreur ;
-symbol ρ : Graph → Node;
-symbol ρ^ : Node → Graph;
+symbol ρ : El graph → El node;
+symbol ρ^ : El node → El graph;
 
-symbol Succ : Node → Node;
-symbol Pred : Node → Node;
-symbol Null : Node → Prop;
-symbol Nat : Node → Prop;
+symbol Succ : El node → El node;
+symbol Pred : El node → El node;
+symbol Null : El node → El prop;
+symbol Nat : El node → El prop;
 
-symbol < : Node → Node → Prop;
+symbol < : El node → El node → El prop;
 notation < infix 5;
 
 rule i' (i $x) ↪ $x;
@@ -60,7 +53,7 @@ rule Nat (Succ $x) ↪ Nat $x;
 rule $x < O ↪ ⊥;
 rule $x < (Succ $y) ↪ ($x < $y) ∨ ($x = $y);
 
-symbol simeq : Graph → Graph → Prop;
+symbol simeq : El graph → El graph → El prop;
 notation simeq infix 5;
 /*rule $a simeq $b ↪ `∃ r : El (n arrow (n arrow omicron)), 
     r (root $a) (root $b) 
@@ -71,28 +64,28 @@ notation simeq infix 5;
         eta $b y' y ∧ r x y 
             ⇒ `∃ x', eta $a x' x ∧ r x' y');
 */
-rule $a simeq $b ↪ `∃ r : El (n arrow (n arrow omicron)), (r (root $a) (root $b)) ∧ (`∀ x, `∀ x', `∀ y, (((eta $a x' x) ∧ (r x y)) ⇒ (`∃ y', ((eta $b y' y) ∧ (r x' y'))))) ∧ (`∀ y, `∀ y', `∀ x, (((eta $b y' y) ∧ (r x y)) ⇒ (`∃ x', ((eta $a x' x) ∧ (r x' y')))));
+rule $a simeq $b ↪ `∃ r : El (node arrow (node arrow prop)), (r (root $a) (root $b)) ∧ (`∀ x, `∀ x', `∀ y, (((eta $a x' x) ∧ (r x y)) ⇒ (`∃ y', ((eta $b y' y) ∧ (r x' y'))))) ∧ (`∀ y, `∀ y', `∀ x, (((eta $b y' y) ∧ (r x y)) ⇒ (`∃ x', ((eta $a x' x) ∧ (r x' y')))));
 
-symbol ∈ : Graph → Graph → Prop;
+symbol ∈ : El graph → El graph → El prop;
 notation ∈ infix 7;
 rule $a ∈ $b ↪ `∃ x, ((eta $b x (root $b)) ∧ ($a simeq cr $b x));
 
-symbol join : Graph → Graph;
+symbol join : El graph → El graph;
 rule eta (join $a) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) ∨ (`∃ y, `∃ z, (($x = i y) ∧ ($x' = o) ∧ eta $a y z ∧ eta $a z (root $a)));
 rule root (join $a) ↪ o;
 
-symbol pair : Graph → Graph → Graph;
+symbol pair : El graph → El graph → El graph;
 rule eta (pair $a $b) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) ∨ (`∃ y, `∃ y', (($x = j y) ∧ ($x' = j y') ∧ eta $b y y')) ∨ (($x = i (root $a)) ∧ ($x' = o)) ∨ (($x = j (root $b)) ∧ ($x' = o));
 rule root (pair $a $b) ↪ o;
 
-symbol powerset : Graph → Graph;
+symbol powerset : El graph → El graph;
 rule eta (powerset $a) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) ∨ (`∃ y, `∃ c, (($x = i y) ∧ ($x' = j (ρ c)) ∧ (eta $a y (root $a)) ∧ ((cr $a y) ∈ c))) ∨ (`∃ c, (($x = j (ρ c)) ∧ ($x' = o)));
 rule root (powerset $a) ↪ o;
 
-symbol omega : Graph;
+symbol omega : El graph;
 rule eta omega $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ (y < y'))) ∨ (`∃ y, (($x = i y) ∧ ($x' = o) ∧ Nat y));
 rule root omega ↪ o;
 
-symbol Cl : Graph → Graph;
-rule eta (Cl $a) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) ∨ (`∃ y, (($x = i y) ∧ ($x' = o) ∧ (`∀ c : El (n arrow omicron), ((`∀ z, (eta $a z (root $a)) ⇒ (c z)) ∧ (`∀ z, `∀ z', (((eta $a z z') ∧ (c z')) ⇒ (c z)))) ⇒ c y)));
+symbol Cl : El graph → El graph;
+rule eta (Cl $a) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) ∨ (`∃ y, (($x = i y) ∧ ($x' = o) ∧ (`∀ c : El (node arrow prop), ((`∀ z, (eta $a z (root $a)) ⇒ (c z)) ∧ (`∀ z, `∀ z', (((eta $a z z') ∧ (c z')) ⇒ (c z)))) ⇒ c y)));
 rule root (Cl $a) ↪ o;

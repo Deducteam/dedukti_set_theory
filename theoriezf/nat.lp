@@ -8,13 +8,13 @@ symbol one ≔ s zero;
 symbol two ≔ s one;
 symbol three ≔ s two;
 
-symbol eqNP : El nat → El nat → Prop;
-rule π(eqNP $x $y) ↪ Π (P : El nat → Prop), π (P $x ⇒ P $y);
+symbol eqNP : El nat → El nat → El prop;
+rule π(eqNP $x $y) ↪ Π (P : El nat → El prop), π (P $x ⇒ P $y);
 
 constant symbol Peano3 : Π (x y: El nat), π((eqNP (s x) (s y)) ⇒ (eqNP x y));
 constant symbol Peano4 : Π (x : El nat), π(¬(eqNP (s x) zero));
 
-constant symbol recN : Π (P : El nat → Prop),
+constant symbol recN : Π (P : El nat → El prop),
 π(P zero) 
 → π(`∀ x, (P x) ⇒ (P (s x)))
 → π(`∀ x, (P x));

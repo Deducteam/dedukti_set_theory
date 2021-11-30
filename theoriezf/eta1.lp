@@ -10,11 +10,11 @@ refine and_i _ _ _ _
 {assume H;
 refine or_e _ _ _ H _ _
 {assume H1;
-refine ExElim n _ H1 _ _;
+refine ExElim node _ H1 _ _;
 assume y Hy;
-refine ExElim n _ Hy _ _;
+refine ExElim node _ Hy _ _;
 assume y'' Hy'';
-refine ExIntro n y _ _;
+refine ExIntro node y _ _;
 refine and_i _ _ _ _
 {refine and_eg _ _ (and_eg _ _ Hy'')}
 {refine imp_i (y' = y'') _ _ _
@@ -22,23 +22,23 @@ refine and_i _ _ _ _
 refine imp_i (y'' = y') _ _ _
 {assume H3;
 refine H3 (λ z, eta a y z) (and_ed _ _ Hy'')}
-{refine lemmaSymEg n _ _ H2}}
+{refine lemmaSymEg node _ _ H2}}
 {refine lemma9 _ _ (and_ed _ _ (and_eg _ _ Hy''))}}}
 {assume H4;
 refine f_e _ _;
-refine ExElim n _ H4 _ _; 
+refine ExElim node _ H4 _ _; 
 assume y Hy;
-refine ExElim n _ Hy _ _; 
+refine ExElim node _ Hy _ _; 
 assume z Hz;
 refine lemma11 y' _;
 refine and_ed _ _ (and_eg _ _ (and_eg _ _ Hz))}}
 {assume H;
-refine ExElim n _ H _ _;
+refine ExElim node _ H _ _;
 assume y Hy;
 refine or_ig _ _ _;
-refine ExIntro n y _ _;
-refine ExIntro n y' _ _;
-refine and_i _ _ (and_i _ _ (and_eg _ _ Hy) (refl n (i y'))) (and_ed _ _ Hy)}
+refine ExIntro node y _ _;
+refine ExIntro node y' _ _;
+refine and_i _ _ (and_i _ _ (and_eg _ _ Hy) (refl node (i y'))) (and_ed _ _ Hy)}
 end;
 
 opaque symbol lemma15 : π(`∀ a, `∀ x, (eta (join a) x o) ⇔ (`∃ y, `∃ z, (x = i y) ∧ (eta a y z) ∧ (eta a z (root a))))
@@ -49,19 +49,19 @@ refine and_i _ _ _ _
 refine or_e _ _ _ H _ _
 {assume H1;
 refine f_e _ _;
-refine ExElim n _ H1 _ _; 
+refine ExElim node _ H1 _ _; 
 assume y Hy;
-refine ExElim n _ Hy _ _; 
+refine ExElim node _ Hy _ _; 
 assume y' Hy';
 refine lemma11 y' _;
-refine lemmaSymEg n _ _ (and_ed _ _ (and_eg _ _ Hy'))}
+refine lemmaSymEg node _ _ (and_ed _ _ (and_eg _ _ Hy'))}
 {assume H2;
-refine ExElim n _ H2 _ _;
+refine ExElim node _ H2 _ _;
 assume y Hy;
-refine ExElim n _ Hy _ _;
+refine ExElim node _ Hy _ _;
 assume z Hz;
-refine ExIntro n y _ _;
-refine ExIntro n z _ _;
+refine ExIntro node y _ _;
+refine ExIntro node z _ _;
 refine and_i _ _ _ _
 {refine and_i _ _ _ _
 {refine and_eg _ _ (and_eg _ _ (and_eg _ _ Hz))}
@@ -69,15 +69,15 @@ refine and_i _ _ _ _
 {refine and_ed _ _ Hz}}}
 {assume H;
 refine or_id _ _ _;
-refine ExElim n _ H _ _;
+refine ExElim node _ H _ _;
 assume y Hy;
-refine ExElim n _ Hy _ _;
+refine ExElim node _ Hy _ _;
 assume z Hz;
-refine ExIntro n y _ _;
-refine ExIntro n z _ _;
+refine ExIntro node y _ _;
+refine ExIntro node z _ _;
 refine and_i _ _ _ _
 {refine and_i _ _ _ _
-{refine and_i _ _ (and_eg _ _ (and_eg _ _ Hz)) (refl n o)}
+{refine and_i _ _ (and_eg _ _ (and_eg _ _ Hz)) (refl node o)}
 {refine and_ed _ _ (and_eg _ _ Hz)}}
 {refine and_ed _ _ Hz}}
 end;
@@ -93,11 +93,11 @@ refine or_e _ _ _ H' _ _
 {assume H'';
 refine or_e _ _ _ H'' _ _
 {assume H1;
-refine ExElim n _ H1 _ _;
+refine ExElim node _ H1 _ _;
 assume y Hy;
-refine ExElim n _ Hy _ _; 
+refine ExElim node _ Hy _ _; 
 assume z Hz;
-refine ExIntro n y _ _;
+refine ExIntro node y _ _;
 refine and_i _ _ _ _
 {refine and_eg _ _ (and_eg _ _ Hz)}
 {refine imp_i (y' = z) _ _ _
@@ -105,13 +105,13 @@ refine and_i _ _ _ _
 refine imp_i (z = y') _ _ _
 {assume H3;
 refine H3 (λ w, eta a y w) (and_ed _ _ Hz)}
-{refine lemmaSymEg n _ _ H2}}
+{refine lemmaSymEg node _ _ H2}}
 {refine lemma9 _ _ (and_ed _ _ (and_eg _ _ Hz))}}}
 {assume H5;
 refine f_e _ _;
-refine ExElim n _ H5 _ _;
+refine ExElim node _ H5 _ _;
 assume y Hy;
-refine ExElim n _ Hy _ _; 
+refine ExElim node _ Hy _ _; 
 assume z Hz;
 refine lemma13 y' z (and_ed _ _ (and_eg _ _ Hz))}}
 {assume H6;
@@ -124,11 +124,11 @@ refine lemma11 y' (and_ed _ _ H7)}}
 refine or_ig _ _ _;
 refine or_ig _ _ _;
 refine or_ig _ _ _;
-refine ExElim n _ H _ _;
+refine ExElim node _ H _ _;
 assume y Hy;
-refine ExIntro n y _ _;
-refine ExIntro n y' _ _;
-refine and_i _ _ (and_i _ _ (and_eg _ _ Hy) (refl n (i y'))) (and_ed _ _ Hy)}
+refine ExIntro node y _ _;
+refine ExIntro node y' _ _;
+refine and_i _ _ (and_i _ _ (and_eg _ _ Hy) (refl node (i y'))) (and_ed _ _ Hy)}
 end;
 
 opaque symbol lemma17 : π(`∀ a, `∀ b, `∀ x, `∀ y', (eta (pair a b) x (j y')) ⇔ (`∃ y, (x = j y) ∧ (eta b y y')))
@@ -143,17 +143,17 @@ refine or_e _ _ _ H' _ _
 refine or_e _ _ _ H'' _ _
 {assume H1;
 refine f_e _ _;
-refine ExElim n _ H1 _ _; 
+refine ExElim node _ H1 _ _; 
 assume y Hy;
-refine ExElim n _ Hy _ _; 
+refine ExElim node _ Hy _ _; 
 assume z Hz;
-refine lemma13 z y' (lemmaSymEg n _ _ (and_ed _ _ (and_eg _ _ Hz)))}
+refine lemma13 z y' (lemmaSymEg node _ _ (and_ed _ _ (and_eg _ _ Hz)))}
 {assume H2;
-refine ExElim n _ H2 _ _;
+refine ExElim node _ H2 _ _;
 assume y Hy;
-refine ExElim n _ Hy _ _; 
+refine ExElim node _ Hy _ _; 
 assume z Hz;
-refine ExIntro n y _ _;
+refine ExIntro node y _ _;
 refine and_i _ _ _ _
 {refine and_eg _ _ (and_eg _ _ Hz)}
 {refine imp_i (y' = z) _ _ _
@@ -161,7 +161,7 @@ refine and_i _ _ _ _
 refine imp_i (z = y') _ _ _
 {assume H4;
 refine H4 (λ w, eta b y w) (and_ed _ _ Hz)}
-{refine lemmaSymEg n _ _ H3}}
+{refine lemmaSymEg node _ _ H3}}
 {refine lemma10 _ _ (and_ed _ _ (and_eg _ _ Hz))}}}}
 {assume H5;
 refine f_e _ _;
@@ -173,11 +173,11 @@ refine lemma12 y' (and_ed _ _ H6)}}
 refine or_ig _ _ _;
 refine or_ig _ _ _;
 refine or_id _ _ _;
-refine ExElim n _ H _ _;
+refine ExElim node _ H _ _;
 assume y Hy;
-refine ExIntro n y _ _;
-refine ExIntro n y' _ _;
-refine and_i _ _ (and_i _ _ (and_eg _ _ Hy) (refl n (j y'))) (and_ed _ _ Hy)}
+refine ExIntro node y _ _;
+refine ExIntro node y' _ _;
+refine and_i _ _ (and_i _ _ (and_eg _ _ Hy) (refl node (j y'))) (and_ed _ _ Hy)}
 end;
 
 opaque symbol lemma18 : π(`∀ a, `∀ b, `∀ x, (eta (pair a b) x o) ⇔ ((x = i (root a)) ∨ (x = j (root b))))
@@ -192,18 +192,18 @@ refine or_e _ _ _ H' _ _
 refine or_e _ _ _ H'' _ _
 {assume H1;
 refine f_e _ _;
-refine ExElim n _ H1 _ _;
+refine ExElim node _ H1 _ _;
 assume y Hy;
-refine ExElim n _ Hy _ _;
+refine ExElim node _ Hy _ _;
 assume z Hz;
-refine lemma11 z (lemmaSymEg n _ _ (and_ed _ _ (and_eg _ _ Hz)))}
+refine lemma11 z (lemmaSymEg node _ _ (and_ed _ _ (and_eg _ _ Hz)))}
 {assume H2;
 refine f_e _ _;
-refine ExElim n _ H2 _ _; 
+refine ExElim node _ H2 _ _; 
 assume y Hy;
-refine ExElim n _ Hy _ _; 
+refine ExElim node _ Hy _ _; 
 assume z Hz;
-refine lemma12 z (lemmaSymEg n _ _ (and_ed _ _ (and_eg _ _ Hz)))}}
+refine lemma12 z (lemmaSymEg node _ _ (and_ed _ _ (and_eg _ _ Hz)))}}
 {assume H3;
 refine or_ig _ _ (and_eg _ _ H3)}}
 {assume H4;
@@ -213,8 +213,8 @@ refine or_e _ _ _ H _ _
 {assume Hi;
 refine or_ig _ _ _;
 refine or_id _ _ _;
-refine and_i _ _ Hi (refl n o)}
+refine and_i _ _ Hi (refl node o)}
 {assume Hj;
 refine or_id _ _ _;
-refine and_i _ _ Hj (refl n o)}}
+refine and_i _ _ Hj (refl node o)}}
 end; 

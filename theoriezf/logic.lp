@@ -1,8 +1,12 @@
-constant symbol Prop : TYPE;
+symbol Set : TYPE;
 
-injective symbol π : Prop → TYPE;
+injective symbol El : Set → TYPE;
 
-constant symbol ∧ : Prop → Prop → Prop;
+constant symbol prop : Set;
+
+injective symbol π : El prop → TYPE;
+
+constant symbol ∧ : El prop → El prop → El prop;
 notation ∧ infix left 5;
 rule π ($A ∧ $B) ↪ Π P, (π $A → π $B → π P) → π P;
 
@@ -34,7 +38,7 @@ assume pA pB;
 apply pB
 end;
 
-constant symbol ∨ : Prop → Prop → Prop;
+constant symbol ∨ : El prop → El prop → El prop;
 notation ∨ infix left 7;
 rule π ($A ∨ $B) ↪ Π P, (π $A → π P) → (π $B → π P) → π P;
 
@@ -62,7 +66,7 @@ assume H pAC pBC;
 apply H C pAC pBC
 end;
 
-constant symbol ⇒ : Prop → Prop → Prop;
+constant symbol ⇒ : El prop → El prop → El prop;
 notation ⇒ infix right 6;
 rule π ($A ⇒ $B) ↪ π $A → π $B;
 
@@ -83,12 +87,12 @@ assume pA;
 apply pAB pA
 end;
 
-symbol ⇔ : Prop → Prop → Prop;
+symbol ⇔ : El prop → El prop → El prop;
 notation ⇔ infix right 6;
 rule ($A ⇔ $B) ↪ ($A ⇒ $B) ∧ ($B ⇒ $A);
 
-constant symbol ⊥ : Prop;
-rule π ⊥ ↪ Π (P : Prop), π P;
+constant symbol ⊥ : El prop;
+rule π ⊥ ↪ Π (P : El prop), π P;
 
 opaque symbol f_e A : π ⊥ → π A
 ≔ begin
@@ -96,11 +100,11 @@ assume A P;
 apply P A
 end;
 
-constant symbol ¬ : Prop → Prop;
+constant symbol ¬ : El prop → El prop;
 rule π (¬ $A) ↪ π $A → π ⊥;
 
-constant symbol ⊤ : Prop;
-rule π ⊤ ↪ Π (P : Prop), π P → π P;
+constant symbol ⊤ : El prop;
+rule π ⊤ ↪ Π (P : El prop), π P → π P;
 
 opaque symbol Vrai : π ⊤ ≔
 begin
@@ -108,26 +112,22 @@ assume P pP;
 apply pP
 end;
 
-symbol Set : TYPE;
-
-injective symbol El : Set → TYPE;
-
-constant symbol ∀ [s] : (El s → Prop) → Prop; 
+constant symbol ∀ [s] : (El s → El prop) → El prop; 
 notation ∀ quantifier;
 rule π (@∀ $x $A) ↪ Π (y : El $x), π ($A y);
 
-constant symbol ∃ [s] : (El s → Prop) → Prop;
+constant symbol ∃ [s] : (El s → El prop) → El prop;
 notation ∃ quantifier;
 rule π (@∃ $x $A) ↪ Π P, (Π (y : El $x), π ($A y) → π P) → π P;
 
-opaque symbol AllElim : Π (x : Set), Π (P : El x → Prop), π(`∀ y, P y) → Π (y : El x), π(P y)
+opaque symbol AllElim : Π (x : Set), Π (P : El x → El prop), π(`∀ y, P y) → Π (y : El x), π(P y)
 ≔ begin
 simplify;
 assume x P H y;
 apply H y
 end;
 
-opaque symbol AllIntro : Π (x : Set), Π (P : El x → Prop), (Π y : El x, π(P y)) → π(`∀ x, P x)
+opaque symbol AllIntro : Π (x : Set), Π (P : El x → El prop), (Π y : El x, π(P y)) → π(`∀ x, P x)
 ≔ begin
 assume x P;
 simplify;
@@ -135,22 +135,22 @@ assume H y;
 apply H y
 end;
 
-opaque symbol ExIntro : Π (x : Set), Π (a : El x), Π (P : El x → Prop), π(P a ⇒ `∃ y, P y)
+opaque symbol ExIntro : Π (x : Set), Π (a : El x), Π (P : El x → El prop), π(P a ⇒ `∃ y, P y)
 ≔ begin
 assume x a P Pa P0 Py0;
 apply Py0 a Pa
 end;
 
-opaque symbol ExElim : Π (x : Set), Π (P : El x → Prop), π(`∃ y, P y) → Π Q : Prop, π((`∀ y : El x, P y ⇒ Q)) → π(Q)
+opaque symbol ExElim : Π (x : Set), Π (P : El x → El prop), π(`∃ y, P y) → Π Q : El prop, π((`∀ y : El x, P y ⇒ Q)) → π(Q)
 ≔ begin
 simplify;
 assume x P H P' H';
 apply H P' H'
 end;
 
-constant symbol = [s] : El s → El s → Prop;
+constant symbol = [s] : El s → El s → El prop;
 notation = infix 4;
-rule π (@= $s $x $y) ↪ Π (P : El $s → Prop), π(P $x) → π(P $y);
+rule π (@= $s $x $y) ↪ Π (P : El $s → El prop), π(P $x) → π(P $y);
 
 opaque symbol refl : Π (s : Set), π(`∀ x : El s, x = x) ≔
 begin
@@ -167,9 +167,6 @@ refine Pxy (λ z, (P z) ⇒ (P x)) _;
 assume Px;
 refine refl s x P Px
 end;
-
-symbol omicron : Set;
-rule El omicron ↪ Prop;
 
 symbol arrow : Set → Set → Set;
 notation arrow infix 4;

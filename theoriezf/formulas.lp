@@ -13,15 +13,15 @@ constant symbol impF : El formula → El formula → El formula;
 constant symbol fF : El formula;
 constant symbol tF : El formula;
 
-symbol update : (El nat → Graph) → El nat → Graph → (El nat → Graph);
-symbol update1 : (El nat → Graph) → El nat → Graph → El nat → (El nat → Graph);
+symbol update : (El nat → El graph) → El nat → El graph → (El nat → El graph);
+symbol update1 : (El nat → El graph) → El nat → El graph → El nat → (El nat → El graph);
 rule update $σ $x $a $y ↪ update1 $σ $x $a $y $y;
 rule update1 $σ zero $a zero $z ↪ $a;
 rule update1 $σ zero $a (s $y) $z ↪ $σ $z;
 rule update1 $σ (s $x) $a zero $z ↪ $σ $z;
 rule update1 $σ (s $x) $a (s $y) $z ↪ update1 $σ $x $a $y $z;
 
-constant symbol recF : Π (P : El formula → Prop), 
+constant symbol recF : Π (P : El formula → El prop), 
 π(`∀ x, `∀ y, P (eqF x y))
 → π(`∀ x, `∀  y, P (inF x y))
 → π(`∀ f, `∀ g, (P f ∧ P g) ⇒ (P (andF f g)))
@@ -33,7 +33,7 @@ constant symbol recF : Π (P : El formula → Prop),
 → π(P fF)
 → π(`∀ f, P f);
 
-symbol interpretation : (El nat → Graph) → El formula → Prop;
+symbol interpretation : (El nat → El graph) → El formula → El prop;
 rule interpretation $σ (eqF $x $y) ↪ ($σ $x) simeq ($σ $y);
 rule interpretation $σ (inF $x $y) ↪ ($σ $x) ∈ ($σ $y);
 rule interpretation $σ (andF $f $g) ↪ (interpretation $σ $f) ∧ (interpretation $σ $g);

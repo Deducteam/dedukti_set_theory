@@ -9,7 +9,7 @@ require open zf.theoriezf.nat;
 require open zf.theoriezf.formulas;
 require open zf.theoriezf.formulas_lemmas;
 
-opaque symbol lemma32 : Π (z : El nat), Π (f : El formula), π(`∀ a, `∀ b, (`∀ σ : (El nat → Graph), ((interpretation (update σ z a) f) ∧ (a simeq b)) ⇒ (interpretation (update σ z b) f)))
+opaque symbol lemma32 : Π (z : El nat), Π (f : El formula), π(`∀ a, `∀ b, (`∀ σ : (El nat → El graph), ((interpretation (update σ z a) f) ∧ (a simeq b)) ⇒ (interpretation (update σ z b) f)))
 ≔ begin
 assume z;
 refine recF (λ f, `∀ a, `∀ b, `∀ σ, (interpretation (update σ z a) f ∧ (a simeq b)) ⇒ interpretation (update σ z b) f) _ _ _ _ _ _ _ _ _
@@ -25,11 +25,11 @@ refine lemma31 (update σ z b x) (update σ z a y) (update σ z b y) (and_i _ _ 
 {refine and_eg _ _ Hin}
 {refine lemmaUp σ z a b (and_ed _ _ Hin) x}}
 {refine lemmaUp σ z a b (and_ed _ _ Hin) y}}
-{assume f g Hfg a b σ Hand;
+{assume f graph Hfg a b σ Hand;
 refine and_i _ _ _ _
 {refine ((and_eg _ _ Hfg) a b σ) (and_i _ _ (and_eg _ _ (and_eg _ _ Hand)) (and_ed _ _ Hand))}
 {refine ((and_ed _ _ Hfg) a b σ) (and_i _ _ (and_ed _ _ (and_eg _ _ Hand)) (and_ed _ _ Hand))}}
-{assume f g Hfg a b σ Hor;
+{assume f graph Hfg a b σ Hor;
 refine or_e _ _ _ (and_eg _ _ Hor) _ _
 {assume Hf;
 refine or_ig _ _ _;
@@ -37,7 +37,7 @@ refine ((and_eg _ _ Hfg) a b σ) (and_i _ _ Hf (and_ed _ _ Hor))}
 {assume Hg;
 refine or_id _ _ _;
 refine ((and_ed _ _ Hfg) a b σ) (and_i _ _ Hg (and_ed _ _ Hor))}}
-{assume f g Hfg a b σ Himp Hf;
+{assume f graph Hfg a b σ Himp Hf;
 refine (and_ed _ _ Hfg a b σ) (and_i _ _ _ (and_ed _ _ Himp));
 refine and_eg _ _ Himp _;
 refine (and_eg _ _ Hfg b a σ) (and_i _ _ Hf _);
@@ -47,9 +47,9 @@ refine lemmaInt f (update (update σ z a) x c) (update (update σ z b) x c) (and
 {refine (and_eg _ _ Hall) c}
 {refine (lemmaUp2 σ z x a b c) (and_ed _ _ Hall)}}
 {assume f Hf x a b σ Hex;
-refine ExElim g _ (and_eg _ _ Hex) _ _;
+refine ExElim graph _ (and_eg _ _ Hex) _ _;
 assume c Hc;
-refine ExIntro g c _ _;
+refine ExIntro graph c _ _;
 refine lemmaInt f (update (update σ z a) x c) (update (update σ z b) x c) (and_i _ _ _ _)
 {refine Hc}
 {refine (lemmaUp2 σ z x a b c) (and_ed _ _ Hex)}}
