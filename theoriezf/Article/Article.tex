@@ -20,12 +20,12 @@
 %\usepackage{bm}
 %\usepackage{stmaryrd}
 %\usepackage{cleveref}
-%\usepackage{tikz}
+\usepackage{tikz}
 %\usepackage{import} % For inkscape generated files
 \usepackage{biblatex}
 \usepackage{url}
 
-\title{Implementation of Set theory in \dedukti}
+\title{Title}
 \date{}
 
 \input{macros.tex}
@@ -36,25 +36,53 @@
 \thispagestyle{empty}
 \maketitle
 
-
-\section*{Plan}
-
-Introduction : introduction du papier précédent, apparition de Dedukti depuis (passage de Deduction modulo à Lambpdapi calcul modulo), théorie U (arrow, omicron) \\
-
-The theory of pointed graphs :  explications détaillées de la structure des graphes pointés \\
-
-The language of pointed graphs : types, signature, règles de réécritures \\
-
-Formulas : nécessité de restreindre l'ensemble des propositions dans la compréhension, définition des formules et des connecteurs sur les formules, principe de l'induction, principe de l'interprétation/valuation/update, présentations des nouveaux lemmes ajoutés pour prouver les résultats sur les formules (formulas-lemmas.lp) \\
-
-Lemmas : expliquer qu'on n'a pas besoin des lemmes 1 et 2, explication des mécanismes classiques réutilisés dans chaque preuve, détails de preuves pour certains lemmes intéressants, extensionalité faible ajoutée entre 41 et 42 parce qu'elle est utilisée dans 44, 47, 48 \\
-
-Conclusion : tableau récapitulatif du nombre de lignes de chaque preuve
-
 \section{Introduction}
 
+\dedukti \ is a logical framework based upon the language \lpcm, which was created to overcome the lack of interoperability between proof assistanrs. As it is a logical framework, we can implement in \dedukti \ theories. Especially, \textit{Set theory} is interesting beacause it will enable traductions from and towards \textsc{Isabelle/ZF}.
+
+A previous work \cite{zermodulo} has demonstrate the implemtation of \textit{Set theory} in \textit{Deduction modulo} thaks to a structure of \textit{pointed graphs}. Until the writing of \cite{zermodulo}, \lpcm \ has been created as an improvement of \textit{Deduction modulo}. We adapt the implementation to the \lpcm \ and then implement it in \dedukti. 
 
 \section{The theory of pointed graphs}
+
+To implement $Set \ theory$ in \dedukti, the first idea is to translate the axioms of the theory into rewriting rules. Nevertheless, as pointed out by M. Crabbé \cite{crabbé}, such implementation does not guarantee normalization. That is why A. Miquel and G. Dowek \cite{zermodulo} introduced a theory of pointed graphs such that the implementation of $Set~theory$ respects normalization.
+
+\subsection{Pointed graphs}
+
+Sets are reprented by pointed graphs. A pointed graph is characterizd by a direct graph and one of its node identified as the root. 
+
+\begin{figure}[h]
+\begin{tikzpicture}[>=stealth,yscale=1.8,xscale=1.4]  
+
+\node(a) at (3,3)[circle,draw,text centered] {a};
+\node(b) at (5,3)[circle,draw,text centered] {b};
+\node(c) at (5,2.5)[circle,draw,text centered] {c};
+\node(d) at (7,3)[circle,draw,text centered] {d};
+\node(e) at (6.5,2.5)[circle,draw,text centered] {e};
+\node(f) at (7.5,2.5)[circle,draw,text centered] {f};
+\node(g) at (7.5,2)[circle,draw,text centered] {g};
+                      
+\draw[->] (b) -- (c); 
+\draw[->] (d) -- (e);
+\draw[->] (d) -- (f);
+\draw[->] (f) -- (g);
+
+\end{tikzpicture}
+\end{figure}
+
+The first graph with root $a$ represents the set $\emptyset$. The second graph with root $b$ represents the set $\{\emptyset\}$, while with root c it represents $\emptyset$. The third graph with root $d$ represents $\{\emptyset,\{\emptyset\}\}$, \textit{etc}.
+
+The operator $root$ gives the root of a pointed graph. $a/x$ replace the root of $a$ by $x$. $x \eta_a y$ means there is a edge in $a$ from $y$ to $x$. $rel(x,y,r)$ means that $x$ and $y$ are related by the relation $r$.
+
+Because some different pointed graphs represents the same set, we introduce the bisimilarity: 
+
+$a \simeq b \lra \ex r~(rel(root(a),root(b),r) \\
+\conj \ \fa x \fa x'~\fa y~(x'~\eta_a~x~\conj~rel(x, y, r)~\imp~\ex~y'~(y'~\eta_b~y~\conj~rel(x', y', r))) \\
+\conj \ \fa y \fa y'~\fa x~(y'~\eta_b~y~\conj~rel(x, y, r)~\imp~\ex~x'~(x'~\eta_a~x~\conj~rel(x', y', r))))$
+
+\subsection{The theory IZmod}
+
+IZmod
+
 
 \section{The language of pointed graphs}
 
@@ -62,85 +90,171 @@ Conclusion : tableau récapitulatif du nombre de lignes de chaque preuve
 
 The langage of the theory IZmod uses four sorts. The first two are for
 the pointed graphs and for the nodes of the pointed graphs.  In
-\dedukti, we thus introduce two constants $\Graph$ and $\Node$ of type
-$\Type$
-\begin{lstlisting}
-constant symbol Graph : TYPE;
-constant symbol Node : TYPE;
-\end{lstlisting}
-As we have two sorts, we would need two universal quantifiers and two
+\dedukti, we would need two universal quantifiers and two
 existential quantifiers, one for each sort.  We rather use another
 solution \cite{theoryU} that is to declare a constant $\Set$ of type
 $\Type$ for codes of sorts, a function $\El$ of type $\Set \ra \Type$,
-two constants $g$ and $n$ of sort $\Set$ and rewrite rules
-$$\El~g \lra \Graph$$
-$$\El~n \lra \Node$$
+two constants $graph$ and $node$ of sort $\Set$.
+
+\begin{lstlisting}
+constant symbol graph : Set;
+constant symbol node : Set;
+\end{lstlisting}
 
 The two other sorts of the theory IZmod are for classes of nodes and
 for binary relations on nodes.  In \dedukti, the sort of classes is
-just $\Node \ra \Prop$ and that of binary relations
-$\Node \ra \Node \ra \Prop$. To quantify on such sorts, we introduce
-constants $\omicron$ of type $\Set$ and $\arr $ of type
-$\Set \ra \Set \ra \Set$ and rewrite rules
-$$\El~\omicron \lra \Prop$$
+just $\El~node \ra \El~prop$ and that of binary relations
+$\El~node \ra \El~node \ra \El~prop$. To quantify on such sorts, we introduce constant $\arr $ of type
+$\Set \ra \Set \ra \Set$ and rewrite rule
 $$\El~(x~\arr~y) \lra (\El~x) \ra (\El~y)$$
-Note that $\El~(n~\arr~\omicron)$ reduces to $\Node \ra \Prop$ and 
-$\El~(n~\arr~(n~\arr~\omicron))$ reduces to $\Node \ra \Node \ra \Prop$. 
 
-The symbols $\Graph$, $\Node$, $g$ and $n$ are specific to the
+The symbols $graph$ and $node$ are specific to the
 expression of $IZmod$ in \dedukti. In contrast the symbols $\Set$,
-$\El$, $\omicron$, and $\arr$ are part of the standard library of 
+$\El$, $prop$, and $\arr$ are part of the standard library of 
 \dedukti.
 
 \subsection{Signature}
 
 The signature of $IZmod$ contains 31 symbols. As we have replaced the
-sorts for classes and relations with the \dedukti types
-$\Node \ra \Prop$ and $\Node \ra \Node \ra \Prop$, we do not need
-specific predicate symbols to apply a class to a node or a relations
-to two. In the same way, we do not need comprehension axioms for 
-classes and relations. 
+sorts for classes and relations with the \dedukti \ types
+$\El~node \ra \El~prop$ and $\El~node \ra \El~node \ra \El~prop$, we do not need specific predicate symbols to apply a class to a node or a relations to two. In the same way, we do not need comprehension axioms for classes and relations. 
 
-In the same way, the equality symbol is part of the standard library of 
-\dedukti.
+Similarly, the equality symbol is part of the standard library of \dedukti.
 
-So the signature is reduced to 26 symbols. 
+So the signature is reduced to 26 symbols. The specific case of the comprehension symbol is treated later.
 
 \begin{lstlisting}
-symbol eta : Graph → Node → Node → Prop;
-symbol root : Graph → Node;
-symbol cr : Graph → Node → Graph;
-constant symbol o : Node;
-constant symbol O : Node;
-symbol i : Node → Node;
-symbol i' : Node → Node;
-symbol j : Node → Node;
-symbol j' : Node → Node;
-symbol I : Node → Prop;
-symbol J : Node → Prop;
-symbol ρ : Graph → Node;
-symbol ρ^ : Node → Graph;
-symbol Succ : Node → Node;
-symbol Pred : Node → Node;
-symbol Null : Node → Prop;
-symbol Nat : Node → Prop;
-symbol < : Node → Node → Prop;
-symbol simeq : Graph → Graph → Prop;
-symbol ∈ : Graph → Graph → Prop;
-symbol join : Graph → Graph;
-symbol pair : Graph → Graph → Graph;
-symbol powerset : Graph → Graph;
-symbol comp : Graph → (El nat → Graph) → El formula → Graph;
-symbol omega : Graph;
-symbol Cl : Graph → Graph;
+symbol eta : El graph → El node → El node → El prop;
+symbol root : El graph → El node;
+symbol cr : El graph → El node → El graph;
+constant symbol o : El node;
+constant symbol O : El node;
+symbol i : El node → El node;
+symbol i' : El node → El node;
+symbol j : El node → El node;
+symbol j' : El node → El node;
+symbol I : El node → El prop;
+symbol J : El node → El prop;
+symbol ρ : El graph → El node;
+symbol ρ^ : El node → El graph;
+symbol Succ : El node → El node;
+symbol Pred : El node → El node;
+symbol Null : El node → El prop;
+symbol Nat : El node → El prop;
+symbol < : El node → El node → El prop;
+symbol simeq : El graph → El graph → El prop;
+symbol ∈ : El graph → El graph → El prop;
+symbol join : El graph → El graph;
+symbol pair : El graph → El graph → El graph;
+symbol powerset : El graph → El graph;
+symbol omega : El graph;
+symbol Cl : El graph → El graph;
 \end{lstlisting}
 
+\subsection{From \textit{Deduction modulo} to \lpcm}
+
+Since the publication of \cite{zermodulo}, \lpcm has been developped as an evolution of \textit{Deduction modulo}.
+
+More specifically, \lpcm allows to quantify on proposition.
+
+In \dedukti, the symbol $mem$ and $rel$ are useless. Indeed, we can apply a node $x$ to class $P$ with $P~x$ and two nodes $x$ and $y$ to a relation $r$ with $r~x~y$.
+
+
 \subsection{Rewriting rules}
+
+The rewriting rule $$y = z \ \lra \ \fa \ p \ (mem(y, p) \ \imp \ mem(z, p))$$ is not required as it is a consequence of the rewriting rule of the polymorphic $=$ implemented in the stardard library of \dedukti: 
+\begin{lstlisting}
+constant symbol = [s] : El s → El s → El prop;
+notation = infix 4;
+rule π (@= $s $x $y) ↪ Π (P : El $s → El prop), π(P $x) → π(P $y);
+\end{lstlisting}
+
++ Expliquer pourquoi on n'utilise pas les symboles g et g' \\
+
+All the other rewriting rules, except the ones involving $comp$, are easy to implement in \dedukti.
+
+\begin{lstlisting}
+rule eta (cr $a $z) $x $y ↪ eta $a $x $y;
+rule root (cr $a $x) ↪ $x;
+rule (cr (cr $a $x) $y) ↪ cr $a $y;
+
+rule i' (i $x) ↪ $x;
+rule j' (j $x) ↪ $x;
+rule ρ^ (ρ $x) ↪ $x;
+rule I (i $x) ↪ ⊤;
+rule J (j $x) ↪ ⊤;
+rule I (j $x) ↪ ⊥;
+rule J (i $x) ↪ ⊥;
+rule I (o) ↪ ⊥;
+rule J (o) ↪ ⊥;
+
+rule Pred (Succ $x) ↪ $x ;
+rule Null O ↪ ⊤;
+rule Nat O ↪ ⊤;
+rule Null (Succ $x) ↪ ⊥;
+rule Nat (Succ $x) ↪ Nat $x;
+
+rule $x < O ↪ ⊥;
+rule $x < (Succ $y) ↪ ($x < $y) ∨ ($x = $y);
+
+rule $a simeq $b ↪ `∃ r : El (node arrow (node arrow prop)), 
+    r (root $a) (root $b)
+    ∧ (`∀ x, `∀ x', `∀ y, 
+        eta $a x' x ∧ r x y
+            ⇒ `∃ y', eta $b y' y ∧ r x' y')
+    ∧ (`∀ y, `∀ y', `∀ x, 
+        eta $b y' y ∧ r x y
+            ⇒ `∃ x', eta $a x' x ∧ r x' y');
+
+rule $a ∈ $b ↪ `∃ x, ((eta $b x (root $b)) ∧ ($a simeq cr $b x));
+
+rule eta (join $a) $x $x' ↪ 
+	(`∃ y, `∃ y', ($x = i y) ∧ ($x' = i y') ∧ eta $a y y')
+    ∨ (`∃ y, `∃ z, ($x = i y) 
+    	∧ ($x' = o) 
+    	∧ eta $a y z 
+    	∧ eta $a z (root $a));
+
+rule eta (pair $a $b) $x $x' ↪ 
+	(`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y'))
+    ∨ (`∃ y, `∃ y', ($x = j y) ∧ ($x' = j y') ∧ eta $b y y')
+    ∨ (($x = i (root $a)) ∧ ($x' = o))
+    ∨ (($x = j (root $b)) ∧ ($x' = o));
+
+rule eta (powerset $a) $x $x' ↪ 
+	(`∃ y, `∃ y', ($x = i y) ∧ ($x' = i y') ∧ eta $a y y')
+    ∨ (`∃ y, `∃ c, ($x = i y) 
+    	∧ ($x' = j (ρ c)) 
+    	∧ (eta $a y (root $a)) 
+    	∧ ((cr $a y) ∈ c))
+    ∨ (`∃ c, ($x = j (ρ c)) ∧ ($x' = o));
+
+symbol omega : El graph;
+rule eta omega $x $x' ↪ 
+	(`∃ y, `∃ y', ($x = i y) ∧ ($x' = i y') ∧ (y < y'))
+    ∨ (`∃ y, ($x = i y) ∧ ($x' = o) ∧ Nat y);
+
+rule eta (Cl $a) $x $x' ↪ 
+	(`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y'))
+    ∨ (`∃ y, ($x = i y) 
+        ∧ ($x' = o)
+        ∧ (`∀ c : El (node arrow prop), 
+                ((`∀ z, eta $a z (root $a) ⇒ c z)
+                ∧ (`∀ z, `∀ z', (eta $a z z') ∧ (c z') ⇒ (c z)))
+            ⇒ c y));
+            
+rule root (join $a) ↪ o;
+rule root (pair $a $b) ↪ o;
+rule root (powerset $a) ↪ o;
+rule root omega ↪ o;
+rule root (Cl $a) ↪ o;
+
+\end{lstlisting}
 
 
 \section{The language of formulas}
 
-We may have notice that the lemmas in which the $comp$ symbol is used are only valid for a subset of formulas. The formulas need to have all of its quantifiers of sort $Graph$ and can only use the language $\in$, $\simeq$ and the classic logical connectives.
+We may have notice that the lemmas in which the $comp$ symbol is used are only valid for a subset of formulas. The formulas need to have all of its quantifiers of sort $El~graph$ and can only use the language $\in$, $\simeq$ and the classic logical connectives.
 
 Thus we need to introduce a set to caraterize the validity domain of such lemmas.
 
@@ -161,10 +275,6 @@ constant symbol fF : El formula;
 constant symbol tF : El formula;
 \end{lstlisting}
 
-
-Henceforth, we are able to define in \dedukti
-$$comp : \Graph \ra (\El \ nat \ \ra \ Graph) \  \ra \El \ formula \ra \Graph$$
-
 Then we are able to define an induction over formulas, using the language $\in$, $\simeq$ and the classic logical connectives.
 
 \begin{lstlisting}
@@ -183,21 +293,27 @@ constant symbol recF : Π (P : El formula → Prop),
 
 \subsection{Interpretation}
 
-The next step is to interpret an object of type $formula$ into $Prop$. We introduce the constant $interpretation$ which receives a valuation of type $\El \ nat \ \ra \ Graph$ and a formula of type $\El \ formula$ and return a $\Prop$.
+The next step is to interpret an object of type $formula$ into $Prop$. We introduce the constant $interpretation$ which receives a valuation of type $\El \ nat \ \ra \ \El~graph$ and a formula of type $\El \ formula$ and return a $\El~prop$.
 
 \begin{lstlisting}
-symbol interpretation : (El nat → Graph) → El formula → Prop;
+symbol interpretation : (El nat → El graph) → El formula → El prop;
 \end{lstlisting} 
 
-We need to have a tool to update a valuation when we assign a variable. To do so, we introduce the constant $update$ of type $(\El \ nat \ra Graph) \ra \El \ nat \ra Graph \ra (\El \ nat \ra Graph)$ which takes as arguments a valuation, a natural number and a graph and returns a new valuation: $(update \ \sigma \ x \ a)$ is a new valuation that substitues $x$ by $a$ and acts like $\sigma$ for the other natural numbers.
+We need to have a tool to update a valuation when we assign a variable. To do so, we introduce the constant $update$ of type $(\El \ nat \ra \El~graph) \ra \El \ nat \ra \El~graph \ra (\El \ nat \ra \El~graph)$ which takes as arguments a valuation $\sigma$, a natural number $x$ and a graph $a$ and returns a new valuation $(update \ \sigma \ x \ a)$ that substitues $x$ by $a$ and acts like $\sigma$ for the other natural numbers.
 
 To write a rewriting rule upon $update$, we need to be able to check if we apply $(update \ \sigma \ x \ a)$ to $z = x$ or to $z \neq x$.
 
-We define the symbol $update1$ of type $(\El \ nat \ \ra \ Graph) \ \ra \ \El \ nat \ \ra \ Graph \ \ra \ \El \ nat \ \ra \ (\El \ nat \ \ra \ Graph)$. We keep in memory the argument of the valuation with the rewriting rule:
+We define the symbol $update1$ of type $(\El \ nat \ \ra \ \El~graph) \ \ra \ \El \ nat \ \ra \ \El~graph \ \ra \ \El \ nat \ \ra \ (\El \ nat \ \ra \ \El~graph)$. The new argument $z$ is used to keep in memory the argument $y$:
 
 $$update \ \sigma \ x \ a \ y \ \lra \ update1 \ \sigma \ x \ a \ y \ y$$
 
-We have two natural numbers to compare: $x$, which is substitued by $a$ by the $update$, and $y$ that is the argument we apply to the valuation. The technique we use to compare $x$ and $y$ is the following: we keep in memory $y$ in the variable $z$, we decrement the two numbers until either one or both are equal to zero. If both are equal to zero, then $x$ and $y$ are equal and we return $a$. If only one equals zero, then they are different and we return $\sigma \ z$.
+We have two natural numbers to compare: $x$, which is substitued by $a$, and $y$ that is the argument we apply to the valuation. The technique we use to compare $x$ and $y$ is the following: 
+
+\begin{itemize}
+\item We keep in memory $y$ in the variable $z$;
+\item We decrement $x$ and $y$ until either one or both are equal to zero;
+\item If both are equal to zero, then $x$ and $y$ are equal and we return $a$. If only one equals zero, then they are different and we return $\sigma \ z$.
+\end{itemize}
 
 $$update1 \ \sigma \ (s \ x) \ a \ (s \ y) \ z \ \lra \ update1 \ \sigma \ x \ a \ y \ z$$
 $$ update1 \ \sigma \ zero \ a \ zero \ z \ \lra \ a$$
@@ -216,6 +332,36 @@ $$interpretation \ \sigma \ (allF \ x \ f) \ \lra \ \fa \ a, interpretation \ (u
 $$interpretation \ \sigma \ (exF \ x \ f) \ \lra \ \ex \ a, interpretation \ (update \ \sigma \ x \ a) \ f$$
 $$interpretation \ \sigma \ fF \lra \blbot$$
 $$interpretation \ \sigma \ tF \lra \bltop$$
+
+\subsection{Comprehension and infinity}
+
+Henceforth, we are able to define in \dedukti
+$$comp : \El~graph \ra (\El \ nat \ \ra \ \El~graph) \  \ra \El \ formula \ra \ \El~graph$$
+
+and its rewriting rules
+
+\begin{lstlisting}
+rule eta (comp $a $σ $f) $x $x' ↪ 
+(`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) 
+∨ (`∃ y, ($x = i y) ∧ ($x' = o) ∧ (eta $a y (root $a))
+∧ (interpretation (update $σ zero (cr $a y)) $f));
+rule root (comp $a $σ $f) ↪ o;
+\end{lstlisting}
+
+When it comes to symbol related to the Infinity section of \cite{zermodulo}, we implement $empty_set$ of type $\El~graph$ and $Ind$ of type $\El~graph \ \ra \ \El~prop$.
+
+To define the empty set, we use $comp$ with the formula $fF$:
+\begin{lstlisting}
+rule empty_set ↪ comp omega (λ _, empty_set) fF;
+rule root empty_set ↪ o;
+\end{lstlisting}
+
+Then we implement
+
+\begin{lstlisting}
+rule Ind $c ↪ (empty_set ∈ $c) 
+∧ (`∀ a, (a ∈ $c) ⇒ ((join (pair a (pair a a))) ∈ $c));
+\end{lstlisting}
 
 
 \subsection{Results concerning valuation}
@@ -256,17 +402,10 @@ $\fa \ f, \fa \ \sigma, \sigma', (interpretation \ \sigma \ f) \ \conj \ (\fa x,
 The fifth theorem is proved by induction over formulas.
 \end{proof}
 
-
 \section{Lemmas}
 
 The first lemma $x=x$ does not need to be implemented since it is already part of the standard library of \dedukti \ under the name $refl$ (which is polymorphic).
 
-The second lemma is not required as it is a consequence of the rewriting rule of the polumorphic $=$ implemented in the stardard library of \dedukti: 
-\begin{lstlisting}
-constant symbol = {s} : El s → El s → Prop;
-notation = infix 4;
-rule π (@= $s $x $y) ↪ Π (P : El $s → Prop), π(P $x) → π(P $y);
-\end{lstlisting}
 
 \subsection{Useful mechanisms}
 
@@ -274,21 +413,13 @@ All the other lemmas except the ones where $comp$ is involved are proved using t
 
 \subsection{Some interesting proofs}
 
-Lemma32
+Lemma32 + utilisation du lemma32
 
 \subsection{Weak extensionnality}
 
-We want to deduce $weak \ extensionality$ from $strong \ extensionality$ (i.e. lemma 41).
+We notice in \cite{zermodulo53} the use of \textit{weak extensionality} to prove lemmas 44, 47 and 48. We want to deduce \textit{weak extensionality} from \textit{strong extensionality} (i.e. lemma 41).
 
-\begin{lstlisting}
-opaque symbol lemma41 : Π (x y : El nat), Π (f : El formula), Π (c d : Graph), π(`∀ σ : (El nat → Graph), ((interpretation (update (update σ x c) y d) f)
-∧ (`∀ a, `∀ a', `∀ b, ((a' ∈ a) ∧ (interpretation (update (update σ x a) y b) f)) ⇒ (`∃ b', ((b' ∈ b) ∧ (interpretation (update (update σ x a') y b') f))))
-∧ (`∀ b, `∀ b', `∀ a, ((b' ∈ b) ∧ (interpretation (update (update σ x a) y b) f)) ⇒ (`∃ a', ((a' ∈ a) ∧ (interpretation (update (update σ x a') y b') f))))) ⇒ (c simeq d))
-
-opaque symbol lemmaExt : Π (c d : Graph), π((`∀ x, (x ∈ c) ⇔ (x ∈ d)) ⇒ (c simeq d))
-\end{lstlisting}
-
-To do this, we need to prove the following intermediry lemma:
+To do this, we need to prove the following intermediary lemma:
 
 \begin{lstlisting}
 opaque symbol lemmaHypExt : Π (c d : Graph), π((`∀ z, (z ∈ c) ⇔ (z ∈ d)) ⇒ ((((c simeq c) ∧ (d simeq d)) ∨ (c simeq d))
@@ -307,6 +438,8 @@ end;
 \end{lstlisting}
 
 \section{Conclusion}
+
+Schema pour représenter Z, Zmod et ZF ?
 
 \begin{center}
 \begin{tabular}{|c|c||c|c|}
