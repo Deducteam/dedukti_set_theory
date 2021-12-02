@@ -7,7 +7,7 @@ constant symbol prop : Set;
 injective symbol π : El prop → TYPE;
 
 constant symbol ∧ : El prop → El prop → El prop;
-notation ∧ infix left 5;
+notation ∧ infix left 8;
 rule π ($A ∧ $B) ↪ Π P, (π $A → π $B → π P) → π P;
 
 opaque symbol and_i A B : π A → π B → π (A ∧ B)
@@ -88,7 +88,7 @@ apply pAB pA
 end;
 
 symbol ⇔ : El prop → El prop → El prop;
-notation ⇔ infix right 6;
+notation ⇔ infix right 5;
 rule ($A ⇔ $B) ↪ ($A ⇒ $B) ∧ ($B ⇒ $A);
 
 constant symbol ⊥ : El prop;

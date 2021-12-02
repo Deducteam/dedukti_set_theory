@@ -54,38 +54,49 @@ rule $x < O ↪ ⊥;
 rule $x < (Succ $y) ↪ ($x < $y) ∨ ($x = $y);
 
 symbol simeq : El graph → El graph → El prop;
-notation simeq infix 5;
-/*rule $a simeq $b ↪ `∃ r : El (n arrow (n arrow omicron)), 
-    r (root $a) (root $b) 
+notation simeq infix 4;
+rule $a simeq $b ↪ `∃ r : El (node arrow (node arrow prop)), 
+    r (root $a) (root $b)
     ∧ (`∀ x, `∀ x', `∀ y, 
-        eta $a x' x ∧ r x y 
+        eta $a x' x ∧ r x y
             ⇒ `∃ y', eta $b y' y ∧ r x' y')
     ∧ (`∀ y, `∀ y', `∀ x, 
-        eta $b y' y ∧ r x y 
+        eta $b y' y ∧ r x y
             ⇒ `∃ x', eta $a x' x ∧ r x' y');
-*/
-rule $a simeq $b ↪ `∃ r : El (node arrow (node arrow prop)), (r (root $a) (root $b)) ∧ (`∀ x, `∀ x', `∀ y, (((eta $a x' x) ∧ (r x y)) ⇒ (`∃ y', ((eta $b y' y) ∧ (r x' y'))))) ∧ (`∀ y, `∀ y', `∀ x, (((eta $b y' y) ∧ (r x y)) ⇒ (`∃ x', ((eta $a x' x) ∧ (r x' y')))));
 
 symbol ∈ : El graph → El graph → El prop;
-notation ∈ infix 7;
-rule $a ∈ $b ↪ `∃ x, ((eta $b x (root $b)) ∧ ($a simeq cr $b x));
+notation ∈ infix 4;
+rule $a ∈ $b ↪ `∃ x, eta $b x (root $b) ∧ ($a simeq cr $b x);
 
 symbol join : El graph → El graph;
-rule eta (join $a) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) ∨ (`∃ y, `∃ z, (($x = i y) ∧ ($x' = o) ∧ eta $a y z ∧ eta $a z (root $a)));
+rule eta (join $a) $x $x' ↪ (`∃ y, `∃ y', ($x = i y) ∧ ($x' = i y') ∧ eta $a y y')
+    ∨ (`∃ y, `∃ z, ($x = i y) ∧ ($x' = o) ∧ eta $a y z ∧ eta $a z (root $a));
 rule root (join $a) ↪ o;
 
 symbol pair : El graph → El graph → El graph;
-rule eta (pair $a $b) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) ∨ (`∃ y, `∃ y', (($x = j y) ∧ ($x' = j y') ∧ eta $b y y')) ∨ (($x = i (root $a)) ∧ ($x' = o)) ∨ (($x = j (root $b)) ∧ ($x' = o));
+rule eta (pair $a $b) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y'))
+    ∨ (`∃ y, `∃ y', ($x = j y) ∧ ($x' = j y') ∧ eta $b y y')
+    ∨ (($x = i (root $a)) ∧ ($x' = o))
+    ∨ (($x = j (root $b)) ∧ ($x' = o));
 rule root (pair $a $b) ↪ o;
 
 symbol powerset : El graph → El graph;
-rule eta (powerset $a) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) ∨ (`∃ y, `∃ c, (($x = i y) ∧ ($x' = j (ρ c)) ∧ (eta $a y (root $a)) ∧ ((cr $a y) ∈ c))) ∨ (`∃ c, (($x = j (ρ c)) ∧ ($x' = o)));
+rule eta (powerset $a) $x $x' ↪ (`∃ y, `∃ y', ($x = i y) ∧ ($x' = i y') ∧ eta $a y y')
+    ∨ (`∃ y, `∃ c, ($x = i y) ∧ ($x' = j (ρ c)) ∧ (eta $a y (root $a)) ∧ ((cr $a y) ∈ c))
+    ∨ (`∃ c, ($x = j (ρ c)) ∧ ($x' = o));
 rule root (powerset $a) ↪ o;
 
 symbol omega : El graph;
-rule eta omega $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ (y < y'))) ∨ (`∃ y, (($x = i y) ∧ ($x' = o) ∧ Nat y));
+rule eta omega $x $x' ↪ (`∃ y, `∃ y', ($x = i y) ∧ ($x' = i y') ∧ (y < y'))
+    ∨ (`∃ y, ($x = i y) ∧ ($x' = o) ∧ Nat y);
 rule root omega ↪ o;
 
 symbol Cl : El graph → El graph;
-rule eta (Cl $a) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) ∨ (`∃ y, (($x = i y) ∧ ($x' = o) ∧ (`∀ c : El (node arrow prop), ((`∀ z, (eta $a z (root $a)) ⇒ (c z)) ∧ (`∀ z, `∀ z', (((eta $a z z') ∧ (c z')) ⇒ (c z)))) ⇒ c y)));
+rule eta (Cl $a) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y'))
+    ∨ (`∃ y, ($x = i y) 
+        ∧ ($x' = o)
+        ∧ (`∀ c : El (node arrow prop), 
+                ((`∀ z, eta $a z (root $a) ⇒ c z)
+                ∧ (`∀ z, `∀ z', (eta $a z z') ∧ (c z') ⇒ (c z)))
+            ⇒ c y));
 rule root (Cl $a) ↪ o;
