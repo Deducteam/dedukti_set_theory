@@ -9,7 +9,7 @@
 \usepackage{amsmath}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{tikz}
-\usepackage{biblatex}
+\usepackage[backend=biber,style=alphabetic]{biblatex}
 \usepackage{url}
 \usepackage{fancyvrb}
 \usepackage{enumitem}
@@ -27,18 +27,18 @@
 \maketitle
 
 \begin{abstract}
-We show how to implement set theory in \dedukti ~in such a way that it respects normalization. To do so, we adapt in $\lambda \Pi$\textit{--calculus modulo theory} the guideline given in \textit{Deduction modulo} by A. Miquel and G. Dowek --using a theory of pointed graphs. To achieve this goal, we develop a language of formulas.
+We show how to implement set theory in \dedukti ~in such a way that it respects normalization. To do so, we adapt in $\lambda \Pi$\textit{--calculus modulo theory} the guideline given in \textit{Deduction modulo} by G. Dowek and A. Miquel --using a theory of pointed graphs. To achieve this goal, we develop a language of formulas.
 \end{abstract}
 
 \section{Introduction}
 
 \dedukti \ is a logical framework based upon the language \lpcm, which was created to overcome the lack of interoperability between proof assistants. As it is a logical framework, we can implement theories in \dedukti. Especially, set theory is interesting beacause it will enable traductions from and towards proof assistants using set theory, such as \textsc{Isabelle/ZF}.
 
-A previous work by A. Miquel and G. Dowek \cite{zermodulo} has demonstrated the implemtation of set theory in \textit{Deduction modulo} thaks to a structure of \textit{pointed graphs}. Since the writing of \cite{zermodulo}, \lpcm \ has been created as an improvement of \textit{Deduction modulo}. We adapt the implementation to the \lpcm \ and then implement it in \dedukti. 
+A previous work by G. Dowek and A. Miquel \cite{zermodulo} has demonstrated the implemtation of set theory in \textit{Deduction modulo} thaks to a structure of \textit{pointed graphs}. Since the writing of \cite{zermodulo}, \lpcm \ has been created as an improvement of \textit{Deduction modulo}. We adapt the implementation to the \lpcm \ and then implement it in \dedukti. 
 
 \section{The theory of pointed graphs}
 
-To implement set theory in \dedukti, the first idea is to translate the axioms of the theory into rewriting rules. Nevertheless, as pointed out by M. Crabbé \cite{crabbé}, such implementation does not guarantee normalization. That is why A. Miquel and G. Dowek \cite{zermodulo} introduced a structure of pointed graphs to set theory. This set theory with pointed graphs -- called IZmod -- respects normalization.
+To implement set theory in \dedukti, the first idea is to translate the axioms of the theory into rewriting rules. Nevertheless, as pointed out by M. Crabbé \cite{crabbé}, such implementation does not guarantee normalization. That is why G. Dowek and A. Miquel \cite{zermodulo} introduced a structure of pointed graphs to set theory. This set theory with pointed graphs -- called IZmod -- respects normalization.
 
 \subsection{Pointed graphs}
 
@@ -70,7 +70,7 @@ $$ x \ \eta_{a/z} \ y \longrightarrow x \ \eta_a \ y $$
 $$ \text{root}(a/x) \longrightarrow x $$
 $$ (a/x)/y \longrightarrow a/y $$
 
-We saw in the examples that some different pointed graphs can represent the same set. To characterized this, A. Miquel and G. Dowek introduce bisimilarity between graphs (noted $\simeq$): 
+We saw in the examples that some different pointed graphs can represent the same set. To characterized this, G. Dowek and A. Miquel introduce bisimilarity between graphs (noted $\simeq$): 
 
 $a \simeq b \lra \ex r~(rel(root(a),root(b),r) \\
 \conj \ \fa x \fa x'~\fa y~(x'~\eta_a~x~\conj~rel(x, y, r)~\imp~\ex~y'~(y'~\eta_b~y~\conj~rel(x', y', r))) \\
@@ -105,7 +105,7 @@ The same method is applied to constructors $pair$, $powerset$, $etc$.
 
 \subsection{Set theories}
 
-Many definitions of the set theory intervines. The two classical set theories are Zermelo (Z) and Zermelo-Fraenkel (ZF). The set theory defined in \textit{Deduction modulo} by A. Miquel and G. Dowek \cite{zermodulo} is stronger than Zermelo set theory but weaker than Zermelo-Fraenkel set thery. Indeed, IZst contains Zermelo set theory, the Strong Extensionality axiom and the Transitive Closure axiom. \\
+Many definitions of the set theory intervines. The two classical set theories are Zermelo (Z) and Zermelo-Fraenkel (ZF). The set theory defined in \textit{Deduction modulo} by G. Dowek and A. Miquel \cite{zermodulo} is stronger than Zermelo set theory but weaker than Zermelo-Fraenkel set thery. Indeed, IZst contains Zermelo set theory, the Strong Extensionality axiom and the Transitive Closure axiom. \\
 
 \textbf{Strong Extensionality axiom.} $\fa~x_1,...,\fa~x_n,\fa~a,\fa~b, \\
 (R(a, b) \\
@@ -119,7 +119,7 @@ where $R(a,b)$ is a formula of free variables $x_1, ..., x_n$. \\
 
 The Strong Extensionality axiom can be deduced from the Foundation axiom and the Transitive Closure axiom is can be derived from Replacement Scheme.
 
-The Strong Extensionality axiom implies the Extensionality axiom\footnote{See 5.3}.
+The Strong Extensionality axiom implies the Extensionality axiom\footnote{See \ref{extensionality}}.
 
 \begin{figure}[h]
 \begin{tikzpicture}[>=stealth,yscale=1,xscale=1]  
@@ -534,6 +534,8 @@ opaque symbol lemma41 : Π (x y : El nat), Π (f : El formula),
 
 \subsection{Weak extensionnality}
 
+\label{extensionality}
+
 We notice in \cite{zermodulo53} the use of weak extensionality (or simply extensionality) to prove lemmas 44, 47 and 48. We want to deduce weak extensionality from strong extensionality (i.e. lemma 41). \\
 
 \textbf{Weak extensionality.} $\fa~c,\fa~d, (\fa~z, (z \in c \Leftrightarrow z \in d) \imp c \simeq d)$ \\
@@ -593,7 +595,7 @@ end;
 
 \section{Conclusion}
 
-We have implemented in \dedukti ~a version of set theory -- IZst -- that respects normalization properties. IZst set theory correponds to Zermelo set theory, with Strong Extensionality axiom and Transitive Closure axiom. To do so, we have adapted the work by A. Miquel and G. Dowek \cite{zermodulo} from \textit{Deduction modulo} to \lpcm. We have \textit{formally} written all the proofs of the lemmas allowing us to implement set theory in \dedukti.
+We have implemented in \dedukti ~a version of set theory -- IZst -- that respects normalization properties. IZst set theory correponds to Zermelo set theory, with Strong Extensionality axiom and Transitive Closure axiom. To do so, we have adapted the work by G. Dowek and A. Miquel \cite{zermodulo} from \textit{Deduction modulo} to \lpcm. We have \textit{formally} written all the proofs of the lemmas allowing us to implement set theory in \dedukti.
 
 
 To define and prove the lemmas corresponding to Comprehension axiom, we have developped a language of formulas, along with operators \textit{interpretation} and \textit{update}. In particular, the language of formulas allows us to prove that Weak Extensionality axiom derives from Strong Extensionality axiom.
