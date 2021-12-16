@@ -53,74 +53,14 @@
 \newenvironment{example}{\noindent {\em Example.}}{\medskip}
 \newenvironment{remark}{\noindent {\em Remark.}}{\medskip}
 
-\colorlet{ftcolor}{Aquamarine}
 
-\newcommand{\mute}[1]{\ifdraft{#1} \else{} \fi}
-
-\newcounter{WarnCounts}
-\newcommand{\decorateWC}{
-  \stepcounter{WarnCounts}
-  \checkoddpage
-  \ifoddpageoroneside
-     \mbox{}\marginnote{\textcolor{red}{$\skull_{\theWarnCounts}$}}
-     \else
-     \reversemarginpar
-     \mbox{}\marginnote{\textcolor{red}{$\skull_{\theWarnCounts}$}}
-     \normalmarginpar
-   \fi
-}
-
-\newcounter{ToDos}
-\newcommand{\decorateTD}{
-  \stepcounter{ToDos}
-    \checkoddpage
-    \ifoddpageoroneside
-     \mbox{}\marginnote{\textcolor{red}{$\skull_{\theToDos}$}}
-     \else
-     \reversemarginpar
-     \mbox{}\marginnote{\textcolor{red}{$\skull_{\theToDos}$}}
-     \normalmarginpar
-   \fi
-}
-
-% Skeleton for remark comments
-% 1: Name, 2: Color, 3:Comment
-\newcommand{\signedComment}[3]
-           {\mute{\decorateWC\textcolor{#2}{(#1:~{#3})}}}
-
-% remarks
-\newcommand{\todo}[1]{\mute{\decorateTD\textcolor{red}{(TODO:~{#1})}}}
-
-\colorlet{ftcolor}{Aquamarine}
-\colorlet{fbcolor}{LimeGreen}
-\colorlet{gdcolor}{RawSienna}
-\colorlet{egcolor}{Plum}
-\colorlet{ghcolor}{Orange}
-
-\newcommand{\ft}[1]{\signedComment{FT}{ftcolor}{#1}}
-\newcommand{\fb}[1]{\signedComment{FB}{fbcolor}{#1}}
-\newcommand{\gd}[1]{\signedComment{GD}{gdcolor}{#1}}
-\newcommand{\eg}[1]{\signedComment{EG}{egcolor}{#1}}
-\newcommand{\gh}[1]{\signedComment{GH}{ghcolor}{#1}}
-
-\newcommand{\cF}{\mathcal{F}}
-
-
-\newcommand{\CF}{\mathcal{F}}
-\newcommand{\CP}{\mathcal{P}}
-\newcommand{\CT}{\mathcal{T}}
-
-\newcommand{\systemstyle}[1]{\textsc{#1}}
-
-\newcommand{\coc}{\systemstyle{Calculus of Constructions}}
-\newcommand{\dedukti}{\systemstyle{Dedukti}}
+\newcommand{\coc}{\textsc{Calculus of Constructions}}
+\newcommand{\dedukti}{\textsc{Dedukti}}
 \newcommand{\lc}{$\lambda\text{-calculus}$}
 \newcommand{\lcs}{$\lambda\textit{-calculi}$}
 \newcommand{\lpc}{$\lambda \Pi\textit{-calculus}$}
 \newcommand{\lpcm}{$\lambda \Pi\textit{-calculus modulo theory}$}
 \newcommand{\lprolog}{$\lambda\textit{-Prolog}$}
-
-
 
 \def\Graph{{\mbox{\it Graph}}}
 \def\Node{{\mbox{\it Node}}}

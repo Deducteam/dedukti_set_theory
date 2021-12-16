@@ -6,26 +6,16 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
-%\usepackage{paralist, tabularx}
-\usepackage{oldlfont,amssymb,epsf,stmaryrd,epsfig,color}\usepackage{amsmath}
-%\usepackage{hyperref}
-%\usepackage{framed,multicol,changepage}
-%\usepackage{graphicx}
+\usepackage{amsmath}
 \usepackage[dvipsnames]{xcolor}
-%\usepackage{skull,ifoddpage,marginnote}
-%\usepackage{pifont}
-%\usepackage{graphicx}
-%\usepackage{ebproof}
-%\usepackage{mathtools}
-%\usepackage{bm}
-%\usepackage{stmaryrd}
-%\usepackage{cleveref}
 \usepackage{tikz}
-%\usepackage{import} % For inkscape generated files
 \usepackage{biblatex}
 \usepackage{url}
+\usepackage{fancyvrb}
+\usepackage{enumitem}
+\setitemize[1]{label=---}
 
-\title{Title}
+\title{\textbf{Dedukti: an implementation of set theory with pointed graphs} (titre provisoire)}
 \date{}
 
 \input{macros.tex}
@@ -36,19 +26,23 @@
 \thispagestyle{empty}
 \maketitle
 
+\begin{abstract}
+We show how to implement set theory in \dedukti ~in such a way that it respects normalization. To do so, we adapt in $\lambda \Pi$\textit{--calculus modulo theory} the guideline given in \textit{Deduction modulo} by A. Miquel and G. Dowek --using a theory of pointed graphs. To achieve this goal, we develop a language of formulas.
+\end{abstract}
+
 \section{Introduction}
 
-\dedukti \ is a logical framework based upon the language \lpcm, which was created to overcome the lack of interoperability between proof assistanrs. As it is a logical framework, we can implement in \dedukti \ theories. Especially, \textit{Set theory} is interesting beacause it will enable traductions from and towards \textsc{Isabelle/ZF}.
+\dedukti \ is a logical framework based upon the language \lpcm, which was created to overcome the lack of interoperability between proof assistants. As it is a logical framework, we can implement theories in \dedukti. Especially, set theory is interesting beacause it will enable traductions from and towards proof assistants using set theory, such as \textsc{Isabelle/ZF}.
 
-A previous work \cite{zermodulo} has demonstrate the implemtation of \textit{Set theory} in \textit{Deduction modulo} thaks to a structure of \textit{pointed graphs}. Until the writing of \cite{zermodulo}, \lpcm \ has been created as an improvement of \textit{Deduction modulo}. We adapt the implementation to the \lpcm \ and then implement it in \dedukti. 
+A previous work by A. Miquel and G. Dowek \cite{zermodulo} has demonstrated the implemtation of set theory in \textit{Deduction modulo} thaks to a structure of \textit{pointed graphs}. Since the writing of \cite{zermodulo}, \lpcm \ has been created as an improvement of \textit{Deduction modulo}. We adapt the implementation to the \lpcm \ and then implement it in \dedukti. 
 
 \section{The theory of pointed graphs}
 
-To implement $Set \ theory$ in \dedukti, the first idea is to translate the axioms of the theory into rewriting rules. Nevertheless, as pointed out by M. Crabbé \cite{crabbé}, such implementation does not guarantee normalization. That is why A. Miquel and G. Dowek \cite{zermodulo} introduced a theory of pointed graphs such that the implementation of $Set~theory$ respects normalization.
+To implement set theory in \dedukti, the first idea is to translate the axioms of the theory into rewriting rules. Nevertheless, as pointed out by M. Crabbé \cite{crabbé}, such implementation does not guarantee normalization. That is why A. Miquel and G. Dowek \cite{zermodulo} introduced a structure of pointed graphs to set theory. This set theory with pointed graphs -- called IZmod -- respects normalization.
 
 \subsection{Pointed graphs}
 
-Sets are reprented by pointed graphs. A pointed graph is characterizd by a direct graph and one of its node identified as the root. 
+In this theory, sets are reprented by pointed graphs. A pointed graph is a direct graph whom one of its node is identified as the root. 
 
 \begin{figure}[h]
 \begin{tikzpicture}[>=stealth,yscale=1.8,xscale=1.4]  
@@ -71,17 +65,76 @@ Sets are reprented by pointed graphs. A pointed graph is characterizd by a direc
 
 The first graph with root $a$ represents the set $\emptyset$. The second graph with root $b$ represents the set $\{\emptyset\}$, while with root c it represents $\emptyset$. The third graph with root $d$ represents $\{\emptyset,\{\emptyset\}\}$, \textit{etc}.
 
-The operator $root$ gives the root of a pointed graph. $a/x$ replace the root of $a$ by $x$. $x \eta_a y$ means there is a edge in $a$ from $y$ to $x$. $rel(x,y,r)$ means that $x$ and $y$ are related by the relation $r$.
+The operator $root$ gives the root of a pointed graph. $a/x$ replace the root of $a$ by $x$. $x~\eta_a~y$ means there is a edge in $a$ from $y$ to $x$. $rel(x,y,r)$ means that the nodes $x$ and $y$ are related by the relation $r$. We have the following rewriting rules:
+$$ x \ \eta_{a/z} \ y \longrightarrow x \ \eta_a \ y $$
+$$ \text{root}(a/x) \longrightarrow x $$
+$$ (a/x)/y \longrightarrow a/y $$
 
-Because some different pointed graphs represents the same set, we introduce the bisimilarity: 
+We saw in the examples that some different pointed graphs can represent the same set. To characterized this, A. Miquel and G. Dowek introduce bisimilarity between graphs (noted $\simeq$): 
 
 $a \simeq b \lra \ex r~(rel(root(a),root(b),r) \\
 \conj \ \fa x \fa x'~\fa y~(x'~\eta_a~x~\conj~rel(x, y, r)~\imp~\ex~y'~(y'~\eta_b~y~\conj~rel(x', y', r))) \\
 \conj \ \fa y \fa y'~\fa x~(y'~\eta_b~y~\conj~rel(x, y, r)~\imp~\ex~x'~(x'~\eta_a~x~\conj~rel(x', y', r))))$
 
-\subsection{The theory IZmod}
+\begin{figure}[h]
+\begin{tikzpicture}[>=stealth,yscale=1.8,xscale=1.4]  
 
-IZmod
+\node(b) at (5,3)[circle,draw,text centered,fill=gray] {b};
+\node(c) at (5,2.5)[circle,draw,text centered] {c};
+\node(d) at (7,3)[circle,draw,text centered] {d};
+\node(e) at (6.5,2.5)[circle,draw,text centered] {e};
+\node(f) at (7.5,2.5)[circle,draw,text centered,fill=gray] {f};
+\node(g) at (7.5,2)[circle,draw,text centered] {g};
+\node(h) at (5.75,2.75)[text centered]{$\simeq$};
+\node(i) at (10,2.5)[text width=4cm,text centered] {The root is noted with the filled circle.};
+                      
+\draw[->] (b) -- (c); 
+\draw[->] (d) -- (e);
+\draw[->] (d) -- (f);
+\draw[->] (f) -- (g);
+
+\end{tikzpicture}
+\end{figure}
+
+The objective is to composed pointed graphs, for instance to join pointed graphs. The root of the new pointed graph is $o$. To guarantee that $o$ is not a node of one of the original pointed graphs, an injective function $i$ is introduced, such as its left inverse $i'$ and its image $I$. 
+$$i'(i(x)) \lra x$$
+$$ I(x) \lra \top $$
+$$ I(o) \lra \bot $$
+
+The same method is applied to constructors $pair$, $powerset$, $etc$.
+
+\subsection{Set theories}
+
+Many definitions of the set theory intervines. The two classical set theories are Zermelo (Z) and Zermelo-Fraenkel (ZF). The set theory defined in \textit{Deduction modulo} by A. Miquel and G. Dowek \cite{zermodulo} is stronger than Zermelo set theory but weaker than Zermelo-Fraenkel set thery. Indeed, IZst contains Zermelo set theory, the Strong Extensionality axiom and the Transitive Closure axiom. \\
+
+\textbf{Strong Extensionality axiom.} $\fa~x_1,...,\fa~x_n,\fa~a,\fa~b, \\
+(R(a, b) \\
+\conj~\fa~x,\fa~x',\fa~y,(x' \in x \conj R(x, y) \imp \ex~y', (y' \in y \conj R(x', y'))) \\
+\conj \fa~y,\fa~y',\fa~x, (y' \in y \conj R(x, y) \imp \ex~x'(x' \in x \conj R(x', y'))) \\
+\imp a = b) $
+
+where $R(a,b)$ is a formula of free variables $x_1, ..., x_n$. \\
+
+\textbf{Transitive Closure axiom.} $\fa~a,\ex~e, (a \subseteq e \conj \fa~x,\fa~y, (x \in y \conj y \in e \imp x \in e))$ \\
+
+The Strong Extensionality axiom can be deduced from the Foundation axiom and the Transitive Closure axiom is can be derived from Replacement Scheme.
+
+The Strong Extensionality axiom implies the Extensionality axiom\footnote{See 5.3}.
+
+\begin{figure}[h]
+\begin{tikzpicture}[>=stealth,yscale=1,xscale=1]  
+
+\draw[rounded corners=3pt] (0.5,0.5) rectangle (4,5);
+\draw[rounded corners=3pt] (0.25,0.25) rectangle (8,5.25);
+\draw[rounded corners=3pt] (0,0) rectangle (12,5.5);
+
+\node(a) at (2.25,3)[text width=3cm,text centered] {\textbf{Z} \\ Pairing \\ Union \\ Extensionality \\ Powerset \\ Comprehension \\ Infinity};
+\node(b) at (6,3)[text width=10cm,text centered] {\textbf{IZst} \\ Transitive Closure \\ Strong Extensionality};
+\node(c) at (10,3)[text width=3cm,text centered] {\textbf{ZF} \\ Replacement \\ Foundation};
+
+\end{tikzpicture}
+\caption{View of the different set theories}
+\end{figure}
 
 
 \section{The language of pointed graphs}
@@ -121,7 +174,7 @@ $\El~node \ra \El~prop$ and $\El~node \ra \El~node \ra \El~prop$, we do not need
 
 Similarly, the equality symbol is part of the standard library of \dedukti.
 
-So the signature is reduced to 26 symbols. The specific case of the comprehension symbol is treated later.
+The signature is thus reduced to 26 symbols. The specific case of the comprehension symbol is treated later.
 
 \begin{lstlisting}
 symbol eta : El graph → El node → El node → El prop;
@@ -153,23 +206,18 @@ symbol Cl : El graph → El graph;
 
 \subsection{From \textit{Deduction modulo} to \lpcm}
 
-Since the publication of \cite{zermodulo}, \lpcm has been developped as an evolution of \textit{Deduction modulo}.
+Since the publication of \cite{zermodulo}, \lpcm~ has been developped as an evolution of \textit{Deduction modulo}.
 
-More specifically, \lpcm allows to quantify on proposition.
+More specifically, \lpcm~ allows to quantify on proposition.
 
 In \dedukti, the symbol $mem$ and $rel$ are useless. Indeed, we can apply a node $x$ to class $P$ with $P~x$ and two nodes $x$ and $y$ to a relation $r$ with $r~x~y$.
 
+Similarly, the symbols $g_{x,y_1,...,y_n,P}$ and $g'_{x,x',y_1,...,y_n,P}$ are not necessary in \dedukti. These symbols were specific constructors that allows to introduce in $mem$ a proposition $P$ by convert it into a class. \\
+
+The rewriting rule $$y = z \ \lra \ \fa \ p \ (mem(y, p) \ \imp \ mem(z, p))$$ is not required as it is a $mem$ is useless in \lpcm.
+
 
 \subsection{Rewriting rules}
-
-The rewriting rule $$y = z \ \lra \ \fa \ p \ (mem(y, p) \ \imp \ mem(z, p))$$ is not required as it is a consequence of the rewriting rule of the polymorphic $=$ implemented in the stardard library of \dedukti: 
-\begin{lstlisting}
-constant symbol = [s] : El s → El s → El prop;
-notation = infix 4;
-rule π (@= $s $x $y) ↪ Π (P : El $s → El prop), π(P $x) → π(P $y);
-\end{lstlisting}
-
-+ Expliquer pourquoi on n'utilise pas les symboles g et g' \\
 
 All the other rewriting rules, except the ones involving $comp$, are easy to implement in \dedukti.
 
@@ -241,7 +289,7 @@ rule eta (Cl $a) $x $x' ↪
         ∧ (`∀ c : El (node arrow prop), 
                 ((`∀ z, eta $a z (root $a) ⇒ c z)
                 ∧ (`∀ z, `∀ z', (eta $a z z') ∧ (c z') ⇒ (c z)))
-            ⇒ c y));
+            	⇒ c y));
             
 rule root (join $a) ↪ o;
 rule root (pair $a $b) ↪ o;
@@ -333,37 +381,6 @@ $$interpretation \ \sigma \ (exF \ x \ f) \ \lra \ \ex \ a, interpretation \ (up
 $$interpretation \ \sigma \ fF \lra \blbot$$
 $$interpretation \ \sigma \ tF \lra \bltop$$
 
-\subsection{Comprehension and infinity}
-
-Henceforth, we are able to define in \dedukti
-$$comp : \El~graph \ra (\El \ nat \ \ra \ \El~graph) \  \ra \El \ formula \ra \ \El~graph$$
-
-and its rewriting rules
-
-\begin{lstlisting}
-rule eta (comp $a $σ $f) $x $x' ↪ 
-(`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) 
-∨ (`∃ y, ($x = i y) ∧ ($x' = o) ∧ (eta $a y (root $a))
-∧ (interpretation (update $σ zero (cr $a y)) $f));
-rule root (comp $a $σ $f) ↪ o;
-\end{lstlisting}
-
-When it comes to symbol related to the Infinity section of \cite{zermodulo}, we implement $empty_set$ of type $\El~graph$ and $Ind$ of type $\El~graph \ \ra \ \El~prop$.
-
-To define the empty set, we use $comp$ with the formula $fF$:
-\begin{lstlisting}
-rule empty_set ↪ comp omega (λ _, empty_set) fF;
-rule root empty_set ↪ o;
-\end{lstlisting}
-
-Then we implement
-
-\begin{lstlisting}
-rule Ind $c ↪ (empty_set ∈ $c) 
-∧ (`∀ a, (a ∈ $c) ⇒ ((join (pair a (pair a a))) ∈ $c));
-\end{lstlisting}
-
-
 \subsection{Results concerning valuation}
 
 Thanks to the introduction of $interpretation$, we can deduce five theorems. \\
@@ -375,7 +392,7 @@ $\fa \ \sigma, \fa \ x, y, z, \fa \ a, [(eqNP \ x \ y) \ \imp \ (((update1 \ \si
 \end{theorem}
 
 \begin{proof}
-The first term of the conjonction is proved by simple recurrence over natural numbers. The second term of the conjonction is proved by double recurrence.
+The first term of the conjonction is proved by simple recurrence over natural numbers. The second term of the conjonction is proved by double recurrence. $\square$
 \end{proof}
 
 The second theorem conveys the idea that if two graphs are bisimilar then it is identical to update a valuation by either of theses two graphs.
@@ -399,47 +416,187 @@ $\fa \ f, \fa \ \sigma, \sigma', (interpretation \ \sigma \ f) \ \conj \ (\fa x,
 \end{theorem}
 
 \begin{proof}
-The fifth theorem is proved by induction over formulas.
+The fifth theorem is proved by induction over formulas. $\square$
 \end{proof}
+
+\subsection{Comprehension and infinity}
+
+Henceforth, we are able to define in \dedukti
+$$comp : \El~graph \ra (\El \ nat \ \ra \ \El~graph) \  \ra \El \ formula \ra \ \El~graph$$
+
+and its rewriting rules
+
+\begin{lstlisting}
+rule eta (comp $a $σ $f) $x $x' ↪ 
+(`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) 
+∨ (`∃ y, ($x = i y) ∧ ($x' = o) ∧ (eta $a y (root $a))
+∧ (interpretation (update $σ zero (cr $a y)) $f));
+rule root (comp $a $σ $f) ↪ o;
+\end{lstlisting}
+
+When it comes to symbol related to the Infinity section of \cite{zermodulo}, we implement $empty\_set$ of type $\El~graph$ and $Ind$ of type $\El~graph \ \ra \ \El~prop$.
+
+To define the empty set, we use $comp$ with the formula $fF$:
+\begin{lstlisting}
+rule empty_set ↪ comp omega (λ _, empty_set) fF;
+rule root empty_set ↪ o;
+\end{lstlisting}
+
+Then we implement
+
+\begin{lstlisting}
+rule Ind $c ↪ (empty_set ∈ $c) 
+∧ (`∀ a, (a ∈ $c) ⇒ ((join (pair a (pair a a))) ∈ $c));
+\end{lstlisting}
+
 
 \section{Lemmas}
 
 The first lemma $x=x$ does not need to be implemented since it is already part of the standard library of \dedukti \ under the name $refl$ (which is polymorphic).
 
+The second lemma is already a consequence of the rewriting rule of the polymorphic $=$ implemented in the stardard library of \dedukti: 
+\begin{lstlisting}
+constant symbol = [s] : El s → El s → El prop;
+notation = infix 4;
+rule π (@= $s $x $y) ↪ Π (P : El $s → El prop), π(P $x) → π(P $y);
+\end{lstlisting}
 
-\subsection{Useful mechanisms}
+All the other lemmas of IZmod except the ones where $comp$ is involved are proved using the blueprint in \cite{zermodulo53}. The complete proofs can be found in \url{https://github.com/ttraversie/zf/tree/main/theoriezf}.
 
-All the other lemmas except the ones where $comp$ is involved are proved using the blueprint in \cite{zermodulo53}. The complete proofs can be found in \url{https://github.com/ttraversie/zf/tree/main/theoriezf}.
+\subsection{An example of proof}
 
-\subsection{Some interesting proofs}
+To show the way lemmas are proved in \dedukti ~we will take the example of lemma 30 and comment its proof. This lemma states that $$ a \in b \conj a \simeq c \imp c \in b $$
 
-Lemma32 + utilisation du lemma32
+\begin{proof}
+We first assume graphs $a$, $b$ and $c$ and $H$ the proof of $ a \in b \conj a \simeq c $. $a \in b$ rewrites to $\ex x~(x~\eta_b~root~b \conj a \simeq (b/x))$. 
+
+We make appear $x$ and $Hx$ the proof $x~\eta_b~root~b \conj a \simeq (b/x)$. 
+
+As the goal is to prove $c \in b$, that is to say $\ex y~(y~\eta_b~root~b \conj c \simeq (b/y))$, we need to find a suitable $y$. We take $x$ and now have two goals: $y~\eta_b~root~b$ and $c \simeq (b/y)$. 
+
+The first one is proved by applying the left part of $Hx$. 
+
+The second one is obtained by applying lemma 5 to $c$, $a$ and $b/x$. To apply lemma 5, we need to prove $c \simeq a \imp a \simeq b/x$. $c \simeq a$ is proved applying reflexivity to $a \simeq c$ (i.e. applying lemma 4 to $a$, $c$ and the right part of $H$). $a \simeq b/x$ derives from the right part of $Hx$. $\square$
+\end{proof}
+
+This proof is written in \dedukti thanks to the following code: 
+
+\begin{lstlisting}
+opaque symbol lemma30 : π(`∀ a, `∀ b, `∀ c, 
+	((a ∈ b) ∧ (a simeq c)) ⇒ (c ∈ b))
+≔ begin
+assume a b c H;
+refine ExElim node _ (and_eg _ _ H) _ _;
+assume x Hx;
+refine ExIntro node x _ _;
+refine and_i _ _ _ _
+{refine and_eg _ _ Hx}
+{refine lemma5 c a (cr b x) 
+	(and_i _ _ (lemma4 a c (and_ed _ _ H)) (and_ed _ _ Hx))}
+end;
+\end{lstlisting}
+
+\subsection{Lemmas involving formulas}
+
+Now that the language of formulas have been designed along with the implementation of the $comp$ symbol, lemma 32 can be implemented.
+
+$$(P(z \leftarrow a) \conj a \simeq b) \imp P(z \leftarrow b)$$
+
+We implement it thanks to the $interpretation$ symbol. The valuation $update~\sigma~z~a)$ represents the assignement of variable $z \leftarrow a$.
+
+\begin{lstlisting}
+opaque symbol lemma32 : Π (z : El nat), Π (f : El formula), 
+π(`∀ a, `∀ b, (`∀ σ : (El nat → El graph),
+((interpretation (update σ z a) f) ∧ (a simeq b)) 
+⇒ (interpretation (update σ z b) f)))
+\end{lstlisting}
+
+The proof of this $opaque~symbol$ is done by induction over formulas: each case is proved easily, using the lemmas that have already been checked by \dedukti. \\
+
+Lemma 41 is implemented similarly:
+
+\begin{lstlisting}
+opaque symbol lemma41 : Π (x y : El nat), Π (f : El formula), 
+Π (c d : El graph), π(`∀ σ : (El nat → El graph), 
+((interpretation (update (update σ x c) y d) f)
+∧ (`∀ a, `∀ a', `∀ b, 
+	((a' ∈ a) 
+	∧ (interpretation (update (update σ x a) y b) f)) 
+	⇒ (`∃ b', ((b' ∈ b) 
+		∧ (interpretation (update (update σ x a') y b') f))))
+∧ (`∀ b, `∀ b', `∀ a, 
+	((b' ∈ b) 
+	∧ (interpretation (update (update σ x a) y b) f)) 
+	⇒ (`∃ a', ((a' ∈ a) 
+		∧ (interpretation (update (update σ x a') y b') f))))) 
+⇒ (c simeq d))
+\end{lstlisting}
 
 \subsection{Weak extensionnality}
 
-We notice in \cite{zermodulo53} the use of \textit{weak extensionality} to prove lemmas 44, 47 and 48. We want to deduce \textit{weak extensionality} from \textit{strong extensionality} (i.e. lemma 41).
+We notice in \cite{zermodulo53} the use of weak extensionality (or simply extensionality) to prove lemmas 44, 47 and 48. We want to deduce weak extensionality from strong extensionality (i.e. lemma 41). \\
 
-To do this, we need to prove the following intermediary lemma:
+\textbf{Weak extensionality.} $\fa~c,\fa~d, (\fa~z, (z \in c \Leftrightarrow z \in d) \imp c \simeq d)$ \\
+
+We follow the blueprint given by G. Dowek and A. Miquel \cite{zermodulo} : we use the strong extensionality axiom where $R(x,y)$ is $(x \simeq c~\conj~y \simeq d)~\disj~x \simeq y$. \\
+
+\begin{proof}
+We want to prove that $\fa~c,\fa~d, (\fa~z, (z \in c \Leftrightarrow z \in d) \imp c \simeq d)$. We assume that $\fa~z, (z \in c \Leftrightarrow z \in d)$. We want to apply strong extensionality to deduce $c \simeq d$. To do so, we need to prove the three terms of the hypothesis of strong extensionality.
+
+$(c \simeq c~\conj~d \simeq d)~\disj~c \simeq d$ is a tautology.
+
+We want to prove that $\fa~a,\fa~a',\fa~b, (a' \in a~\conj~((a \simeq c~\conj~b \simeq d)~\disj~a \simeq b) \imp (\ex~b', (b' \in b~\conj~((a' \simeq c~\conj~b' \simeq d)~\disj~a' \simeq b'))$. We assume $(a' \in a~\conj~((a \simeq c~\conj~b \simeq d)~\disj~a \simeq b)$. If $(a \simeq c~\conj~b \simeq d)$, then we choose $b' \simeq a'$. We have $b' \in a$ because $a' \in a$. Yet, $a \simeq c$, $c \simeq d$ and $d \simeq b$. Then $b' \in b$. If $a \simeq b$, we choose $b' \simeq a'$. We have $b' \in a$ because $a' \in a$. Yet, $a \simeq b$. Thus $b' \in b$.
+
+We procede similarly for the third term. $\square$
+\end{proof}
+
+We impelement this theorem in \dedukti:
 
 \begin{lstlisting}
-opaque symbol lemmaHypExt : Π (c d : Graph), π((`∀ z, (z ∈ c) ⇔ (z ∈ d)) ⇒ ((((c simeq c) ∧ (d simeq d)) ∨ (c simeq d))
-∧ (`∀ a, `∀ a', `∀ b, ((a' ∈ a) ∧ (((a simeq c) ∧ (b simeq d)) ∨ (a simeq b))) ⇒ (`∃ b', ((b' ∈ b) ∧ (((a' simeq c) ∧ (b' simeq d)) ∨ (a' simeq b')))))
-∧ (`∀ b, `∀ b', `∀ a, ((b' ∈ b) ∧ (((a simeq c) ∧ (b simeq d)) ∨ (a simeq b))) ⇒ (`∃ a', ((a' ∈ a) ∧ (((a' simeq c) ∧ (b' simeq d)) ∨ (a' simeq b')))))))
+opaque symbol lemmaHypExt : Π (c d : Graph), 
+π((`∀ z, (z ∈ c) ⇔ (z ∈ d)) ⇒ 
+((((c simeq c) ∧ (d simeq d)) ∨ (c simeq d))
+∧ (`∀ a, `∀ a', `∀ b, 
+	((a' ∈ a) ∧ (((a simeq c) ∧ (b simeq d)) ∨ (a simeq b))) 
+	⇒ (`∃ b', ((b' ∈ b) 
+	∧ (((a' simeq c) ∧ (b' simeq d)) ∨ (a' simeq b')))))
+∧ (`∀ b, `∀ b', `∀ a, 
+	((b' ∈ b) ∧ (((a simeq c) ∧ (b simeq d)) ∨ (a simeq b)))
+	 ⇒ (`∃ a', ((a' ∈ a) 
+	 ∧ (((a' simeq c) ∧ (b' simeq d)) ∨ (a' simeq b')))))))
 \end{lstlisting}
 
-We thus can prove $weak \ extensionality$ thanks to:
+To prove $weak \ extensionality$, we assume graphs $c$ and $d$, and $H$ the hypothesis $\fa~z, (z \in c) \Leftrightarrow (z \in d)$. Then we apply lemma41 to:
+
+\begin{itemize}
+\item nats $zero$ and $one$
+\item the formula $(orF~(andF~(eqF~zero~two)~(eqF~one~three))~(eqF~zero~one))$
+\item graphs $c$ and $d$
+\item the valuation $(update~(update~(\lambda \_, empty\_set)~two~c)~three~d)$ 
+\item the proof of the left hand term $lemmaHypExt~c~d~H$.
+\end{itemize}
+
+Indeed, in the formula $$(orF~(andF~(eqF~zero~two)~(eqF~one~three))~(eqF~zero~one))$$ $zero$ and $one$ will be interpreted by $c$ and $d$ thanks to lemma41 and $two$ will be interpreted by $c$ and $three$ by $d$ thanks the valuation $$(update~(update~(\lambda \_, empty\_set)~two~c)~three~d)$$ The proposition obtained corresponds to the proposition in lemmaHypExt.
+
 
 \begin{lstlisting}
 opaque symbol lemmaExt : Π (c d : Graph), π((`∀ x, (x ∈ c) ⇔ (x ∈ d)) ⇒ (c simeq d))
 ≔ begin
 assume c d H;
-refine lemma41 zero one (orF (andF (eqF zero two) (eqF one three)) (eqF zero one)) c d (update (update (λ _, empty_set) two c) three d) (lemmaHypExt c d H);
+refine lemma41 zero one 
+		(orF (andF (eqF zero two) (eqF one three)) (eqF zero one)) 
+		c d 
+		(update (update (λ _, empty_set) two c) three d) 
+		(lemmaHypExt c d H);
 end;
 \end{lstlisting}
 
 \section{Conclusion}
 
-Schema pour représenter Z, Zmod et ZF ?
+We have implemented in \dedukti ~a version of set theory -- IZst -- that respects normalization properties. IZst set theory correponds to Zermelo set theory, with Strong Extensionality axiom and Transitive Closure axiom. To do so, we have adapted the work by A. Miquel and G. Dowek \cite{zermodulo} from \textit{Deduction modulo} to \lpcm. We have \textit{formally} written all the proofs of the lemmas allowing us to implement set theory in \dedukti.
+
+
+To define and prove the lemmas corresponding to Comprehension axiom, we have developped a language of formulas, along with operators \textit{interpretation} and \textit{update}. In particular, the language of formulas allows us to prove that Weak Extensionality axiom derives from Strong Extensionality axiom.
 
 \begin{center}
 \begin{tabular}{|c|c||c|c|}
@@ -459,17 +616,17 @@ Schema pour représenter Z, Zmod et ZF ?
 \hline 15 & ? & 41 & ? \\
 \hline 16 & ? & 42 & ? \\
 \hline 17 & ? & 43 & ? \\
-\hline 18 & ? & 44 & ? \\
-\hline 19 & ? & 45 & ? \\
-\hline 20 & ? & 46 & ? \\
-\hline 21 & ? & 47 & ? \\
-\hline 22 & ? & 48 & ? \\
-\hline 23 & ? & 49 & ? \\
-\hline 24 & ? & 50 & ? \\
-\hline 25 & ? & 51 & ? \\
-\hline 26 & ? & 52 & ? \\
-\hline 27 & ? & 53 & ? \\
-\hline 28 & ? & Weak extensionality & ? \\
+\hline 18 & ? & Weak extensionality & ? \\
+\hline 19 & ? & 44 & ? \\
+\hline 20 & ? & 45 & ? \\
+\hline 21 & ? & 46 & ? \\
+\hline 22 & ? & 47 & ? \\
+\hline 23 & ? & 48 & ? \\
+\hline 24 & ? & 49 & ? \\
+\hline 25 & ? & 50 & ? \\
+\hline 26 & ? & 51 & ? \\
+\hline 27 & ? & 52 & ? \\
+\hline 28 & ? & 53 & ? \\
 \hline
 \end{tabular}
 \end{center}
