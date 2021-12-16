@@ -45,14 +45,14 @@ refine lemma4 a b (and_ed _ _ Himp)}
 {assume f Hf x a b σ Hall c;
 refine lemmaInt f (update (update σ z a) x c) (update (update σ z b) x c) (and_i _ _ _ _)
 {refine (and_eg _ _ Hall) c}
-{refine (lemmaUp2 σ z x a b c) (and_ed _ _ Hall)}}
+{refine (lemmaUp3 σ z x a b c) (and_ed _ _ Hall)}}
 {assume f Hf x a b σ Hex;
 refine ExElim graph _ (and_eg _ _ Hex) _ _;
 assume c Hc;
 refine ExIntro graph c _ _;
 refine lemmaInt f (update (update σ z a) x c) (update (update σ z b) x c) (and_i _ _ _ _)
 {refine Hc}
-{refine (lemmaUp2 σ z x a b c) (and_ed _ _ Hex)}}
+{refine (lemmaUp3 σ z x a b c) (and_ed _ _ Hex)}}
 {assume a b σ H;
 refine and_eg _ _ H}
 {assume a b σ H;

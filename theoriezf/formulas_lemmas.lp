@@ -49,7 +49,7 @@ refine Hxy (λ z, eqNP (s x) (s z)) _;
 refine lemmaNP (s x)}}
 end;
 
-opaque symbol axiom1 : Π (σ : El nat → El graph), Π (x y z: El nat), Π (a : El graph), π(((eqNP x y) ⇒ (((update1 σ x a) y z) simeq a)) ∧ (¬(eqNP x y) ⇒ (((update1 σ x a) y z) simeq (σ z))))
+opaque symbol lemmaUp1 : Π (σ : El nat → El graph), Π (x y z: El nat), Π (a : El graph), π(((eqNP x y) ⇒ (((update1 σ x a) y z) simeq a)) ∧ (¬(eqNP x y) ⇒ (((update1 σ x a) y z) simeq (σ z))))
 ≔ begin
 assume σ x y z a;
 refine and_i _ _ _ _
@@ -74,30 +74,30 @@ refine or_e _ _ _ (eqNPor x y) _ _
 refine lemma5 (update σ x a y) b (update σ x b y) (and_i _ _ _ _)
 {refine lemma5 (update σ x a y) a b (and_i _ _ _ Hab);
 simplify update;
-refine (and_eg _ _ (axiom1 σ x y y a)) H1}
-{refine lemma4 (update σ x b y) b ((and_eg _ _ (axiom1 σ x y y b)) H1)}}
+refine (and_eg _ _ (lemmaUp1 σ x y y a)) H1}
+{refine lemma4 (update σ x b y) b ((and_eg _ _ (lemmaUp1 σ x y y b)) H1)}}
 {assume H0;
 refine lemma5 (update σ x a y) (σ y) (update σ x b y) (and_i _ _ _ _)
-{refine (and_ed _ _ (axiom1 σ x y y a)) H0}
-{refine lemma4 (update σ x b y) (σ y) ((and_ed _ _ (axiom1 σ x y y b)) H0)}}
+{refine (and_ed _ _ (lemmaUp1 σ x y y a)) H0}
+{refine lemma4 (update σ x b y) (σ y) ((and_ed _ _ (lemmaUp1 σ x y y b)) H0)}}
 end;
 
-opaque symbol lemmaUp2 : Π (σ : El nat → El graph), Π (x y : El nat), Π (a b c : El graph), π((a simeq b) ⇒ (`∀ z, (update (update σ x a) y c z) simeq (update (update σ x b) y c z)))
+opaque symbol lemmaUp3 : Π (σ : El nat → El graph), Π (x y : El nat), Π (a b c : El graph), π((a simeq b) ⇒ (`∀ z, (update (update σ x a) y c z) simeq (update (update σ x b) y c z)))
 ≔ begin
 assume σ x y a b c Hab z;
 refine or_e _ _ _ (eqNPor y z) _ _
 {assume H1;
 refine lemma5 (update (update σ x a) y c z) c (update (update σ x b) y c z) (and_i _ _ _ _)
 {simplify update;
-refine (and_eg _ _ (axiom1 (update σ x a) y z z c)) H1}
-{refine lemma4 (update (update σ x b) y c z) c ((and_eg _ _ (axiom1 (update σ x b) y z z c)) H1)}}
+refine (and_eg _ _ (lemmaUp1 (update σ x a) y z z c)) H1}
+{refine lemma4 (update (update σ x b) y c z) c ((and_eg _ _ (lemmaUp1 (update σ x b) y z z c)) H1)}}
 {assume H0;
 refine lemma5 (update (update σ x a) y c z) (update σ x a z ) (update (update σ x b) y c z) (and_i _ _ _ _)
 {simplify update;
-refine (and_ed _ _ (axiom1 (update σ x a) y z z c)) H0}
+refine (and_ed _ _ (lemmaUp1 (update σ x a) y z z c)) H0}
 {refine lemma5 (update σ x a z) (update σ x b z) (update (update σ x b) y c z) (and_i _ _ _ _)
 {refine lemmaUp σ x a b Hab z}
-{refine lemma4 (update (update σ x b) y c z) (update σ x b z) ((and_ed _ _ (axiom1 (update σ x b) y z z c)) H0)}}}
+{refine lemma4 (update (update σ x b) y c z) (update σ x b z) ((and_ed _ _ (lemmaUp1 (update σ x b) y z z c)) H0)}}}
 end;
 
 opaque symbol lemmaVal : Π (σ σ' : El nat → El graph), Π (x : El nat), Π (c : El graph), π ((`∀ y, σ y simeq σ' y) ⇒ (`∀ z, (update σ x c z) simeq (update σ' x c z)))
@@ -109,16 +109,16 @@ refine imp_i (eqNP z x) _ _ _
 {assume H';
 refine H' (λ w, (update1 σ w c z z) simeq (update1 σ' w c z z)) _;
 refine lemma5 (update1 σ z c z z) c (update1 σ' z c z z) (and_i _ _ _ _)
-{refine (and_eg _ _ (axiom1 σ z z z c)) (lemmaNP z)}
-{refine lemma4 (update1 σ' z c z z) c ((and_eg _ _ (axiom1 σ' z z z c)) (lemmaNP z))}}
+{refine (and_eg _ _ (lemmaUp1 σ z z z c)) (lemmaNP z)}
+{refine lemma4 (update1 σ' z c z z) c ((and_eg _ _ (lemmaUp1 σ' z z z c)) (lemmaNP z))}}
 {refine lemmaSymNP x z H1}}
 {assume H0;
 simplify update;
 refine lemma5 (update1 σ x c z z) (σ z) (update1 σ' x c z z) (and_i _ _ _ _)
-{refine (and_ed _ _ (axiom1 σ x z z c)) H0}
+{refine (and_ed _ _ (lemmaUp1 σ x z z c)) H0}
 {refine lemma5 (σ z) (σ' z) (update1 σ' x c z z) (and_i _ _ _ _)
 {refine H z}
-{refine lemma4 (update1 σ' x c z z) (σ' z) ((and_ed _ _ (axiom1 σ' x z z c)) H0)}}}
+{refine lemma4 (update1 σ' x c z z) (σ' z) ((and_ed _ _ (lemmaUp1 σ' x z z c)) H0)}}}
 end;
 
 opaque symbol lemmaInt : Π (f : El formula), π(`∀ σ : (El nat → El graph), `∀ σ' : (El nat → El graph), ((interpretation σ f) ∧ (`∀ x, (σ x) simeq (σ' x))) ⇒ (interpretation σ' f))
