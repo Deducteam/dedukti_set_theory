@@ -27,24 +27,30 @@
 \maketitle
 
 \begin{abstract}
-We show how to implement a version of set theory in \dedukti ~in such a way that it respects normalization. To do so, we adapt in $\lambda \Pi$\textit{--calculus modulo theory} the guideline given in \textit{Deduction modulo} by G. Dowek and A. Miquel --using a theory of pointed graphs-- and we \textit{formally} write the proofs in \dedukti. To achieve this goal, we develop a language of formulas.
+We show how to implement a version of set theory in \dedukti ~in such a way that it respects normalization. To do so, we adapt in $\lambda \Pi$\textit{--calculus modulo theory} the guideline given in \textit{Deduction modulo theory} by G. Dowek and A. Miquel --using a theory of pointed graphs-- and we \textit{formally} write the proofs in \dedukti. To achieve this goal, we develop a language of formulas.
 \end{abstract}
 
 \section{Introduction}
 
-\dedukti \ is a logical framework based upon the language \lpcm, which was created to overcome the lack of interoperability between proof assistants. As it is a logical framework, we can implement theories in \dedukti. Especially, set theory is interesting beacause it will enable traductions from and towards proof assistants using set theory, such as \textsc{Isabelle/ZF}.
+Several prover are based on set theory, such as \textsc{Mizar}, \textsc{Atelier B} and \textsc{Isabelle/ZF}. The goal of this paper is to present an implementation of set theory in the logical framework \dedukti ~\cite{expressing} expressed in the \lpcm. We use here one of \dedukti's implementation, called \textsc{Lambdapi}. Our long term project is to use this implementation to enable interoperability between such provers based on set theory. 
 
-A previous work by G. Dowek and A. Miquel \cite{zermodulo} has demonstrated the implemtation of set theory in \textit{Deduction modulo} thaks to a structure of \textit{pointed graphs}. Since the writing of \cite{zermodulo}, \lpcm \ has been created as an improvement of \textit{Deduction modulo}. We adapt the implementation to the \lpcm \ and then implement it in \dedukti. 
+The first way to implement the set theory in \dedukti ~is to state each axiom in the framework. But such a method does not yield a cut-elimination theorem for the set theory. In particular, it does not enable to extract witnesses from a constructive existence proof. An alternative is to orient these axioms as rewriting rules. For instance, $$x \in \mathcal{P}(y) \Leftrightarrow x \subseteq y$$ is replaced with $$x \in \mathcal{P}(y) \lra x \subseteq y$$
+
+However, as pointed out by M. Crabbé \cite{crabbé}, such a formulation of set theory does not have a cut-elimination property. An other solution is to define sets as \textit{pointed graphs}. With such a formulation, we can prove a cut-elimination theorem: for every proof in natural deduction that contains cuts there exists a cut-free proof. Such a theory expressed in \textit{Dedution modulo theory} is presented in \cite{zermodulo} with pencil and paper proofs. The goal of this paper is to present an implementation of this theory.
+
+In 2007, the \lpcm ~had not been defined and this is why the original theory was defined in \textit{Dedution modulo theory}. The first issue was to adapt the expression in \textit{Dedution modulo theory} to the expression in \lpcm. This led to simplify the original formulation as classes of nodes of pointed graphs and relations on nodes can be naturaly expressed in \dedukti ~while that required a specific sort and specific comprehension axiom in \textit{Dedution modulo theory}. This enabled to reduce the size of the signature from 31 symbols to 26.
+
+On the other hand, in the original formulation of the theory some lemmas were only valid for a specific subset of propositions. These lemmas were proved by induction over the structure of the propositions of this subset. Implementing these lemmas in \dedukti ~required to define a new inductive sort for the formulas of this subset and an intepretation of these formulas into the general type of  propositions, itself defined with rewriting rules. This development is the first, to our knowledge, to use such a reflexion principle defined with rewriting rules in \dedukti. The generality of this method still remains to be investigated.
 
 \section{The theory of pointed graphs}
 
-To implement set theory in \dedukti, the first idea is to translate the axioms of the theory into rewriting rules. However, as pointed out by M. Crabbé \cite{crabbé}, such implementation does not guarantee normalization. That is why G. Dowek and A. Miquel \cite{zermodulo} introduced a structure of pointed graphs to encode set theory. This set theory with pointed graphs -- called IZmod -- respects normalization.
+The set theory with pointed graphs developped by G. Dowek and A. Miquel is called IZmod (Intuitionistic Zermelo set theory in \textit{Deduction modulo}). We give here an informal presentation of the ideas developped in \cite{zermodulo}.
 
 \subsection{Sets as pointed graphs}
 
 \label{informal}
 
-In the IZmod theory \cite[see][Section 3.1]{zermodulo}, sets are reprented by pointed graphs. A pointed graph is a direct graph whose one of its node is identified as the root. 
+In the IZmod theory, sets are reprented by pointed graphs. A pointed graph is a direct graph whose one of its node is identified as the root. 
 
 \begin{figure}[h]
 \centering
@@ -99,18 +105,18 @@ In the IZmod theory \cite[see][Section 3.1]{zermodulo}, sets are reprented by po
 
 We have represented several pointed graphs where the root is indicated by the filled circle. We see that the location of the root is important as it changes the set represented by the pointed graph. In the third graph, the node $b$ has no effect because the root is $c$. \\
 
-The operator $root$ gives the root of a pointed graph. $a/x$ replace the root of $a$ by $x$. $x~\eta_a~y$ means there is a edge in $a$ from $y$ to $x$. $rel(x,y,r)$ means that the nodes $x$ and $y$ are related by the relation $r$. We have the following rewriting rules:
+The operator $root$ gives the root of a pointed graph. $a/x$ replace the root of $a$ by $x$. $x~\eta_a~y$ means there is a edge in $a$ from $y$ to $x$. The notation $rel(x,y,r)$ means that the nodes $x$ and $y$ are related by the relation $r$. We have the following rewriting rules:
 $$ x \ \eta_{a/z} \ y \longrightarrow x \ \eta_a \ y $$
-$$ \text{root}(a/x) \longrightarrow x $$
+$$ root(a/x) \longrightarrow x $$
 $$ (a/x)/y \longrightarrow a/y $$
 
-We see in the examples that some different pointed graphs can represent the same set. To characterized this, G. Dowek and A. Miquel introduce bisimilarity between graphs, noted $\simeq$, and with rewriting rule 
+We see in the examples that some different pointed graphs can represent the same set. To characterized this, a notion of  bisimilarity, noted $\simeq$, is introduced between graphs with rewriting rule 
 
 \begin{equation*}
 \begin{split}
-a \simeq b \lra~ &\ex~r~(rel(root(a),root(b),r) \\
-&\conj \ \fa x \fa x'~\fa y~(x'~\eta_a~x~\conj~rel(x, y, r)~\imp~\ex~y'~(y'~\eta_b~y~\conj~rel(x', y', r))) \\
-&\conj \ \fa y \fa y'~\fa x~(y'~\eta_b~y~\conj~rel(x, y, r)~\imp~\ex~x'~(x'~\eta_a~x~\conj~rel(x', y', r))))
+a \simeq b \lra~ &\ex~r~root(a)~root(b) \\
+&\conj \ \fa x \fa x'~\fa y~(x'~\eta_a~x~\conj~r~x~y~\imp~\ex~y'~(y'~\eta_b~y~\conj~r~x'~y')) \\
+&\conj \ \fa y \fa y'~\fa x~(y'~\eta_b~y~\conj~r~x~y~\imp~\ex~x'~(x'~\eta_a~x~\conj~r~x'~y')))
 \end{split}
 \end{equation*}
 
@@ -134,39 +140,37 @@ a \simeq b \lra~ &\ex~r~(rel(root(a),root(b),r) \\
 \end{tikzpicture}
 \end{figure}
 
-In set theory, there only exists one sort: the sets. In the IZmod theory, there exists two sorts: nodes and pointed graphs. Therefore, there are in IZmod two constructions related to the inclusion of sets. We can take the example of $\emptyset \in \{\emptyset\}$. We can represents this inclusion by two different ways.
+In set theory, there only exists one sort: the sets. In the IZmod theory, there exists two sorts: nodes and pointed graphs. Therefore, there are in IZmod two constructions related to the inclusion of sets. We can take the example of $\emptyset \in \{\emptyset\}$. We can represents this inclusion by two different ways, one between pointed graphs and the other between nodes within a pointed graph.
 
 \begin{figure}[h]
 \centering
 \begin{tikzpicture}[>=stealth,yscale=1.8,xscale=1.4]  
 
-\node(a) at (3,2.75)[circle,draw,text centered,fill=gray] {h};
-\node(k) at (3.5,2.75)[text centered]{$\in$};
-\node(b) at (4,3)[circle,draw,text centered,fill=gray] {i};
-\node(c) at (4,2.5)[circle,draw,text centered] {j};
 \node(d) at (6,3)[circle,draw,text centered] {k};
-\node(e) at (6,2.5)[circle,draw,text centered] {$\ell$};
+\node(e) at (6,2.5)[circle,draw,text centered,fill=gray] {$\ell$};
+\node(k) at (6.5,2.75)[text centered]{$\in$};
+\node(f) at (7,3)[circle,draw,text centered,fill=gray] {k};
+\node(g) at (7,2.5)[circle,draw,text centered] {$\ell$};
                       
-\draw[->] (b) -- (c); 
 \draw[->] (d) -- (e);
+\draw[->] (f) -- (g);
 
 \end{tikzpicture}
 \end{figure}
 
-Into a pointed graphs, inclusion is represented by the constructor $\eta$. Indeed, there exists an edge from $k$ to $\ell$, which means that the pointed graph with root $i$ is included in the pointed graph with root $h$. 
+When in a graph we have an edge from $k$ to $\ell$, the pointed graph with the root $\ell$ represents a set which is an element of the set represented by the pointed graph with root $k$. But any pointed graph bisimilar with pointed graph with root $\ell$ also represents a set that is an element of the set represented with the pointed graph with root $k$. This leads to the definition of membership noted $\in$, with rewriting rule $a \in b \lra \ex~x~(x~\eta_b~root(b)~\conj~a \simeq (b/x))$. \\
 
-Between two pointed graphs, inclusion is represented by a new constructor noted $\in$, with rewriting rule $a \in b \lra \ex~x~(x~\eta_b~root(b)~\conj~a \simeq (b/x))$. \\
+The objective is to composed pointed graphs, for instance to join pointed graphs. The root of the new pointed graph is $o$. To guarantee that $o$ is not a node of one of the original pointed graphs, an injective function $i$ is introduced, with $i'$ its left inverse and $I$ the predicate of its image. 
 
-The objective is to composed pointed graphs, for instance to join pointed graphs. The root of the new pointed graph is $o$. To guarantee that $o$ is not a node of one of the original pointed graphs, an injective function $i$ is introduced, such as its left inverse $i'$ and its image $I$. 
 $$i'(i(x)) \lra x$$
-$$ I(x) \lra \top $$
-$$ I(o) \lra \bot $$
+$$I(x) \lra \top$$
+$$I(o) \lra \bot$$
 
 The same method is applied to constructors $pair$, $powerset$, $etc$.
 
 \subsection{Set theories}
 
-Many definitions of the set theory intervines. The two classical set theories are Zermelo (Z) and Zermelo-Fraenkel (ZF). The set theory defined in \textit{Deduction modulo} by G. Dowek and A. Miquel \cite[see][Section 2]{zermodulo} --called IZst-- is stronger than Zermelo set theory but weaker than Zermelo-Fraenkel set thery. Indeed, the IZst theory contains Zermelo set theory, the Strong Extensionality axiom and the Transitive Closure axiom. \\
+These pointed graphs permit to prove the axioms of a theory IZst that lies between Zermelo (Z) and Zermelo-Fraenkel (ZF). This theory does not contain the Replacement scheme but it contains two additional axioms: the Strong Extensionality axiom and the Transitive Closure axiom. \\
 
 \textbf{Strong Extensionality axiom.} 
 \begin{equation*}
@@ -180,7 +184,7 @@ Many definitions of the set theory intervines. The two classical set theories ar
 
 where $R(a,b)$ is a formula of free variables $x_1, ..., x_n$. \\
 
-The hypothesis of the Strong Extensionality axiom imitates the structure of the rewriting rule of $\eta$. This can be explained with the following reasoning: in the Extensionality axiom, the hypothesis states that two sets have the same elements, so the hypothesis of the strong extensionality axiom copy the structure of one of the equivalent to the inclusion in IZmod --that is to say the constructor $eta$. \\
+The hypothesis of the Strong Extensionality axiom imitates the structure of the rewriting rule of $\eta$. This can be explained with the following reasoning: in the Extensionality axiom, the hypothesis states that two sets have the same elements, so the hypothesis of the strong extensionality axiom copy the structure of one of the equivalent to the inclusion in IZmod --that is to say the constructor $\eta$. \\
 
 \textbf{Transitive Closure axiom.} $\fa~a,\ex~e, (a \subseteq e \conj \fa~x,\fa~y, (x \in y \conj y \in e \imp x \in e))$ \\
 
@@ -188,7 +192,7 @@ The Transitive Closure axiom conveys the idea that every set is included in a tr
 
 The Strong Extensionality axiom can be deduced from the Foundation axiom and the Transitive Closure axiom is can be derived from Replacement Scheme.
 
-The Strong Extensionality axiom implies the Extensionality axiom\footnote{See \ref{extensionality}}.
+The Strong Extensionality axiom implies the Extensionality axiom\footnote{See Section \ref{extensionality}}.
 
 The IZmod theory is an extension of IZst set theory with an encoding of pointed graphs.
 
@@ -200,9 +204,9 @@ The IZmod theory is an extension of IZst set theory with an encoding of pointed 
 \draw[rounded corners=3pt] (0.25,0.25) rectangle (8,5.25);
 \draw[rounded corners=3pt] (0,0) rectangle (12,5.5);
 
-\node(a) at (2.25,3)[text width=3cm,text centered] {\textbf{Z} \\ Pairing \\ Union \\ Extensionality \\ Powerset \\ Comprehension \\ Infinity};
-\node(b) at (6,3)[text width=10cm,text centered] {\textbf{IZst} \\ Transitive Closure \\ Strong Extensionality};
-\node(c) at (10,3)[text width=3cm,text centered] {\textbf{ZF} \\ Replacement \\ Foundation};
+\node(a) at (2.25,3)[text width=3cm,text centered] {\underline{\textbf{Z}} \\ Pairing \\ Union \\ Extensionality \\ Powerset \\ Comprehension \\ Infinity};
+\node(b) at (6,3)[text width=10cm,text centered] {\underline{\textbf{IZst}} \\ Transitive Closure \\ Strong Extensionality};
+\node(c) at (10,3)[text width=3cm,text centered] {\underline{\textbf{ZF}} \\ Replacement \\ Foundation};
 
 \end{tikzpicture}
 \caption{View of the different set theories}
@@ -276,20 +280,18 @@ symbol omega : El graph;
 symbol Cl : El graph → El graph;
 \end{lstlisting}
 
-\subsection{From \textit{Deduction modulo} to \lpcm}
+\subsection{From \textit{Deduction modulo theory} to \lpcm}
 
-Since the publication of \cite{zermodulo}, \lpcm ~has been developped as an evolution of \textit{Deduction modulo}. More specifically, \lpcm ~allows to quantify on proposition. In that respect, the schemes of axioms have been replaced by axioms, as henceforth we do not need to write one axiom for each proposition. \\
+Unlike the \textit{Dedution modulo theory}, the \lpcm ~allows quantification over propositions. \\
 
-In \dedukti, the symbol $mem$ and $rel$ \cite[see][Table 2]{zermodulo} are useless. Indeed, we can apply a node $x$ to class $P$ with $P~x$ and two nodes $x$ and $y$ to a relation $r$ with $r~x~y$.
+Thus the symbols $mem$ and $rel$ \cite[see][Table 2]{zermodulo} are not needed anymore. Indeed, a class of nodes can simply be expressed as a term $P$ of type $El~n \ra El~prop$, and the fact that a node $x$ is an element of this class can be expressed as $P~x$ and not as $mem(x,P)$. In a similar way, the fact that two nodes $x$ and $y$ are related by a relation $r$ is expressed with $r~x~y$.
 
-The symbols $g_{x,y_1,...,y_n,P}$ and $g'_{x,x',y_1,...,y_n,P}$ had been created as specific constructors that allow to introduce in $mem$ a proposition $P$ by convert it into a class. These symbols are now not necessary in \dedukti since $mem$ is deleted. \\
-
-The rewriting rule $$y = z \ \lra \ \fa \ p \ (mem(y, p) \ \imp \ mem(z, p))$$ is not required as it is a $mem$ is useless in \lpcm.
+The symbols $g_{x,y_1,...,y_n,P}$ and $g'_{x,x',y_1,...,y_n,P}$ had been created as specific constructors that allow to introduce in $mem$ a proposition $P$ by convert it into a class. These symbols are now not necessary in \dedukti ~since $mem$ is deleted. 
 
 
 \subsection{Rewriting rules}
 
-All the other rewriting rules \cite[see][Table 3]{zermodulo}, except the ones involving $comp$, are easy to implement in \dedukti.
+All the other rewriting rules \cite[see][Table 3]{zermodulo}, except the ones involving the symbol associated with the construction of sets by comprehension (noted $comp$), are easy to implement in \dedukti.
 
 \begin{center}
 \underline{\textbf{General}}
@@ -391,12 +393,12 @@ rule root (Cl $a) ↪ o;
 
 \end{lstlisting}
 
-The pointed graph $omega$ represents the set of Von Neumann ordinals \cite[see][Table 2]{zermodulo53}. Indeed, the informal presentation of the representation of sets by pointed graphs given in \ref{informal} corresponds to Von Neumann ordinals. The rewriting rule of $x~\eta_{omega}~x'$ states that in $omega$ the edges represents the order relation $<$ and that there is an edge from every natural number to the root of $omega$.
+The pointed graph \texttt{omega} represents the set of Von Neumann ordinals \cite[see][Table 2]{zermodulo53}. Indeed, the informal presentation of the representation of sets by pointed graphs given in \ref{informal} corresponds to Von Neumann ordinals. The rewriting rule of \texttt{eta omega x x'} states that in \texttt{omega} the edges represents the order relation $<$ and that there is an edge from every natural number to the root of \texttt{omega}.
 
 
 \section{The language of formulas}
 
-We may have notice that the lemmas in which the $comp$ symbol is used are only valid for a subset of formulas \cite[see][Table 5]{zermodulo}. The formulas need to have all of its quantifiers of sort $El~graph$ and can only use the language $\in$, $\simeq$ and the classic logical connectives.
+A key point in the original formulation of the theory is that the $comp$ symbol enabling to construct a set in comprehension is used are only valid for a subset of formulas \cite[see][Table 5]{zermodulo}. The formulas need to have all of its quantifiers of sort $El~graph$ and can only use the language $\in$, $\simeq$ and the classic logical connectives. Taking this restriction into account was the main challenge of this implementation.
 
 Thus we need to introduce a set to caraterize the validity domain of such lemmas.
 
@@ -522,9 +524,9 @@ and its rewriting rules
 
 \begin{lstlisting}
 rule eta (comp $a $σ $f) $x $x' ↪ 
-(`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) 
-∨ (`∃ y, ($x = i y) ∧ ($x' = o) ∧ (eta $a y (root $a))
-∧ (interpretation (update $σ zero (cr $a y)) $f));
+	(`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y')) 
+	∨ (`∃ y, ($x = i y) ∧ ($x' = o) ∧ (eta $a y (root $a))
+	∧ (interpretation (update $σ zero (cr $a y)) $f));
 rule root (comp $a $σ $f) ↪ o;
 \end{lstlisting}
 
@@ -546,9 +548,11 @@ rule Ind $c ↪ (empty_set ∈ $c)
 
 \section{Lemmas}
 
-There are 53 lemmas to proved \textit{formally} \cite[see][Tables a and 5]{zermodulo}.
+A first result on the original formulation of the theory was to prove that the axioms of IZst are theorems in IZmod. This required 53 lemmas that were \textit{informally} proved in \cite[see][Tables 4 and 5]{zermodulo} and that we proved \textit{formally} in this paper.
 
-The first lemma $x=x$ does not need to be implemented since it is already part of the standard library of \dedukti \ under the name $refl$ (which is polymorphic).
+Some of these proofs just follow the informal ones. Some others required the use of the type of formula and its embedding into propositions. 
+
+The first lemma $x=x$ does not need to be implemented since it is already part of the standard library of \dedukti \ under the name \texttt{refl} (which is polymorphic).
 
 The second lemma is already a consequence of the rewriting rule of the polymorphic $=$ implemented in the stardard library of \dedukti: 
 \begin{lstlisting}
@@ -575,7 +579,7 @@ The first one is proved by applying the left part of $Hx$.
 The second one is obtained by applying lemma 5 to $c$, $a$ and $b/x$. To apply lemma 5, we need to prove $c \simeq a \imp a \simeq b/x$. $c \simeq a$ is proved applying reflexivity to $a \simeq c$ (i.e. applying lemma 4 to $a$, $c$ and the right part of $H$). $a \simeq b/x$ derives from the right part of $Hx$. $\square$
 \end{proof}
 
-This proof is written in \dedukti thanks to the following code: 
+This proof is written in \dedukti ~thanks to the following code: 
 
 \begin{lstlisting}
 opaque symbol lemma30 : π(`∀ a, `∀ b, `∀ c, 
@@ -598,7 +602,7 @@ Now that the language of formulas have been designed along with the implementati
 
 $$(P(z \leftarrow a) \conj a \simeq b) \imp P(z \leftarrow b)$$
 
-We implement it thanks to the $interpretation$ symbol. The valuation $update~\sigma~z~a)$ represents the assignement of variable $z \leftarrow a$.
+We implement it thanks to the $interpretation$ symbol. The valuation $update~\sigma~z~a$ represents the assignement of variable $z \leftarrow a$.
 
 \begin{lstlisting}
 opaque symbol lemma32 : Π (z : El nat), Π (f : El formula), 
@@ -607,7 +611,7 @@ opaque symbol lemma32 : Π (z : El nat), Π (f : El formula),
 ⇒ (interpretation (update σ z b) f)))
 \end{lstlisting}
 
-The proof of this $opaque~symbol$ is done by induction over formulas: each case is proved easily, using the lemmas that have already been checked by \dedukti. \\
+The proof of this \texttt{opaque symbol} is done by induction over formulas: each case is proved easily, using the lemmas that have already been checked by \dedukti. \\
 
 Lemma 41 is implemented similarly:
 
@@ -636,7 +640,7 @@ We notice in \cite{zermodulo53} the use of weak extensionality (simply called ex
 
 \textbf{Weak extensionality.} $\fa~c,\fa~d, (\fa~z, (z \in c \Leftrightarrow z \in d) \imp c \simeq d)$ \\
 
-We follow the blueprint given by G. Dowek and A. Miquel \cite{zermodulo} : we use the strong extensionality axiom where $R(x,y)$ is $(x \simeq c~\conj~y \simeq d)~\disj~x \simeq y$. \\
+We follow the blueprint given by G. Dowek and A. Miquel \cite[see][Proposition 1]{zermodulo} : we use the strong extensionality axiom where $R(x,y)$ is $(x \simeq c~\conj~y \simeq d)~\disj~x \simeq y$. \\
 
 \begin{proof}
 We want to prove that $\fa~c,\fa~d, (\fa~z, (z \in c \Leftrightarrow z \in d) \imp c \simeq d)$. We assume that $\fa~z, (z \in c \Leftrightarrow z \in d)$. We want to apply strong extensionality to deduce $c \simeq d$. To do so, we need to prove the three terms of the hypothesis of strong extensionality.
@@ -696,10 +700,15 @@ We have now encoded in \dedukti ~all the axioms of IZst set theory: the strong e
 
 \section{Conclusion}
 
-We have implemented in \dedukti ~a version of set theory -- IZst -- that respects normalization properties. IZst set theory correponds to Zermelo set theory, with the Strong Extensionality axiom and the Transitive Closure axiom. To do so, we have adapted the work by G. Dowek and A. Miquel \cite{zermodulo} from \textit{Deduction modulo} to \lpcm. We have \textit{formally} written all the proofs of the lemmas allowing us to implement set theory in \dedukti.
+We have implemented in \dedukti ~a version of set theory -- IZst -- that respects normalization properties. IZst set theory correponds to Zermelo set theory, with the Strong Extensionality axiom and the Transitive Closure axiom. To do so, we have adapted the work by G. Dowek and A. Miquel \cite{zermodulo} from \textit{Deduction modulo theory} to \lpcm ~and have encoded set with a theory of pointed graphs -- IZmod. We have \textit{formally} written all the proofs of the lemmas allowing us to implement set theory in \dedukti.
 
 
 To define and prove the lemmas corresponding to the Comprehension axiom, we have developped a language of formulas, along with operators \textit{interpretation} and \textit{update}. In particular, the language of formulas allows us to prove that the Extensionality axiom derives from the Strong Extensionality axiom.
+
+The implementation of IZmod theory represents a significant corpus of formal proofs in \textsc{Lambdapi}.
+
+\newpage
+\section*{Annex}
 
 \begin{center}
 \begin{tabular}{|c|c||c|c|}
