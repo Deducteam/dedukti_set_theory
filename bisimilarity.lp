@@ -1,5 +1,5 @@
-require open zf.theoriezf.logic;
-require open zf.theoriezf.language;
+require open Logic.Z.logic;
+require open Logic.Z.language;
 
 opaque symbol lemma3 : π(`∀ a : El graph, a simeq a)
 ≔ begin

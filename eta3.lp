@@ -1,12 +1,12 @@
-require open zf.theoriezf.logic;
-require open zf.theoriezf.language;
-require open zf.theoriezf.bisimilarity;
-require open zf.theoriezf.injectivity;
-require open zf.theoriezf.eta1;
-require open zf.theoriezf.eta2;
-require open zf.theoriezf.formulas;
-require open zf.theoriezf.nat;
-require open zf.theoriezf.language2;
+require open Logic.Z.logic;
+require open Logic.Z.language;
+require open Logic.Z.bisimilarity;
+require open Logic.Z.injectivity;
+require open Logic.Z.eta1;
+require open Logic.Z.eta2;
+require open Logic.Z.formulas;
+require open Logic.Z.nat;
+require open Logic.Z.language2;
 
 opaque symbol lemma22 : Π (σ : (El nat → El graph)), Π (f : El formula), π(`∀ a, `∀ x, `∀ y', (eta (comp a σ f) x (i y') ⇔ (`∃ y, (x = i y) ∧ (eta a y y'))))
 ≔ begin

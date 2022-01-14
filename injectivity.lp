@@ -1,6 +1,6 @@
-require open zf.theoriezf.logic;
-require open zf.theoriezf.language;
-require open zf.theoriezf.bisimilarity;
+require open Logic.Z.logic;
+require open Logic.Z.language;
+require open Logic.Z.bisimilarity;
 
 opaque symbol lemmaPred : π(`∀ a, `∀ b, (a = b) ⇒ (Pred a = Pred b))
 ≔ begin

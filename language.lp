@@ -1,4 +1,4 @@
-require open zf.theoriezf.logic;
+require open Logic.Z.logic;
 
 constant symbol graph : Set;
 constant symbol node : Set;

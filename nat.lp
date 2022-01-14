@@ -1,4 +1,4 @@
-require open zf.theoriezf.logic;
+require open Logic.Z.logic;
 
 constant symbol nat : Set;
 symbol zero : El nat;

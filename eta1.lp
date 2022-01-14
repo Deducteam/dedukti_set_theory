@@ -1,7 +1,7 @@
-require open zf.theoriezf.logic;
-require open zf.theoriezf.language;
-require open zf.theoriezf.bisimilarity;
-require open zf.theoriezf.injectivity;
+require open Logic.Z.logic;
+require open Logic.Z.language;
+require open Logic.Z.bisimilarity;
+require open Logic.Z.injectivity;
 
 opaque symbol lemma14 : π(`∀ a, `∀ x, `∀ y', (eta (join a) x (i y')) ⇔ (`∃ y, (x = i y) ∧ (eta a y y')))
 ≔ begin

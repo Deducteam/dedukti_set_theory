@@ -1,13 +1,13 @@
-require open zf.theoriezf.logic;
-require open zf.theoriezf.language;
-require open zf.theoriezf.bisimilarity;
-require open zf.theoriezf.injectivity;
-require open zf.theoriezf.eta1;
-require open zf.theoriezf.eta2;
-require open zf.theoriezf.membership;
-require open zf.theoriezf.nat;
-require open zf.theoriezf.formulas;
-require open zf.theoriezf.formulas_lemmas;
+require open Logic.Z.logic;
+require open Logic.Z.language;
+require open Logic.Z.bisimilarity;
+require open Logic.Z.injectivity;
+require open Logic.Z.eta1;
+require open Logic.Z.eta2;
+require open Logic.Z.membership;
+require open Logic.Z.nat;
+require open Logic.Z.formulas;
+require open Logic.Z.formulas_lemmas;
 
 opaque symbol lemma32 : Π (z : El nat), Π (f : El formula), π(`∀ a, `∀ b, (`∀ σ : (El nat → El graph), ((interpretation (update σ z a) f) ∧ (a simeq b)) ⇒ (interpretation (update σ z b) f)))
 ≔ begin

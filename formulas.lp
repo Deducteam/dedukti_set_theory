@@ -1,6 +1,6 @@
-require open zf.theoriezf.logic;
-require open zf.theoriezf.language;
-require open zf.theoriezf.nat;
+require open Logic.Z.logic;
+require open Logic.Z.language;
+require open Logic.Z.nat;
 
 constant symbol formula : Set;
 constant symbol eqF : El nat → El nat → El formula;

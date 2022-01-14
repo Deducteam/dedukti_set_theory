@@ -1,7 +1,7 @@
-require open zf.theoriezf.logic;
-require open zf.theoriezf.language;
-require open zf.theoriezf.nat;
-require open zf.theoriezf.formulas;
+require open Logic.Z.logic;
+require open Logic.Z.language;
+require open Logic.Z.nat;
+require open Logic.Z.formulas;
 
 // Comprehension
 

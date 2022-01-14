@@ -1,15 +1,15 @@
-require open zf.theoriezf.logic;
-require open zf.theoriezf.language;
-require open zf.theoriezf.nat;
-require open zf.theoriezf.bisimilarity;
-require open zf.theoriezf.injectivity;
-require open zf.theoriezf.eta1;
-require open zf.theoriezf.eta2;
-require open zf.theoriezf.eta3;
-require open zf.theoriezf.relocation;
-require open zf.theoriezf.membership;
-require open zf.theoriezf.formulas;
-require open zf.theoriezf.language2;
+require open Logic.Z.logic;
+require open Logic.Z.language;
+require open Logic.Z.nat;
+require open Logic.Z.bisimilarity;
+require open Logic.Z.injectivity;
+require open Logic.Z.eta1;
+require open Logic.Z.eta2;
+require open Logic.Z.eta3;
+require open Logic.Z.relocation;
+require open Logic.Z.membership;
+require open Logic.Z.formulas;
+require open Logic.Z.language2;
 
 opaque symbol lemma35 : π(`∀ a, `∀ y, (cr (join a) (i y)) simeq (cr a y))
 ≔ begin

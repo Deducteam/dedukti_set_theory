@@ -1,8 +1,8 @@
-require open zf.theoriezf.logic;
-require open zf.theoriezf.language;
-require open zf.theoriezf.bisimilarity;
-require open zf.theoriezf.injectivity;
-require open zf.theoriezf.eta1;
+require open Logic.Z.logic;
+require open Logic.Z.language;
+require open Logic.Z.bisimilarity;
+require open Logic.Z.injectivity;
+require open Logic.Z.eta1;
 
 opaque symbol lemma28 : π(`∀ a, `∀ x, (eta a x (root a)) ⇒ ((cr a x) ∈ a))
 ≔ begin
