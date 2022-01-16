@@ -61,10 +61,10 @@ refine and_i _ _ _ _
 refine lemma22 σ f a y' x}
 end;
 
-opaque symbol lemma40 : π(`∀ a, `∀ y, (cr (Cl a) (i y)) simeq (cr a y))
+opaque symbol lemma40 : π(`∀ a, `∀ y, (cr (closure a) (i y)) simeq (cr a y))
 ≔ begin
 assume a y;
-refine lemma4 (cr a y) (cr (Cl a) (i y)) (lemma33 (cr a y) (cr (Cl a) (i y)) _);
+refine lemma4 (cr a y) (cr (closure a) (i y)) (lemma33 (cr a y) (cr (closure a) (i y)) _);
 refine and_i _ _ _ _
 {refine refl node (i y)}
 {assume x y';

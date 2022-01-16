@@ -22,9 +22,8 @@ symbol j' : El node → El node;
 symbol I : El node → El prop;
 symbol J : El node → El prop;
 
-// ρ^ car ρ' affiche un message d'erreur ;
 symbol ρ : El graph → El node;
-symbol ρ^ : El node → El graph;
+symbol ρ' : El node → El graph;
 
 symbol Succ : El node → El node;
 symbol Pred : El node → El node;
@@ -36,7 +35,7 @@ notation < infix 5;
 
 rule i' (i $x) ↪ $x;
 rule j' (j $x) ↪ $x;
-rule ρ^ (ρ $x) ↪ $x;
+rule ρ' (ρ $x) ↪ $x;
 rule I (i $x) ↪ ⊤;
 rule J (j $x) ↪ ⊤;
 rule I (j $x) ↪ ⊥;
@@ -91,12 +90,12 @@ rule eta omega $x $x' ↪ (`∃ y, `∃ y', ($x = i y) ∧ ($x' = i y') ∧ (y <
     ∨ (`∃ y, ($x = i y) ∧ ($x' = o) ∧ Nat y);
 rule root omega ↪ o;
 
-symbol Cl : El graph → El graph;
-rule eta (Cl $a) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y'))
+symbol closure : El graph → El graph;
+rule eta (closure $a) $x $x' ↪ (`∃ y, `∃ y', (($x = i y) ∧ ($x' = i y') ∧ eta $a y y'))
     ∨ (`∃ y, ($x = i y) 
         ∧ ($x' = o)
         ∧ (`∀ c : El (node arrow prop), 
                 ((`∀ z, eta $a z (root $a) ⇒ c z)
                 ∧ (`∀ z, `∀ z', (eta $a z z') ∧ (c z') ⇒ (c z)))
             ⇒ c y));
-rule root (Cl $a) ↪ o;
+rule root (closure $a) ↪ o;

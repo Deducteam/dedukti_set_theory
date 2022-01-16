@@ -150,7 +150,7 @@ refine and_i _ _ _ _
 {refine and_er _ _ Hy}}
 end;
 
-opaque symbol lemma26 : π(`∀ a, `∀ x, `∀ y', (eta (Cl a) x (i y')) ⇔ (`∃ y, (x = i y) ∧ (eta a y y')))
+opaque symbol lemma26 : π(`∀ a, `∀ x, `∀ y', (eta (closure a) x (i y')) ⇔ (`∃ y, (x = i y) ∧ (eta a y y')))
 ≔ begin
 assume a x y';
 refine and_i _ _ _ _
@@ -189,7 +189,7 @@ refine and_i _ _ _ _
 {refine and_er _ _ Hy}}
 end;
 
-opaque symbol lemma27 : π(`∀ a, `∀ x, (eta (Cl a) x o) ⇔ (`∃ y, ((x = i y) ∧ (`∀ c : El (node arrow prop), ((`∀ z, (eta a z (root a)) ⇒ (c z)) ∧ (`∀ z, `∀ z', (((eta a z z') ∧ (c z')) ⇒ (c z)))) ⇒ c y))))
+opaque symbol lemma27 : π(`∀ a, `∀ x, (eta (closure a) x o) ⇔ (`∃ y, ((x = i y) ∧ (`∀ c : El (node arrow prop), ((`∀ z, (eta a z (root a)) ⇒ (c z)) ∧ (`∀ z, `∀ z', (((eta a z z') ∧ (c z')) ⇒ (c z)))) ⇒ c y))))
 ≔ begin
 assume a x;
 refine and_i _ _ _ _

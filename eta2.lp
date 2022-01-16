@@ -82,10 +82,10 @@ refine and_i _ _ _ _
 {assume H3;
 refine imp_e (ρ c' = ρ c) _ _ _
 {assume H4;
-refine imp_e (eta (ρ^ (ρ c)) z (root (ρ^ (ρ c)))) (eta c z (root c)) _ _
+refine imp_e (eta (ρ' (ρ c)) z (root (ρ' (ρ c)))) (eta c z (root c)) _ _
 {assume P;
 refine P}
-{refine H4 (λ w, eta (ρ^ w) z (root (ρ^ w))) _;
+{refine H4 (λ w, eta (ρ' w) z (root (ρ' w))) _;
 refine and_el _ _ Hz}}
 {refine sym node _ _ H3}}
 {refine lemma10 _ _ (and_er _ _ (and_el _ _ (and_el _ _ Hc')))}}
@@ -103,10 +103,10 @@ refine imp_e (ρ c' = ρ c) _ _ _
 refine ex_e node _ ((and_er _ _ (and_el _ _ Hr)) u u' v Heta) _ _;
 assume y' Hy';
 refine ex_i node y' _ _;
-refine imp_e (eta (ρ^ (ρ c)) y' v ∧ r u' y') (eta c y' v ∧ r u' y') _ _
+refine imp_e (eta (ρ' (ρ c)) y' v ∧ r u' y') (eta c y' v ∧ r u' y') _ _
 {assume P;
 refine P}
-{refine H6 (λ w, eta (ρ^ w) y' v ∧ r u' y') Hy'}}
+{refine H6 (λ w, eta (ρ' w) y' v ∧ r u' y') Hy'}}
 {refine sym node _ _ H5}}
 {refine lemma10 _ _ (and_er _ _ (and_el _ _ (and_el _ _ Hc')))}}}
 {assume v v' u Heta;
@@ -115,10 +115,10 @@ refine imp_e (ρ c' = ρ c) _ _ _
 {assume H7;
 refine imp_e (ρ c = ρ c') _ _ _
 {assume H8;
-refine imp_e (eta (ρ^ (ρ c')) v' v ∧ r u v) (eta c' v' v ∧ r u v) _ _
+refine imp_e (eta (ρ' (ρ c')) v' v ∧ r u v) (eta c' v' v ∧ r u v) _ _
 {assume P;
 refine P}
-{refine H8 (λ w, eta (ρ^ w) v' v ∧ r u v) Heta}}
+{refine H8 (λ w, eta (ρ' w) v' v ∧ r u v) Heta}}
 {refine sym node _ _ H7}}
 {refine lemma10 _ _ (sym node _ _ (and_er _ _ (and_el _ _ (and_el _ _ Hc'))))}}}}}}
 {assume H9;
