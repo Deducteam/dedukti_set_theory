@@ -19,7 +19,7 @@ end;
 opaque symbol lemma8 : π(`∀ x, ¬(O = Succ x))
 ≔ begin
 assume x Pegal;
-refine Pegal Null Vrai
+refine Pegal Null top_i
 end;
 
 
@@ -54,17 +54,17 @@ end;
 opaque symbol lemma11 : π(`∀ x, ¬(i x = o))
 ≔ begin
 assume x Pegal;
-refine Pegal I Vrai
+refine Pegal I top_i
 end;
 
 opaque symbol lemma12 : π(`∀ x, ¬(j x = o))
 ≔ begin
 assume x Pegal;
-refine Pegal J Vrai
+refine Pegal J top_i
 end;
 
 opaque symbol lemma13 : π(`∀ x, `∀ y, ¬(i x = j y))
 ≔ begin
 assume x y Pegal;
-refine Pegal I Vrai
+refine Pegal I top_i
 end;
