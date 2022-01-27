@@ -30,9 +30,9 @@ refine Pz}
 refine or_ir _ _ _;
 assume H0;
 refine Peano4 x _;
-refine sym nat zero (s x) H0;
-assume x Hx}}
-{refine recN _ _ _
+refine sym nat zero (s x) H0}}
+{assume x Hx;
+refine recN _ _ _
 //Cas s x, y = 0
 {refine or_ir _ _ _;
 refine Peano4 x}
