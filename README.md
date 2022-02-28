@@ -25,3 +25,5 @@ The implementation of __Set theory__ in Dedukti is composed of several files :
 - *weakextensionality.lp* contains the proofs of the theorem prooving weak extensionality
 
 - *finitary.lp*, *infinity.lp* and *closure.lp* contain the proofs of lemmas 42 to 53.
+
+NB: The lemmas are those detailed in *Cut elimination for Zermelo set theory* (G. Dowek, A. Miquel, 2007, http://www.lsv.fr/~dowek/Publi/zermodulo.pdf).
