@@ -1,6 +1,6 @@
 # Implementation of Set Theory in Dedukti
 
-This repository presents the code of an **implementation of set theory in Dedukti** [2]. The version of set theory implemented is Dowek-Miquel’s intuitionistic set theory [1], in which sets are represented by a primitive notion of pointed graphs. To achieve this implementation, we have defined a peculiar class of formulas along with its interpretation in the theory. 
+This repository presents the code of an **implementation of set theory in Dedukti** [2]. The version of set theory implemented is Dowek-Miquel’s intuitionistic set theory [1], in which sets are represented by pointed graphs. To achieve this implementation, we have defined a peculiar class of formulas along with its interpretation in the theory. 
 
 The repository is composed of several code files, organized as follows and where the numbering of lemmas corresponds to the one in [1]:
 
