@@ -1,29 +1,52 @@
-# Implementation of Set theory in Dedukti
+# Implementation of Set Theory in Dedukti
 
-The implementation of __Set theory__ in Dedukti is composed of several files :
+This repository presents the code of an **implementation of set theory in Dedukti** [2]. The version of set theory implemented is Dowek-Miquel’s intuitionistic set theory [1], in which sets are represented by a primitive notion of pointed graphs. To achieve this implementation, we have defined a peculiar class of formulas along with its interpretation in the theory. 
 
-- *logic.lp* contains the basis of logic
+The repository is composed of several code files, organized as follows and where the numbering of lemmas corresponds to the one in [1]:
 
- - *nat.lp* contains the definition of natural numbers
+- `logic.lp` contains the basis of **logic**
 
-- *language.lp* contains the defintion of the theory of pointed graphs
+- `nat.lp` contains the definition of **natural numbers**
 
-- *formulas.lp* contains the development of formulas
+- `language.lp` contains the defintion of the theory of **pointed graphs**
 
-- *language2.lp* contains the development of language with formulas
+- `formulas.lp` contains the development of the **type of formulas**
 
-- *bisimilarity.lp*, *injectivity.lp*, *eta1.lp*, *eta2.lp* and *eta3.lp* contain lemmas 3 to 27
+- `language2.lp` contains an **extension of the language** using formulas
 
-- *membership.lp* contains lemmas 28 to 31
+- `bisimilarity.lp` contains **lemmas 3 to 6**
 
-- *formulas_lemmas.lp* contains intermediate lemmas that are using formulas
+- `injectivity.lp` contains **lemmas 7 to 13**
 
-- *lemma32.lp* contains the proof of lemma 32
+- `eta1.lp` contains **lemmas 14 to 18**
 
-- *relocation.lp*, *embedding.lp* and *lemma41.lp* contain the proofs of lemma 33 to 41
+- `eta2.lp` contains **lemmas 19 to 21**
 
-- *weakextensionality.lp* contains the proofs of the theorem prooving weak extensionality
+- `eta3.lp` contains **lemmas 22 to 27**
 
-- *finitary.lp*, *infinity.lp* and *closure.lp* contain the proofs of lemmas 42 to 53.
+- `membership.lp` contains **lemmas 28 to 31**
 
-NB: The lemmas are those detailed in *Cut elimination for Zermelo set theory* (G. Dowek, A. Miquel, 2007, http://www.lsv.fr/~dowek/Publi/zermodulo.pdf).
+- `formulas_lemmas.lp` contains **intermediate lemmas** that use formulas
+
+- `lemma32.lp` contains **lemma 32**
+
+- `relocation.lp` contains **lemmas 33 and 34**
+
+- `embedding.lp` contains **lemmas 35 to 40**
+
+- `lemma41.lp` contains **lemma 41**
+
+- `weak_extensionality.lp` contains the proofs of **weak extensionality**
+
+- `finitary.lp` contains **lemmas 42 to 45**
+
+- `infinity.lp` contains **lemmas 46 to 51**
+
+- `closure.lp` contains **lemmas 52 and 53**.
+
+
+# References
+
+[1] G. Dowek & A. Miquel, "Cut elimination for Zermelo set theory". Manuscript available on the website of the authors, http://www.lsv.fr/~dowek/Publi/zermodulo.pdf, 2007.
+
+[2] V. Blot, G. Dowek & T. Traversié, "An Implementation of Set Theory with Pointed Graphs in Dedukti". Not yet available, 2022.
