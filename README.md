@@ -49,4 +49,4 @@ The repository is composed of several code files, organized as follows and where
 
 [1] G. Dowek & A. Miquel, "Cut elimination for Zermelo set theory". Manuscript available on the website of the authors, http://www.lsv.fr/~dowek/Publi/zermodulo.pdf, 2007.
 
-[2] V. Blot, G. Dowek & T. Traversié, "An Implementation of Set Theory with Pointed Graphs in Dedukti". Logical Frameworks and Meta Languages: Theory and Practice, https://hal.inria.fr/hal-03740004/document, 2022.
+[2] V. Blot, G. Dowek & T. Traversié, "An Implementation of Set Theory with Pointed Graphs in Dedukti". _Logical Frameworks and Meta Languages: Theory and Practice_, https://hal.inria.fr/hal-03740004/document, 2022.
